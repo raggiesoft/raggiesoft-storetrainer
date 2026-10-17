@@ -6,3 +6,4 @@ The official portal and source code museum for **RaggieSoft StoreTrainer (`TStor
 - **Tech Stack**: Vanilla TypeScript + Classic Win32 / Netscape Communicator 4.7 CSS Static SSG
 - **Accessibility**: WCAG 2.1 AA / Section 508 Compliant (`prefers-color-scheme: light | dark` — Win98/2000 Silver & Teal Desktop in Light Mode, Win2000 High-Contrast Dark Terminal in Dark Mode)
 - **Licenses**: MIT License (Code) & CC BY-SA 4.0 (Documentation)
+
