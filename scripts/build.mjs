@@ -366,7 +366,7 @@ function renderNetscapeShell({ title, description, canonicalPath, bodyHtml }) {
     <meta name="twitter:image" content="${escapeHtml(ogImage)}" />
     <link rel="icon" type="image/png" href="https://assets.raggiesoft.com/raggiesoft-corporate/images/logos/raggiesoft-logo.png" />
     <link rel="stylesheet" href="https://assets.raggiesoft.com/storetrainer/css/win98-netscape.css" />
-    <link rel="stylesheet" href="https://assets.raggiesoft.com/common/css/raggiesoft-network.css?v=20261017h" />
+    <link rel="stylesheet" href="https://assets.raggiesoft.com/common/css/raggiesoft-network.css?v=20261017j" />
   </head>
   <body>
     <a href="#content" class="skip-link">Skip to main document content</a>
@@ -381,7 +381,6 @@ function renderNetscapeShell({ title, description, canonicalPath, bodyHtml }) {
           <li><a href="https://books.raggiesoft.com">📚 Books</a></li>
           <li><a href="https://stardust.raggiesoft.com">🚀 Stardust</a></li>
           <li><a href="https://engineroom.raggiesoft.com">⚙️ Engine Room</a></li>
-          <li><a href="https://lore.raggiesoft.com">🏛️ Lore</a></li>
           <li><a href="https://corporate.raggiesoft.com">🏢 Corporate</a></li>
           <li><a href="https://storetrainer.raggiesoft.com" aria-current="page" class="is-active">💾 StoreTrainer</a></li>
           <li><a href="https://michaelpragsdale.com">👔 Michael P. Ragsdale</a></li>
@@ -486,7 +485,7 @@ function renderNetscapeShell({ title, description, canonicalPath, bodyHtml }) {
     </div>
 
     <script src="https://assets.raggiesoft.com/storetrainer/js/netscape-ui.js" defer></script>
-    <script src="https://assets.raggiesoft.com/common/js/raggiesoft-network.js?v=20261017h" defer></script>
+    <script src="https://assets.raggiesoft.com/common/js/raggiesoft-network.js?v=20261017j" defer></script>
   </body>
 </html>`;
 }
