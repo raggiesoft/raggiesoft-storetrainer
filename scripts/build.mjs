@@ -366,7 +366,7 @@ function renderNetscapeShell({ title, description, canonicalPath, bodyHtml }) {
     <meta name="twitter:image" content="${escapeHtml(ogImage)}" />
     <link rel="icon" type="image/png" href="https://assets.raggiesoft.com/raggiesoft-corporate/images/logos/raggiesoft-logo.png" />
     <link rel="stylesheet" href="https://assets.raggiesoft.com/storetrainer/css/win98-netscape.css" />
-    <link rel="stylesheet" href="https://assets.raggiesoft.com/common/css/raggiesoft-network.css?v=20261017c" />
+    <link rel="stylesheet" href="https://assets.raggiesoft.com/common/css/raggiesoft-network.css?v=20261017d" />
   </head>
   <body>
     <a href="#content" class="skip-link">Skip to main document content</a>
@@ -486,7 +486,7 @@ function renderNetscapeShell({ title, description, canonicalPath, bodyHtml }) {
     </div>
 
     <script src="https://assets.raggiesoft.com/storetrainer/js/netscape-ui.js" defer></script>
-    <script src="https://assets.raggiesoft.com/common/js/raggiesoft-network.js?v=20261017c" defer></script>
+    <script src="https://assets.raggiesoft.com/common/js/raggiesoft-network.js?v=20261017d" defer></script>
   </body>
 </html>`;
 }
