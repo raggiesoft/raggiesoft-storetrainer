@@ -1,0 +1,901 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      try {
+        var storedScheme = localStorage.getItem('color-scheme');
+        document.querySelector('meta[name="color-scheme"]').content = storedScheme ?? 'light dark';
+        var resolvedTheme = (storedScheme === 'light' || storedScheme === 'dark')
+          ? storedScheme
+          : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', resolvedTheme);
+      } catch (e) {}
+    </script>
+    <title>NSIS Wizard95 Installer | RaggieSoft StoreTrainer</title>
+    <meta name="description" content="Explore the NSIS Wizard95 installer scripts (TSSetup.nsi and TSSetup-Patch.nsi) and VB6 runtime deployment for RaggieSoft StoreTrainer." />
+    <link rel="canonical" href="https://storetrainer.raggiesoft.com/installer" />
+    <meta property="og:title" content="NSIS Wizard95 Installer | RaggieSoft StoreTrainer" />
+    <meta property="og:description" content="Explore the NSIS Wizard95 installer scripts (TSSetup.nsi and TSSetup-Patch.nsi) and VB6 runtime deployment for RaggieSoft StoreTrainer." />
+    <meta property="og:image" content="https://assets.raggiesoft.com/raggiesoft-corporate/images/og/raggiesoft-corporate-og.jpg" />
+    <meta property="og:url" content="https://storetrainer.raggiesoft.com/installer" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="RaggieSoft StoreTrainer" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="NSIS Wizard95 Installer | RaggieSoft StoreTrainer" />
+    <meta name="twitter:description" content="Explore the NSIS Wizard95 installer scripts (TSSetup.nsi and TSSetup-Patch.nsi) and VB6 runtime deployment for RaggieSoft StoreTrainer." />
+    <meta name="twitter:image" content="https://assets.raggiesoft.com/raggiesoft-corporate/images/og/raggiesoft-corporate-og.jpg" />
+    <link rel="icon" type="image/png" href="https://assets.raggiesoft.com/raggiesoft-corporate/images/logos/raggiesoft-logo.png" />
+    <link rel="stylesheet" href="https://assets.raggiesoft.com/storetrainer/css/win98-netscape.css" />
+    <link rel="stylesheet" href="https://assets.raggiesoft.com/common/css/raggiesoft-network.css" />
+  </head>
+  <body>
+    <a href="#content" class="skip-link">Skip to main document content</a>
+
+    <nav class="rs-network-bar" aria-label="RaggieSoft Ecosystem Network" style="margin-bottom: 0.45rem; border-radius: 4px;">
+      <div class="rs-network-bar-inner">
+        <span class="rs-network-label">✦ RaggieSoft Network:</span>
+        <ul class="rs-network-links">
+          <li><a href="https://raggiesoft.com">🌐 Hub</a></li>
+          <li><a href="https://nebulae.raggiesoft.com">🌌 Nebulae</a></li>
+          <li><a href="https://music.raggiesoft.com">🎧 Music</a></li>
+          <li><a href="https://books.raggiesoft.com">📚 Books</a></li>
+          <li><a href="https://stardust.raggiesoft.com">🚀 Stardust</a></li>
+          <li><a href="https://engineroom.raggiesoft.com">⚙️ Engine Room</a></li>
+          <li><a href="https://lore.raggiesoft.com">🏛️ Lore</a></li>
+          <li><a href="https://corporate.raggiesoft.com">🏢 Corporate</a></li>
+          <li><a href="https://storetrainer.raggiesoft.com" aria-current="page" class="is-active">💾 StoreTrainer</a></li>
+          <li><a href="https://michaelpragsdale.com">👔 Michael P. Ragsdale</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="netscape-window win-outset" role="application" aria-label="Netscape Communicator 4.78 — RaggieSoft StoreTrainer Portal">
+      <!-- Win2000 Title Bar -->
+      <header class="win-titlebar" role="banner">
+        <div class="win-titlebar-left">
+          <span aria-hidden="true">🖳</span>
+          <span>NSIS Wizard95 Installer | RaggieSoft StoreTrainer - Netscape Communicator 4.78 [Windows 2000 Professional SP4]</span>
+        </div>
+        <div class="win-titlebar-controls" aria-hidden="true">
+          <span class="win-ctrl-box">_</span>
+          <span class="win-ctrl-box">□</span>
+          <span class="win-ctrl-box">×</span>
+        </div>
+      </header>
+
+      <!-- Menu Bar -->
+      <div class="netscape-menubar" role="navigation" aria-label="Application Menu Bar">
+        <ul class="netscape-menu-items">
+          <li><a href="/"><u>F</u>ile</a></li>
+          <li><a href="/source"><u>E</u>dit / Source</a></li>
+          <li><a href="/installer"><u>V</u>iew Installer</a></li>
+          <li><a href="https://raggiesoft.com"><u>H</u>ub</a></li>
+          <li><a href="https://music.raggiesoft.com"><u>M</u>usic</a></li>
+          <li><a href="https://books.raggiesoft.com"><u>B</u>ooks</a></li>
+          <li><a href="https://stardust.raggiesoft.com"><u>S</u>tardust</a></li>
+          <li><a href="https://engineroom.raggiesoft.com"><u>L</u>abel</a></li>
+          <li><a href="https://corporate.raggiesoft.com/projects/storetrainer"><u>C</u>orporate</a></li>
+          <li><a href="https://michaelpragsdale.com"><u>A</u>rchitect</a></li>
+          <li><a href="https://nebulae.raggiesoft.com"><u>N</u>ebulae Sitemap</a></li>
+        </ul>
+        <span style="font-size: 11.5px;">Pre-AI Hand-Written Win32 Freeware (2018–2020)</span>
+      </div>
+
+      <!-- Navigation Toolbar -->
+      <nav class="netscape-toolbar" aria-label="Primary StoreTrainer Navigation">
+        <ul class="netscape-nav-list">
+          <li><a href="/" class="win-btn">🏠 Home &amp; Download</a></li>
+            <li><a href="/source" class="win-btn">💾 VB6 &amp; .NET Source</a></li>
+            <li><a href="/installer" class="win-btn" aria-current="page">📦 NSIS Wizard95 Installer</a></li>
+          <li>
+            <a href="https://assets.raggiesoft.com/storetrainer/tssetup100.exe" class="win-btn win-btn-primary">
+              ⬇️ Download tssetup100.exe (v1.0)
+            </a>
+          </li>
+          <li>
+            <button
+              type="button"
+              id="theme-toggle"
+              class="win-btn"
+              aria-label="Toggle between Windows 98 Classic Light Mode and Windows 2000 High-Contrast Dark Mode"
+            >
+              <span id="theme-toggle-label">🖥️ Theme</span>
+            </button>
+          </li>
+        </ul>
+        <div class="netscape-throbber" aria-hidden="true" title="Netscape Communicator">N</div>
+      </nav>
+
+      <!-- Location / Address Bar -->
+      <div class="netscape-locationbar">
+        <strong>Netsite:</strong>
+        <div class="location-input win-inset" aria-label="Current URL">https://storetrainer.raggiesoft.com/installer</div>
+        <a href="https://raggiesoft.com" class="win-btn">🌐 RaggieSoft Hub</a>
+      </div>
+
+      <!-- Sunken Document Viewport -->
+      <main id="content" class="netscape-viewport win-inset" tabindex="-1">
+        
+    <h1>NSIS Wizard95 Installer Architecture (<code>TSSetup.nsi</code> &amp; <code>TSSetup-Patch.nsi</code>)</h1>
+    <p>
+      <strong>RaggieSoft StoreTrainer</strong> is packaged using the <strong>Nullsoft Scriptable Install System (NSIS)</strong> with the classic 1990s <code>win.bmp</code> Wizard95 sidebar graphic, <code>WinVer.nsh</code> OS verification (checking for Windows 95 or Windows NT 4.0 and newer), and safe <code>UpgradeDLL</code> registration for the Visual Basic 6.0 SP6 runtime libraries (<code>msvbvm60.dll</code>, <code>oleaut32.dll</code>, <code>olepro32.dll</code>, <code>asycfilt.dll</code>, <code>stdole2.tlb</code>, and <code>comcat.dll</code>).
+    </p>
+    <div class="retro-banner">
+      <h2 style="margin-top: 0;">Finish-Page Redirect Canon (<code>storetrainer.raggiesoft.com</code>)</h2>
+      <p style="margin-bottom: 0.75rem;">
+        Original 2020 builds of <code>tssetup100.exe</code> pointed their finish-page link to <code>https://raggiesoft.com/products/storetrainer</code>, which now permanently <code>301</code> redirects to <code>https://storetrainer.raggiesoft.com/</code>. Both active NSIS scripts below define <code>MUI_FINISHPAGE_LINK_LOCATION "https://storetrainer.raggiesoft.com/"</code> for all future builds.
+      </p>
+      <a href="https://assets.raggiesoft.com/storetrainer/tssetup100.exe" class="win-btn win-btn-primary">
+        ⬇️ Download Compiled Installer: tssetup100.exe
+      </a>
+    </div>
+    
+      <section id="tssetup-nsi" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-tssetup-nsi">
+        <h2 id="heading-tssetup-nsi" style="margin-top: 0;">Installer/TSSetup.nsi (Full NSIS Wizard95 Installer)</h2>
+        <p>Full Nullsoft Scriptable Install System (NSIS) script featuring the classic Wizard95 bitmap, Windows 95–11 OS check, and VB6 runtime DLL registration.</p>
+        <pre class="code-viewer"><code>;In NSIS, all variables are GLOBAL
+
+;Variables for the Product Information
+Var CompanyName
+Var ProductName
+
+;DCOM98
+Var DCOM98INSTALL ;Do we need to install DCOM98? Yes or No
+Var DCOM98RETURN ;What is the return code for DCOM98? (not necessary in our case, but NSIS will error out if there is no variable to hold the rerurn code, ALWAYS reboot after install)
+
+;Windows Script Host
+Var SCRRUNVER ;Version of WSH to check against (5.6)
+Var SCRRUNDLL ;Version of WSH installed on machine
+Var scr_exit_code ;Exit code from WSH installer
+
+;Version of $ProductName installed
+Var TSTOREVER
+
+;Source Code installation folder. Typically $INSTDIR\Source
+Var SRCCODE
+
+;Unistall Registry Key Location
+Var UNINSREG
+
+;For comparing previous installations of $ProductName
+Var IS_INSTALLED ;Yes or No: is $ProductName installed?
+Var TSTORESETUP ;Variable to hold product version data
+
+;InstallSpider UI (https://nsis.sourceforge.io/InstallSpiderUI)
+;Drop in replacement for MUI2 to mimic Wizard95 installer interface
+!include &quot;ISUI.nsh&quot;
+
+;For using Logic operators
+!include &quot;LogicLib.nsh&quot;
+
+;Detect Windows Version
+!include &quot;WinVer.nsh&quot;
+
+;For installing my system libraries
+!include &quot;Library.nsh&quot;
+
+;For getting file functions
+!include &quot;FileFunc.nsh&quot;
+
+;For comparing versions
+!include &quot;WordFunc.nsh&quot;
+
+;Installer for $CompanyName $ProductName
+Name &quot;$CompanyName $ProductName&quot;
+OutFile &quot;tssetup100.exe&quot;
+BrandingText &quot;$CompanyName&quot;
+
+;Show file copy operations
+ShowInstDetails show
+ShowUninstDetails show
+
+;Default install folder
+InstallDir &quot;$PROGRAMFILES\$CompanyName\$ProductName&quot;
+
+;Install Folder Registry Key
+InstallDirRegKey HKLM &quot;Software\$CompanyName\$ProductName&quot; &quot;Installation Folder&quot;
+
+;Subscribe to Common Controls 6.0 in Windows XP+
+XPStyle on
+
+;Request application privileges for Windows Vista and above
+;See un.onInit and .onInit for older versions of WinNT Admin Rights checks
+;un/.onInit will also handle Admin checks if UAC is turned off
+RequestExecutionLevel admin
+
+;What versions of Windows UAC dialogs to support
+ManifestSupportedOS all
+
+;Version this installer has
+!getdllversion &quot;..\Build\TStore.exe&quot; Expv_
+
+;Installation Version Information
+VIProductVersion &quot;${Expv_1}.${Expv_2}.${Expv_3}.${Expv_4}&quot;
+VIAddVersionKey &quot;ProductName&quot; &quot;$ProductName&quot;
+VIAddVersionKey &quot;Comments&quot; &quot;&quot;
+VIAddVersionKey &quot;CompanyName&quot; &quot;$CompanyName&quot;
+VIAddVersionKey &quot;LegalTrademarks&quot; &quot;$ProductName is a trademark of $CompanyName&quot;
+VIAddVersionKey &quot;LegalCopyright&quot; &quot;Copyright (C) 2018-2020 $CompanyName&quot;
+VIAddVersionKey &quot;FileDescription&quot; &quot;Stores the locations of games and trainers&quot;
+VIAddVersionKey &quot;FileVersion&quot; &quot;${Expv_1}.${Expv_2}.${Expv_3}.${Expv_4}&quot;
+
+
+;Install Pages
+!insertmacro MUI_PAGE_WELCOME
+	;Set up our License page
+	!define MUI_LICENSEPAGE_RADIOBUTTONS
+	!define MUI_LICENSEPAGE_RADIOBUTTONS_TEXT_ACCEPT &quot;I &amp;Accept&quot;
+	!define MUI_LICENSEPAGE_RADIOBUTTONS_TEXT_DECLINE &quot;I &amp;Decline&quot;
+!insertmacro MUI_PAGE_LICENSE &quot;License\LICENSE.rtf&quot;
+!insertmacro MUI_PAGE_COMPONENTS
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
+	;Set up our Finish page
+	!define MUI_FINISHPAGE_RUN $INSTDIR\TStore.exe
+	!define MUI_FINISHPAGE_RUN_TEXT &quot;&amp;Launch $ProductName&quot;
+	!define MUI_FINISHPAGE_LINK &quot;&amp;Visit the $ProductName Website&quot;
+	!define MUI_FINISHPAGE_LINK_LOCATION &quot;https://storetrainer.raggiesoft.com/&quot;
+!insertmacro MUI_PAGE_FINISH
+
+;Uninstall Pages
+!insertmacro MUI_UNPAGE_WELCOME
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_UNPAGE_FINISH
+
+;Language Setting (yes, AFTER pages are loaded)
+!insertmacro MUI_LANGUAGE &quot;English&quot;
+
+
+
+;Microsoft Redistribution Files
+;Only needed for older systems
+;ABSOLUTELY POSITIVELY DO NOT ATTEMPT TO UNINSTALL!!!
+Section &quot;-Required System Components&quot; SysComp
+	;Most likely, these will only need to be installed on Windows 95/98
+	;DO NOT ATTEMPT TO FORCIBLY REPLACE THESE FILES ON WINDOWS 2000 OR NEWER!!
+	;For newer operating systems (2000, ME, and above), this will check with System File Protection before copying DLLs
+	;This installer contains the 2012 re-release of the Visual Basic 6.0 DLLs
+	
+	;Start with the VB6 Runtime
+	DetailPrint &quot;Installing Microsoft Visual Basic 6.0 Runtime&quot;
+	!insertmacro InstallLib REGDLL &quot;${ALREADY_INSTALLED}&quot; REBOOT_PROTECTED &quot;Microsoft Redist\msvbvm60.dll&quot; &quot;$SYSDIR\msvbvm60.dll&quot; &quot;$SYSDIR&quot;
+	!insertmacro InstallLib REGDLL &quot;${ALREADY_INSTALLED}&quot; REBOOT_PROTECTED &quot;Microsoft Redist\oleaut32.dll&quot; &quot;$SYSDIR\oleaut32.dll&quot; &quot;$SYSDIR&quot;
+	!insertmacro InstallLib REGDLL &quot;${ALREADY_INSTALLED}&quot; REBOOT_PROTECTED &quot;Microsoft Redist\olepro32.dll&quot; &quot;$SYSDIR\olepro32.dll&quot; &quot;$SYSDIR&quot;
+	!insertmacro InstallLib REGDLL &quot;${ALREADY_INSTALLED}&quot; REBOOT_PROTECTED &quot;Microsoft Redist\comcat.dll&quot; &quot;$SYSDIR\comcat.dll&quot; &quot;$SYSDIR&quot;
+	!insertmacro InstallLib DLL &quot;${ALREADY_INSTALLED}&quot; REBOOT_PROTECTED &quot;Microsoft Redist\asycfilt.dll&quot; &quot;$SYSDIR\asycfilt.dll&quot; &quot;$SYSDIR&quot;
+	!insertmacro InstallLib TLB &quot;${ALREADY_INSTALLED}&quot; REBOOT_PROTECTED &quot;Microsoft Redist\stdole2.tlb&quot;  &quot;$SYSDIR\stdole2.tlb&quot; &quot;$SYSDIR&quot;
+	
+	;Let&#39;s install the Windows Common Controls
+	DetailPrint &quot;Installing Windows Common Controls&quot;
+	!insertmacro InstallLib REGDLL &quot;${ALREADY_INSTALLED}&quot; REBOOT_PROTECTED &quot;Microsoft Redist\comct232.ocx&quot; &quot;$SYSDIR\comct232.ocx&quot; &quot;$SYSDIR&quot;
+	!insertmacro InstallLib REGDLL &quot;${ALREADY_INSTALLED}&quot; REBOOT_PROTECTED &quot;Microsoft Redist\comctl32.ocx&quot; &quot;$SYSDIR\comctl32.ocx&quot; &quot;$SYSDIR&quot;
+	
+	;Let&#39;s install the Windows Common Dialog Control
+	DetailPrint &quot;Installing Windows Common Dialog Control&quot;
+	!insertmacro InstallLib REGDLL &quot;${ALREADY_INSTALLED}&quot; REBOOT_PROTECTED &quot;Microsoft Redist\comdlg32.ocx&quot; &quot;$SYSDIR\comdlg32.ocx&quot; &quot;$SYSDIR&quot;
+	
+	;Windows Script Host ActiveX Control
+	;In a moment, we will also install the Windows Script Host Runtime
+	DetailPrint &quot;Installing Windows Script Host ActiveX Control&quot;
+	!insertmacro InstallLib REGDLL ${ALREADY_INSTALLED} REBOOT_PROTECTED &quot;Microsoft Redist\wshom.ocx&quot; &quot;$SYSDIR\wshom.ocx&quot; &quot;$SYSDIR&quot;
+
+	;Let&#39;s get DCOM and the Windows Script Host going.  Only required for Windows 2000 or older
+	SetOutPath $TEMP
+	File &quot;Microsoft Redist\DCOM98\DCOM98.exe&quot;
+	File &quot;Microsoft Redist\WSH56\WScr9x.exe&quot;
+	File &quot;Microsoft Redist\WSH56\WScrNT2k.exe&quot;
+	
+	;Let&#39;s check for, and if necessary, install DCOM98 on this computer.
+	;It is only needed on Windows 95/98
+	${IfNot} ${IsNT}
+		;Yes or no: is DCOM98 installed
+		;If we need to drill down deeper, this returns a version string (but I don&#39;t need to)
+		;A reboot is mandatory according to the Microsoft documentation
+		;We are going to run in Silent mode, with no DCOM98 reboot (while telling NSIS to reboot at the end of EVERYTHING)
+		ReadRegStr $DCOM98INSTALL HKCR &quot;CLSID\{bdc67890-4fc0-11d0-a805-00aa006d2ea4}&quot; &quot;InstalledVersion&quot;
+		${If} $DCOM98INSTALL == &quot;&quot;
+			DetailPrint &quot;Installing DCOM98...&quot;
+			ExecWait &quot;$\&quot;$TEMP\DCOM98.exe$\&quot; $\&quot;/r:n /q:u$\&quot;&quot; $DCOM98RETURN
+			SetRebootFlag true
+		${EndIf}
+	${EndIf}
+	;Let&#39;s install Windows Script Host (already included with XP+)
+	;First, let&#39;s get the file version of scrrun.dll (Scripting Host).  We have installers for version 5.6 of the runtime
+	${GetFileVersion} &quot;$SYSDIR\scrrun.dll&quot; $SCRRUNDLL
+	${VersionCompare} &quot;5.6&quot; $SCRRUNDLL $SCRRUNVER
+	${If} $SCRRUNVER == &quot;1&quot;
+		${If} ${IsNT}
+			${If} ${AtMostWin2000}
+				;Windows Script Host for Windows NT 4.0 and Windows 2000
+				DetailPrint &quot;Installing Windows Script Host 5.6 for Windows NT 4.0 and Windows 2000&quot;
+				ExecWait &quot;$\&quot;$TEMP\WScrNT2k.exe$\&quot; $\&quot;/q /r:n$\&quot;&quot; $scr_exit_code
+				SetRebootFlag true
+			${EndIf}
+		${Else}
+			;Windows Script Host for Windows 95/98
+			DetailPrint &quot;Installing Windows Script Host 5.6 for Windows 95 and 98&quot;
+			ExecWait &quot;$\&quot;$TEMP\Wscr9x.exe$\&quot; $\&quot;/q /r:n$\&quot;&quot; $scr_exit_code
+			SetRebootFlag true
+		${EndIf}
+	${EndIf}
+	
+
+	
+	;Finished installing System Components
+SectionEnd
+;$ProductName Install
+Section &quot;$CompanyName $ProductName&quot; TStoreBase
+	;We want Shortcuts to be for All Users
+	SetShellVarContext all
+	
+	;Install Files
+	SetOutPath $INSTDIR
+	SetOverwrite ifnewer
+	DetailPrint &quot;Installing $ProductName&quot;
+	File &quot;..\Build\TStore.exe&quot;
+	File &quot;..\Build\TStore.exe.manifest&quot;
+	File &quot;..\README.txt&quot;
+	File &quot;License\LICENSE.rtf&quot;
+	
+	;Get the Product Version
+	${GetFileVersion} &quot;$INSTDIR\TStore.exe&quot; $TSTOREVER
+	
+	;Create Shortcut
+	CreateShortcut &quot;$SMPROGRAMS\$ProductName.lnk&quot; &quot;$INSTDIR\TStore.exe&quot; &quot;&quot; &quot;$INSTDIR\TStore.exe&quot; 0 &quot;SW_SHOWNORMAL&quot; &quot;&quot; &quot;$ProductName stores the locations of your games and trainers in an easy to use format&quot;
+	
+	;Create $ProductName Registry entries
+	WriteRegStr HKLM &quot;Software\$CompanyName\$ProductName&quot; &quot;Installation Folder&quot; &quot;$INSTDIR&quot;
+	WriteRegStr HKLM &quot;Software\$CompanyName\$ProductName&quot; &quot;Product Version&quot; &quot;$TSTOREVER&quot;
+	WriteRegStr HKLM &quot;Software\$CompanyName\$ProductName&quot; &quot;SMFolder&quot; &quot;$SMPROGRAMS&quot;
+	WriteRegStr HKLM &quot;Software\$CompanyName\$ProductName&quot; &quot;Uninstall Key Location&quot; &quot;Software\Microsoft\Windows\CurrentVersion\Uninstall\$CompanyName $ProductName&quot;
+	
+	;Create master TSTORE.INI file (meant to be read-only)
+	WriteINIStr &quot;$INSTDIR\TStore.ini&quot; &quot;General&quot; &quot;Version&quot; &quot;$TSTOREVER&quot;
+	WriteINIStr &quot;$INSTDIR\TStore.ini&quot; &quot;General&quot; &quot;Path&quot; &quot;$INSTDIR&quot;
+	
+SectionEnd
+Section &quot;Source Code&quot; Src
+	;Install the Source Code
+	DetailPrint &quot;Installing Source Code&quot;
+	StrCpy $SRCCODE &quot;$INSTDIR\Source&quot;
+	CreateDirectory &quot;$SRCCODE&quot;
+	SetOutPath &quot;$SRCCODE&quot;
+	
+	;$ProductName Source Code
+	File &quot;..\DetectOSBits.bas&quot;
+	File &quot;..\frmMain.frm&quot;
+	File &quot;..\INIFile.bas&quot;
+	File &quot;..\OSVersionInfo.bas&quot;
+	File &quot;..\README.txt&quot;
+	File &quot;..\Registry.bas&quot;
+	File &quot;..\SFile.bas&quot;
+	File &quot;..\SpecialFolder.bas&quot;
+	File &quot;..\TStore.bas&quot;
+	File &quot;..\TStore.PDM&quot;
+	File &quot;..\TStore.vbp&quot;
+	File &quot;..\TStore.vbw&quot;
+	File &quot;..\VersionCompare.bas&quot;
+	File &quot;..\wHwnd.bas&quot;
+	CreateDirectory &quot;$SRCCODE\Installer&quot;
+	CreateDirectory &quot;$SRCCODE\Build&quot;
+	SetOutPath &quot;$SRCCODE\Installer&quot;
+	File &quot;TSSetup.nsi&quot;
+	File &quot;TSSetup-Patch.nsi&quot;
+	
+	;Let&#39;s recreate the Microsoft Redist folders that TSSetup.nsi expects
+	CreateDirectory &quot;$SRCCODE\Installer\Microsoft Redist&quot;
+	SetOutPath &quot;$SRCCODE\Installer\Microsoft Redist&quot;
+	
+	;Copy the existing files so that they are in the locations TSSetup.nsi expects
+	;The numbers at the end are the size in KB so the insaller can correctly do disk costing
+	;NOTE: The Visual Basic 6.0 runtime files are from the 2012 Security Update
+	;The InstallLib macro above correctly handles file updates, even on modern versions of Windows
+	;DO NOT ATTEMPT TO REGISTER THESE COPIES OF SYSTEM FILES - YOU WILL BREAK WINDOWS
+	CopyFiles &quot;$SYSDIR\asycfilt.dll&quot; &quot;$SRCCODE\Installer\Microsoft Redist&quot; 145
+	CopyFiles &quot;$SYSDIR\comcat.dll&quot; &quot;$SRCCODE\Installer\Microsoft Redist&quot; 22
+	CopyFiles &quot;$SYSDIR\comct232.ocx&quot; &quot;$SRCCODE\Installer\Microsoft Redist&quot; 167
+	CopyFiles &quot;$SYSDIR\comctl32.ocx&quot; &quot;$SRCCODE\Installer\Microsoft Redist&quot; 604
+	CopyFiles &quot;$SYSDIR\comdlg32.ocx&quot; &quot;$SRCCODE\Installer\Microsoft Redist&quot; 153
+	CopyFiles &quot;$SYSDIR\msvbvm60.dll&quot; &quot;$SRCCODE\Installer\Microsoft Redist&quot; 1354
+	CopyFiles &quot;$SYSDIR\oleaut32.dll&quot; &quot;$SRCCODE\Installer\Microsoft Redist&quot; 585
+	CopyFiles &quot;$SYSDIR\olepro32.dll&quot; &quot;$SRCCODE\Installer\Microsoft Redist&quot; 161
+	CopyFiles &quot;$SYSDIR\stdole2.tlb&quot; &quot;$SRCCODE\Installer\Microsoft Redist&quot; 18
+	CopyFiles &quot;$SYSDIR\wshom.ocx&quot; &quot;$SRCCODE\Installer\Microsoft Redist&quot; 101
+	
+	CreateDirectory &quot;$SRCCODE\Installer\Microsoft Redist\DCOM98&quot;
+	SetOutPath &quot;$SRCCODE\Installer\Microsoft Redist\DCOM98&quot;
+	CopyFiles &quot;$TEMP\DCOM98.exe&quot; &quot;$SRCCODE\Installer\Microsoft Redist\DCOM98&quot; 1194
+	
+	CreateDirectory &quot;$SRCCODE\Installer\Microsoft Redist\WSH56&quot;
+	SetOutPath &quot;$SRCCODE\Installer\Microsoft Redist\WSH56&quot;
+	CopyFiles &quot;$TEMP\WScr9x.exe&quot; &quot;$SRCCODE\Installer\Microsoft Redist\WSH56&quot; 716
+	CopyFiles &quot;$TEMP\WScrNT2k.exe&quot; &quot;$SRCCODE\Installer\Microsoft Redist\WSH56&quot; 716
+SectionEnd
+Section &quot;-Unistall Registry Keys&quot; Unins
+	;Create Uninstall Registry Entries
+	DetailPrint &quot;Creating Uninstaller&quot;
+	StrCpy $UNINSREG &quot;Software\Microsoft\Windows\CurrentVersion\Uninstall\$CompanyName $ProductName&quot;
+	
+	;Get $ProductName file version for the Uninstall Registry key
+	${GetFileVersion} &quot;$INSTDIR\TStore.exe&quot; $R0
+	
+	;Write the keys to the Registry
+	WriteRegStr HKLM $UNINSREG &quot;DisplayName&quot; &quot;$CompanyName $ProductName&quot;
+	WriteRegStr HKLM $UNINSREG &quot;DisplayVersion&quot; $R0
+	WriteRegStr HKLM $UNINSREG &quot;UninstallString&quot; &quot;$INSTDIR\uninstall.exe&quot;
+	WriteRegStr HKLM $UNINSREG &quot;Publisher&quot; &quot;$CompanyName&quot;
+	
+	;Write our Uninstaller
+	WriteUninstaller &quot;$INSTDIR\uninstall.exe&quot;
+SectionEnd
+Section &quot;-Cleanup&quot; Cleanup
+	;Let&#39;s remove the redist installers
+	DetailPrint &quot;Cleaning up&quot;
+	Delete &quot;$TEMP\DCOM98.exe&quot;
+	Delete &quot;$TEMP\Wscr9x.exe&quot;
+	Delete &quot;$TEMP\WScrNT2k.exe&quot;
+SectionEnd
+
+;Section Descriptions
+LangString DESC_TStoreBase ${LANG_ENGLISH} &quot;$ProductName stores the locations of games and trainers&quot;
+LangString DESC_Src ${LANG_ENGLISH} &quot;Source Code for $ProductName (Visual Basic 6)&quot;
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+	!insertmacro MUI_DESCRIPTION_TEXT ${TStoreBase} $(DESC_TStoreBase)
+	!insertmacro MUI_DESCRIPTION_TEXT ${Src} $(DESC_Src)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+;This runs when the program is uninstalling
+Section &quot;Uninstall&quot;
+	;We want Shortcuts to be for All Users
+	SetShellVarContext all
+	
+	;Grab the proper installation folder (in case the uninstaller is in the wrong place)
+	ReadRegStr $INSTDIR HKLM &quot;Software\$CompanyName\$ProductName&quot; &quot;Installation Folder&quot;
+	
+	;Remove our Registry keys
+	DetailPrint &quot;Deleting Registry Keys&quot;
+	DeleteRegKey HKLM &quot;Software\Microsoft Windows\CurrentVersion\Uninstall\$CompanyName $ProductName&quot;
+	DeleteRegKey HKLM &quot;Software\$CompanyName\$ProductName&quot;
+	DeleteRegKey /ifempty HKLM &quot;Software\$CompanyName&quot;
+	
+	;Remove $ProductName&#39;s executable
+	DetailPrint &quot;Uninstalling $ProductName&quot;
+	RMDir /r /REBOOTOK &quot;$INSTDIR\Source&quot; ;Recursively search the folder to clear out any extra files
+	Delete &quot;$INSTDIR\TStore.exe&quot;
+	Delete &quot;$INSTDIR\TStore.exe.manifest&quot;
+	Delete &quot;$INSTDIR\License.rtf&quot;
+	Delete &quot;$INSTDIR\README.txt&quot;
+	Delete &quot;$INSTDIR\TStore.ini&quot;
+	Delete &quot;$INSTDIR\uninstall.exe&quot;
+	RMDir &quot;$INSTDIR&quot; ;DO NOT do a /r recursive search (in case, for example, someone installed to C:\Program Files this would really mess up the users computer)
+	RMDir $PROGRAMFILES\$CompanyName ;AGAIN, do NOT use /r (this deletes it ONLY IF EMPTY)
+	
+	DetailPrint &quot;Deleting Shortcuts&quot;
+	Delete &quot;$SMPROGRAMS\$ProductName.lnk&quot;
+	
+	;We are DONE with uninstall
+	;As a reminder, DO NOT TOUCH any of the Microsoft DLLs that get installed
+	;Also, $ProductName&#39;s per-user files do not get uninstalled (it&#39;s just not possible to remove files for users other than your own in the main uninstaller, however it is possible to release a utility that does PER-USER cleaning)
+	
+SectionEnd
+
+;We need to do some checks when the installer and uninstaller are started.
+
+;Tests for Admin rights NT4/2000/XP
+;Also works if somehow UAC is disabled or broken on Vista+
+;Also, on Windows NT 4.0, the Visual Basic runtime requires Service Pack 3 or later installed
+Function .onInit
+	;Company and Product
+	StrCpy $CompanyName &quot;RaggieSoft&quot;
+	StrCpy $ProductName &quot;StoreTrainer&quot;
+	
+	;Redefine the install folder
+	StrCpy $INSTDIR &quot;$PROGRAMFILES\$CompanyName\$ProductName&quot;
+	
+	;Check for NT Admin Rights
+	UserInfo::GetAccountType
+	pop $0
+	${If} $0 != &quot;admin&quot; ;Require admin rights on NT4+
+		MessageBox MB_ICONSTOP|MB_OK &quot;Administrator rights required to install $ProductName!&quot; /SD IDOK
+		SetErrorLevel 740 ;ERROR_ELEVATION_REQUIRED
+		Quit
+	${EndIf}
+
+	;Check for NT 4.0 SP3 or higher
+	;Otherwise, $ProductName *SHOULD* be able to run on any other 32bit or 64bit OS
+	;That is Windows 95 or later.  Sorry Windows 3.1
+	${If} ${IsNT}
+		${If} ${IsWinNT4}
+			${If} ${AtMostServicePack} 2
+				MessageBox MB_ICONSTOP|MB_OK &quot;Service Pack 3 or higher is required for Windows NT 4.0&quot; /SD IDOK
+				SetErrorLevel 3 ;3 because Service Pack 3 (pun intended)
+				Quit
+			${EndIf}
+		${EndIf}
+	${EndIf}
+	
+	;Detect previous version
+	ReadRegStr  $IS_INSTALLED HKLM &quot;Software\$CompanyName\$ProductName&quot; &quot;Installation Folder&quot;
+	IfFileExists &quot;$IS_INSTALLED\uninstall.exe&quot; FileFound EndFileExistsTest
+	FileFound:
+		;Let&#39;s check file versions.
+		${GetFileVersion} &quot;$INSTDIR\TStore.exe&quot; $R0
+		${GetFileVersion} &quot;$EXEPATH&quot; $R1
+		${VersionCompare} $R0 $R1 $TSTORESETUP
+		
+		;This installer is the same as what is already installed
+		${If} $TSTORESETUP == 0
+			Exec &quot;$IS_INSTALLED\uninstall.exe&quot;
+			SetErrorLevel 4
+			Quit
+		${EndIf}
+		
+		;This installer has an older version of $ProductName
+		${If} $TSSETUP == 1
+			MessageBox MB_ICONSTOP|MB_OK &quot;This installer contains an older version of $ProductName.$\r$\nSetup will now close.&quot; /SD IDOK
+			SetErrorLevel 5
+			Quit
+		${EndIf}
+	EndFileExistsTest:
+
+		
+FunctionEnd
+Function un.onInit
+	;Company and Product
+	StrCpy $CompanyName &quot;RaggieSoft&quot;
+	StrCpy $ProductName &quot;StoreTrainer&quot;
+	
+	UserInfo::GetAccountType
+	pop $0
+	${If} $0 != &quot;admin&quot; ;Require admin rights on NT4+
+		MessageBox MB_ICONSTOP|MB_OK &quot;Administrator rights required to uninstall $ProductName!&quot; /SD IDOK
+		SetErrorLevel 740 ;ERROR_ELEVATION_REQUIRED
+		Quit
+	${EndIf}
+FunctionEnd</code></pre>
+      </section>
+
+      <section id="tssetup-patch-nsi" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-tssetup-patch-nsi">
+        <h2 id="heading-tssetup-patch-nsi" style="margin-top: 0;">Installer/TSSetup-Patch.nsi (Lightweight Patch Installer)</h2>
+        <p>Compact update installer script updating `TStore.exe` and linking directly to `https://storetrainer.raggiesoft.com/`.</p>
+        <pre class="code-viewer"><code>; Variables for the Product Information
+Var CompanyName
+Var ProductName
+
+; InstallSpider UI
+!include &quot;ISUI.nsh&quot;
+
+; For using Logic operators
+!include &quot;LogicLib.nsh&quot;
+
+; Detect Windows Version
+!include &quot;WinVer.nsh&quot;
+
+; For installing my system libraries
+!include &quot;Library.nsh&quot;
+
+; For getting file functions
+!include &quot;FileFunc.nsh&quot;
+
+; For comparing versions
+!include &quot;WordFunc.nsh&quot;
+
+; Installer for RaggieSoft StoreTrainer
+Name &quot;$CompanyName $ProductName&quot;
+OutFile &quot;tspatch104.exe&quot;
+BrandingText &quot;$CompanyName&quot;
+
+; Show file copy operations
+ShowInstDetails show
+ShowUninstDetails show
+
+; Default install folder
+InstallDir &quot;$PROGRAMFILES\$CompanyName\$ProductName&quot;
+
+; Install Folder Registry Key
+InstallDirRegKey HKLM &quot;Software\$CompanyName\$ProductName&quot; &quot;Installation Folder&quot;
+
+; Subscribe to Common Controls 6.0 in Windows XP+
+XPStyle on
+
+; Request application privileges for Windows Vista and above
+; See un.onInit and .onInit for older versions of WinNT Admin Rights checks
+RequestExecutionLevel admin
+
+; What versions of Windows UAC dialogs to support
+ManifestSupportedOS all
+
+; Version this installer has
+!getdllversion &quot;..\Build\TStore.exe&quot; Expv_
+
+; Installation Version Information
+VIProductVersion &quot;${Expv_1}.${Expv_2}.${Expv_3}.${Expv_4}&quot;
+VIAddVersionKey &quot;ProductName&quot; &quot;$ProductName&quot;
+VIAddVersionKey &quot;Comments&quot; &quot;&quot;
+VIAddVersionKey &quot;CompanyName&quot; &quot;$CompanyName&quot;
+VIAddVersionKey &quot;LegalTrademarks&quot; &quot;$ProductName is a trademark of $CompanyName&quot;
+VIAddVersionKey &quot;LegalCopyright&quot; &quot;Copyright (C) 2018-2020 $CompanyName&quot;
+VIAddVersionKey &quot;FileDescription&quot; &quot;Stores the locations of games and trainers&quot;
+VIAddVersionKey &quot;FileVersion&quot; &quot;${Expv_1}.${Expv_2}.${Expv_3}.${Expv_4}&quot;
+
+Var PreviousInstallFolder
+Var TStoreVersionInstalled
+Var TStoreVersionPatch
+Var TSVerCompare
+
+; Install Pages
+	;Redefine the text on the Welcome page to let everyone know that this is a Patch installer
+	!define MUI_WELCOMEPAGE_TITLE &quot;$CompanyName $ProductName Patcher&quot;
+	!define MUI_WELCOMEPAGE_TEXT &quot;Welcome to the patch utility for $CompanyName $ProductName.  This installer will update your copy of $ProductName from version $TStoreVersionInstalled to version ${Expv_1}.${Expv_2}.${Expv_3}.${Expv_4}.$\r$\n$\r$\nIt is recommended that you close all other applications before starting Setup. This will make it possible to update relevant system files without having to reboot your computer$\r$\n$\r$\n$_CLICK&quot;
+!insertmacro MUI_PAGE_WELCOME
+	; Set up our License page
+	!define MUI_LICENSEPAGE_RADIOBUTTONS
+	!define MUI_LICENSEPAGE_RADIOBUTTONS_TEXT_ACCEPT &quot;I &amp;Accept&quot;
+	!define MUI_LICENSEPAGE_RADIOBUTTONS_TEXT_DECLINE &quot;I &amp;Decline&quot;
+!insertmacro MUI_PAGE_LICENSE &quot;License\LICENSE.rtf&quot;
+;!insertmacro MUI_PAGE_COMPONENTS
+;!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
+	; Set up our Finish page
+	!define MUI_FINISHPAGE_RUN $INSTDIR\TStore.exe
+	!define MUI_FINISHPAGE_RUN_TEXT &quot;&amp;Launch $ProductName&quot;
+	!define MUI_FINISHPAGE_LINK &quot;&amp;Visit the $ProductName Website&quot;
+	!define MUI_FINISHPAGE_LINK_LOCATION &quot;https://storetrainer.raggiesoft.com/&quot;
+!insertmacro MUI_PAGE_FINISH
+
+; Uninstall Pages
+!insertmacro MUI_UNPAGE_WELCOME
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_UNPAGE_FINISH
+
+; Language Setting (yes, AFTER pages are loaded)
+!insertmacro MUI_LANGUAGE &quot;English&quot;
+
+; $ProductName Install
+Section &quot;$CompanyName $ProductName&quot; TStoreBase
+	; Install Files
+	SetOutPath $INSTDIR
+	SetOverwrite ifnewer
+	DetailPrint &quot;Installing $ProductName&quot;
+	File &quot;..\Build\TStore.exe&quot;
+	File &quot;..\Build\TStore.exe.manifest&quot;
+	File &quot;..\README.txt&quot;
+	File &quot;License\LICENSE.rtf&quot;
+	
+	; Create master TSTORE.INI file (meant to be read-only)
+	Var /GLOBAL TSTOREVER
+	${GetFileVersion} &quot;$INSTDIR\TStore.exe&quot; $TSTOREVER
+	WriteINIStr &quot;$INSTDIR\TStore.ini&quot; &quot;General&quot; &quot;Version&quot; &quot;$TSTOREVER&quot;
+	WriteINIStr &quot;$INSTDIR\TStore.ini&quot; &quot;General&quot; &quot;Path&quot; &quot;$INSTDIR&quot;
+	
+	; Create Shortcut
+	CreateShortcut &quot;$SMPROGRAMS\$ProductName.lnk&quot; &quot;$INSTDIR\TStore.exe&quot; &quot;&quot; &quot;$INSTDIR\TStore.exe&quot; 0 SW_SHOWNORMAL &quot;&quot; &quot;$ProductName stores the locations of your games and trainers in an easy to use format&quot;
+	
+	; Create $ProductName Registry entries
+	WriteRegStr HKLM &quot;Software\$CompanyName\$ProductName&quot; &quot;Installation Folder&quot; &quot;$INSTDIR&quot;
+	WriteRegStr HKLM &quot;Software\$CompanyName\$ProductName&quot; &quot;Product Version&quot; &quot;$TSTOREVER&quot;
+	WriteRegStr HKLM &quot;Software\$CompanyName\$ProductName&quot; &quot;SMFolder&quot; &quot;$SMPROGRAMS&quot;
+	WriteRegStr HKLM &quot;Software\$CompanyName\$ProductName&quot; &quot;Uninstall Key Location&quot; &quot;Software\Microsoft\Windows\CurrentVersion\Uninstall\$CompanyName $ProductName&quot;
+	
+SectionEnd
+Section &quot;Source Code&quot; Src
+	; Install the Source Code
+	DetailPrint &quot;Installing Source Code&quot;
+	Var /GLOBAL SRCCODE
+	StrCpy $SRCCODE &quot;$INSTDIR\Source&quot;
+	CreateDirectory &quot;$SRCCODE&quot;
+	SetOutPath &quot;$SRCCODE&quot;
+	
+	; $ProductName Source Code
+	File &quot;..\DetectOSBits.bas&quot;
+	File &quot;..\frmMain.frm&quot;
+	File &quot;..\INIFile.bas&quot;
+	File &quot;..\OSVersionInfo.bas&quot;
+	File &quot;..\README.txt&quot;
+	File &quot;..\Registry.bas&quot;
+	File &quot;..\SFile.bas&quot;
+	File &quot;..\SpecialFolder.bas&quot;
+	File &quot;..\TStore.bas&quot;
+	File &quot;..\TStore.PDM&quot;
+	File &quot;..\TStore.vbp&quot;
+	File &quot;..\TStore.vbw&quot;
+	File &quot;..\VersionCompare.bas&quot;
+	File &quot;..\wHwnd.bas&quot;
+	CreateDirectory &quot;$SRCCODE\Installer&quot;
+	CreateDirectory &quot;$SRCCODE\Build&quot;
+	SetOutPath &quot;$SRCCODE\Installer&quot;
+	File &quot;TSSetup.nsi&quot;
+	File &quot;TSSetup-Patch.nsi&quot;
+	
+	; The Microsoft Redist files are not included in the Patch installer
+
+
+SectionEnd
+
+; The Patch installer does not contain Microsoft Redist
+
+Section &quot;-Unistall Registry Keys&quot; Unins
+	; Create Uninstall Registry Entries
+	DetailPrint &quot;Creating Uninstaller&quot;
+	Var /GLOBAL UNINSREG
+	StrCpy $UNINSREG &quot;Software\Microsoft\Windows\CurrentVersion\Uninstall\$CompanyName $ProductName&quot;
+	
+	; Get $ProductName file version for the Uninstall Registry key
+	${GetFileVersion} &quot;$INSTDIR\TStore.exe&quot; $R0
+	
+	; Write the keys to the Registry
+	WriteRegStr HKLM $UNINSREG &quot;DisplayName&quot; &quot;$CompanyName $ProductName&quot;
+	WriteRegStr HKLM $UNINSREG &quot;DisplayVersion&quot; $R0
+	WriteRegStr HKLM $UNINSREG &quot;UninstallString&quot; &quot;$INSTDIR\uninstall.exe&quot;
+	WriteRegStr HKLM $UNINSREG &quot;Publisher&quot; &quot;$CompanyName&quot;
+	
+	; Write our Uninstaller
+	WriteUninstaller &quot;$INSTDIR\uninstall.exe&quot;
+SectionEnd
+
+; This runs when the program is uninstalling
+; Even with the Patch Installer, you MUST have the COMPLETE uninstall script (NSIS does not log actions like other tools such as Inno Setup or Windows Installer)
+Section &quot;Uninstall&quot;
+	; Switch Start Menu locations
+	SetShellVarContext all
+	
+	; Grab the proper installation folder (in case the uninstaller is in the wrong place)
+	ReadRegStr $INSTDIR HKLM &quot;Software\$CompanyName\$ProductName&quot; &quot;Installation Folder&quot;
+	
+	; Remove our Registry keys
+	DetailPrint &quot;Deleting Registry Keys&quot;
+	DeleteRegKey HKLM &quot;Software\Microsoft Windows\CurrentVersion\Uninstall\$CompanyName $ProductName&quot;
+	DeleteRegKey HKLM &quot;Software\$CompanyName\$ProductName&quot;
+	DeleteRegKey /ifempty HKLM &quot;Software\$CompanyName&quot;
+	
+	; Remove $ProductName&#39;s executable
+	DetailPrint &quot;Uninstalling $ProductName&quot;
+	RMDir /r /REBOOTOK &quot;$INSTDIR\Source&quot;
+	Delete &quot;$INSTDIR\TStore.exe&quot;
+	Delete &quot;$INSTDIR\TStore.exe.manifest&quot;
+	Delete &quot;$INSTDIR\License.rtf&quot;
+	Delete &quot;$INSTDIR\README.txt&quot;
+	Delete &quot;$INSTDIR\TStore.ini&quot;
+	Delete &quot;$INSTDIR\uninstall.exe&quot;
+	RMDir &quot;$INSTDIR&quot; ; DO NOT do a /r recursive search (in case, for example, someone installed to C:\Program Files this would really mess up the users computer)
+	RMDir $PROGRAMFILES\$CompanyName ;AGAIN, do NOT use /r
+	
+	DetailPrint &quot;Deleting Shortcuts&quot;
+	Delete &quot;$SMPROGRAMS\$ProductName.lnk&quot;
+	
+	; We are DONE with uninstall
+	; As a reminder, DO NOT TOUCH any of the Microsoft DLLs that get installed
+	; Also, $ProductName&#39;s per-user files do not get uninstalled (it&#39;s just not possible to remove files for users other than your own in the main uninstaller, however it is possible to release a utility that does PER-USER cleaning)
+	
+SectionEnd
+
+; Section Descriptions
+LangString DESC_TStoreBase ${LANG_ENGLISH} &quot;$ProductName stores the locations of games and trainers&quot;
+LangString DESC_Src ${LANG_ENGLISH} &quot;Source Code for $ProductName (Visual Basic 6)&quot;
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+	!insertmacro MUI_DESCRIPTION_TEXT ${TStoreBase} $(DESC_TStoreBase)
+	!insertmacro MUI_DESCRIPTION_TEXT ${Src} $(DESC_Src)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+
+; We need to do some checks when the installer and uninstaller are started.
+
+; Tests for Admin rights NT4/2000/XP
+; Also works if somehow UAC is disabled or broken on Vista+
+; Also, on Windows NT 4.0, the Visual Basic runtime requires Service Pack 3 or later installed
+Function .onInit
+	; Company and Product
+	StrCpy $CompanyName &quot;RaggieSoft&quot;
+	StrCpy $ProductName &quot;StoreTrainer&quot;
+	
+	; Redefine the install folder (Setup will cross-check it later)
+	StrCpy $INSTDIR &quot;$PROGRAMFILES\$CompanyName\$ProductName&quot;
+	
+	; Check for NT Admin Rights
+	UserInfo::GetAccountType
+	pop $0
+	${If} $0 != &quot;admin&quot; ;Require admin rights on NT4+
+		MessageBox MB_ICONSTOP|MB_OK &quot;Administrator rights required to install $ProductName!&quot; /SD IDOK
+		SetErrorLevel 740 ;ERROR_ELEVATION_REQUIRED
+		Quit
+	${EndIf}
+
+	; Check for NT 4.0 SP3 or higher
+	; Otherwise, $ProductName *SHOULD* be able to run on any other 32bit or 64bit OS
+	; That is Windows 95 or later.  Sorry Windows 3.1
+	${If} ${IsNT}
+		${If} ${IsWinNT4}
+			${If} ${AtMostServicePack} 2
+				MessageBox MB_ICONSTOP|MB_OK &quot;Service Pack 3 or higher is required for Windows NT 4.0&quot; /SD IDOK
+				SetErrorLevel 3 ;3 because Service Pack 3 (pun intended)
+				Quit
+			${EndIf}
+		${EndIf}
+	${EndIf}
+	
+	; Since this is a Patch installer, check for a previous version of $ProductName
+	ReadRegStr $PreviousInstallFolder HKLM &quot;Software\$CompanyName\$ProductName&quot; &quot;Installation Folder&quot;
+	IfFileExists &quot;$PreviousInstallFolder\TStore.exe&quot; file_found file_not_found
+	file_not_found:
+		MessageBox mb_iconstop &quot;This patch utility requires that you have $CompanyName $ProductName already installed!&quot; /SD IDOK
+		SetErrorLevel 7
+		Quit
+	file_found:
+	${If} $PreviousInstallFolder == &quot;&quot;
+		MessageBox mb_iconstop &quot;This installer requires a previous version of $ProductName to be installed!&quot; /SD IDOK
+		SetErrorLevel 4
+		Quit
+	${Else}
+		StrCpy $INSTDIR $PreviousInstallFolder
+		${GetFileVersion} &quot;$INSTDIR\TStore.exe&quot; $TStoreVersionInstalled
+		SetOutPath $TEMP
+		File &quot;..\Build\TStore.exe&quot;
+		${GetFileVersion} &quot;$TEMP\TStore.exe&quot; $TStoreVersionPatch
+		${VersionCompare} &quot;$TStoreVersionInstalled&quot; &quot;$TStoreVersionPatch&quot; $TSVerCompare
+		Delete &quot;$TEMP\TStore.exe&quot;
+		
+		${If} $TSVerCompare == 0
+			MessageBox mb_iconstop &quot;This patch is the same version of $ProductName you have!&quot; /SD IDOK
+			SetErrorLevel 5
+			Quit
+		${ElseIf} $TSVerCompare == 1
+			MessageBox mb_iconstop &quot;You have a newer version of $ProductName installed!&quot; /SD IDOK
+			SetErrorLevel 6
+			Quit
+		${EndIf}
+	${EndIf}
+FunctionEnd
+Function un.onInit
+	; Company and Product
+	StrCpy $CompanyName &quot;RaggieSoft&quot;
+	StrCpy $ProductName &quot;StoreTrainer&quot;
+	UserInfo::GetAccountType
+	pop $0
+	${If} $0 != &quot;admin&quot; ;Require admin rights on NT4+
+		MessageBox mb_iconstop &quot;Administrator rights required to uninstall $ProductName!&quot; /SD IDOK
+		SetErrorLevel 740 ;ERROR_ELEVATION_REQUIRED
+		Quit
+	${EndIf}
+FunctionEnd</code></pre>
+      </section>
+  
+      </main>
+
+      <!-- Netscape Status Bar & Global Legal Footer -->
+      <footer class="netscape-statusbar" role="contentinfo">
+        <div class="status-cell">🔒 TLS 1.3 Modern Security • Document: Done (WCAG 2.1 AA / Section 508 Verified)</div>
+        <div class="status-cell">
+          Code: <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT License</a> |
+          Docs: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Global Fictitious Disclaimer & Network Links Outside Window Frame -->
+    <div class="netscape-window win-outset" style="margin-top: 0.75rem; padding: 0.85rem 1.15rem; font-size: 12.5px;">
+      <p style="margin: 0 0 0.5rem;">
+        <strong>RaggieSoft Ecosystem Links:</strong>
+        <a href="https://raggiesoft.com">RaggieSoft Hub</a> •
+        <a href="https://corporate.raggiesoft.com">RaggieSoft Media (B2B)</a> •
+        <a href="https://michaelpragsdale.com">Michael P. Ragsdale Portfolio</a> •
+        <a href="https://music.raggiesoft.com">The Listening Room</a> •
+        <a href="https://books.raggiesoft.com">RaggieSoft Book Reader</a> •
+        <a href="https://lore.raggiesoft.com">Lore Omnibus</a> •
+        <a href="https://engineroom.raggiesoft.com">Engine Room Records</a> •
+        <a href="https://stardust.raggiesoft.com">The Stardust Engine</a> •
+        <a href="https://nebulae.raggiesoft.com">The RaggieSoft Nebulae</a>
+      </p>
+      <p style="margin: 0;">
+        <strong>Fictitious Persons &amp; Entities Disclaimer:</strong> While <strong>RaggieSoft StoreTrainer</strong> is a real-world Win32 desktop utility authored by <strong>Michael P. Ragsdale</strong>, all narrative characters, bands, biographies, universities (including Commonwealth Polytechnic Institute / CPI, The Forgers, and The Crucible), corporations (including OmniCorp, Apex Records, Prairie Coachworks, and Sainte-Claire), transit agencies (Blue Ridge Transit), in-universe legal filings, and any entity with <strong>&ldquo;LLC&rdquo;</strong>, <strong>&ldquo;Trust&rdquo;</strong>, or <strong>&ldquo;Holdings&rdquo;</strong> in its name across the wider RaggieSoft network are works of fiction. Any resemblance to actual persons (living or dead), businesses, institutions, or events is purely coincidental.
+      </p>
+    </div>
+
+    <script src="https://assets.raggiesoft.com/storetrainer/js/netscape-ui.js" defer></script>
+    <script src="https://assets.raggiesoft.com/common/js/raggiesoft-network.js" defer></script>
+  </body>
+</html>

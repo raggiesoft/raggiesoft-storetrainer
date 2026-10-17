@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      try {
+        var storedScheme = localStorage.getItem('color-scheme');
+        document.querySelector('meta[name="color-scheme"]').content = storedScheme ?? 'light dark';
+        var resolvedTheme = (storedScheme === 'light' || storedScheme === 'dark')
+          ? storedScheme
+          : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', resolvedTheme);
+      } catch (e) {}
+    </script>
+    <title>RaggieSoft StoreTrainer | Win32 Game &amp; Trainer Manager</title>
+    <meta name="description" content="Official portal for RaggieSoft StoreTrainer (TStore.exe)—a hand-written VB6 Win32 utility to store and launch PC games and game trainers on Windows 95–11." />
+    <link rel="canonical" href="https://storetrainer.raggiesoft.com" />
+    <meta property="og:title" content="RaggieSoft StoreTrainer | Win32 Game &amp; Trainer Manager" />
+    <meta property="og:description" content="Official portal for RaggieSoft StoreTrainer (TStore.exe)—a hand-written VB6 Win32 utility to store and launch PC games and game trainers on Windows 95–11." />
+    <meta property="og:image" content="https://assets.raggiesoft.com/raggiesoft-corporate/images/og/raggiesoft-corporate-og.jpg" />
+    <meta property="og:url" content="https://storetrainer.raggiesoft.com" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="RaggieSoft StoreTrainer" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="RaggieSoft StoreTrainer | Win32 Game &amp; Trainer Manager" />
+    <meta name="twitter:description" content="Official portal for RaggieSoft StoreTrainer (TStore.exe)—a hand-written VB6 Win32 utility to store and launch PC games and game trainers on Windows 95–11." />
+    <meta name="twitter:image" content="https://assets.raggiesoft.com/raggiesoft-corporate/images/og/raggiesoft-corporate-og.jpg" />
+    <link rel="icon" type="image/png" href="https://assets.raggiesoft.com/raggiesoft-corporate/images/logos/raggiesoft-logo.png" />
+    <link rel="stylesheet" href="https://assets.raggiesoft.com/storetrainer/css/win98-netscape.css" />
+    <link rel="stylesheet" href="https://assets.raggiesoft.com/common/css/raggiesoft-network.css" />
+  </head>
+  <body>
+    <a href="#content" class="skip-link">Skip to main document content</a>
+
+    <nav class="rs-network-bar" aria-label="RaggieSoft Ecosystem Network" style="margin-bottom: 0.45rem; border-radius: 4px;">
+      <div class="rs-network-bar-inner">
+        <span class="rs-network-label">✦ RaggieSoft Network:</span>
+        <ul class="rs-network-links">
+          <li><a href="https://raggiesoft.com">🌐 Hub</a></li>
+          <li><a href="https://nebulae.raggiesoft.com">🌌 Nebulae</a></li>
+          <li><a href="https://music.raggiesoft.com">🎧 Music</a></li>
+          <li><a href="https://books.raggiesoft.com">📚 Books</a></li>
+          <li><a href="https://stardust.raggiesoft.com">🚀 Stardust</a></li>
+          <li><a href="https://engineroom.raggiesoft.com">⚙️ Engine Room</a></li>
+          <li><a href="https://lore.raggiesoft.com">🏛️ Lore</a></li>
+          <li><a href="https://corporate.raggiesoft.com">🏢 Corporate</a></li>
+          <li><a href="https://storetrainer.raggiesoft.com" aria-current="page" class="is-active">💾 StoreTrainer</a></li>
+          <li><a href="https://michaelpragsdale.com">👔 Michael P. Ragsdale</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="netscape-window win-outset" role="application" aria-label="Netscape Communicator 4.78 — RaggieSoft StoreTrainer Portal">
+      <!-- Win2000 Title Bar -->
+      <header class="win-titlebar" role="banner">
+        <div class="win-titlebar-left">
+          <span aria-hidden="true">🖳</span>
+          <span>RaggieSoft StoreTrainer | Win32 Game &amp; Trainer Manager - Netscape Communicator 4.78 [Windows 2000 Professional SP4]</span>
+        </div>
+        <div class="win-titlebar-controls" aria-hidden="true">
+          <span class="win-ctrl-box">_</span>
+          <span class="win-ctrl-box">□</span>
+          <span class="win-ctrl-box">×</span>
+        </div>
+      </header>
+
+      <!-- Menu Bar -->
+      <div class="netscape-menubar" role="navigation" aria-label="Application Menu Bar">
+        <ul class="netscape-menu-items">
+          <li><a href="/"><u>F</u>ile</a></li>
+          <li><a href="/source"><u>E</u>dit / Source</a></li>
+          <li><a href="/installer"><u>V</u>iew Installer</a></li>
+          <li><a href="https://raggiesoft.com"><u>H</u>ub</a></li>
+          <li><a href="https://music.raggiesoft.com"><u>M</u>usic</a></li>
+          <li><a href="https://books.raggiesoft.com"><u>B</u>ooks</a></li>
+          <li><a href="https://stardust.raggiesoft.com"><u>S</u>tardust</a></li>
+          <li><a href="https://engineroom.raggiesoft.com"><u>L</u>abel</a></li>
+          <li><a href="https://corporate.raggiesoft.com/projects/storetrainer"><u>C</u>orporate</a></li>
+          <li><a href="https://michaelpragsdale.com"><u>A</u>rchitect</a></li>
+          <li><a href="https://nebulae.raggiesoft.com"><u>N</u>ebulae Sitemap</a></li>
+        </ul>
+        <span style="font-size: 11.5px;">Pre-AI Hand-Written Win32 Freeware (2018–2020)</span>
+      </div>
+
+      <!-- Navigation Toolbar -->
+      <nav class="netscape-toolbar" aria-label="Primary StoreTrainer Navigation">
+        <ul class="netscape-nav-list">
+          <li><a href="/" class="win-btn" aria-current="page">🏠 Home &amp; Download</a></li>
+            <li><a href="/source" class="win-btn">💾 VB6 &amp; .NET Source</a></li>
+            <li><a href="/installer" class="win-btn">📦 NSIS Wizard95 Installer</a></li>
+          <li>
+            <a href="https://assets.raggiesoft.com/storetrainer/tssetup100.exe" class="win-btn win-btn-primary">
+              ⬇️ Download tssetup100.exe (v1.0)
+            </a>
+          </li>
+          <li>
+            <button
+              type="button"
+              id="theme-toggle"
+              class="win-btn"
+              aria-label="Toggle between Windows 98 Classic Light Mode and Windows 2000 High-Contrast Dark Mode"
+            >
+              <span id="theme-toggle-label">🖥️ Theme</span>
+            </button>
+          </li>
+        </ul>
+        <div class="netscape-throbber" aria-hidden="true" title="Netscape Communicator">N</div>
+      </nav>
+
+      <!-- Location / Address Bar -->
+      <div class="netscape-locationbar">
+        <strong>Netsite:</strong>
+        <div class="location-input win-inset" aria-label="Current URL">https://storetrainer.raggiesoft.com</div>
+        <a href="https://raggiesoft.com" class="win-btn">🌐 RaggieSoft Hub</a>
+      </div>
+
+      <!-- Sunken Document Viewport -->
+      <main id="content" class="netscape-viewport win-inset" tabindex="-1">
+        
+    <div class="retro-banner">
+      <h1>RaggieSoft StoreTrainer v1.0 (Win32 Retro PC Game &amp; Trainer Manager)</h1>
+      <p style="margin: 0 0 0.85rem; font-size: 1.02rem;">
+        <strong>RaggieSoft StoreTrainer (<code>TStore.exe</code>)</strong> is a <strong>100% hand-written (pre-AI, 2018–2020)</strong> Win32 desktop utility authored by <strong>Michael P. Ragsdale</strong> in <strong>Visual Basic 6.0 (<code>TStore.vbp</code>)</strong> inside a <strong>Windows 2000 Professional SP4 virtual machine</strong>. It indexes, stores, and launches classic and modern PC games alongside their associated <strong>game trainers (cheat utilities)</strong> and custom command-line switches across every desktop release of Windows from <strong>Windows 95 through Windows 11</strong>.
+      </p>
+      <div style="display: flex; flex-wrap: wrap; gap: 0.65rem;">
+        <a href="https://assets.raggiesoft.com/storetrainer/tssetup100.exe" class="win-btn win-btn-primary">
+          💾 Download Official Installer: tssetup100.exe (Win95–Win11)
+        </a>
+        <a href="/source" class="win-btn">
+          🔍 Inspect VB6 &amp; .NET Source Code (18 Files) →
+        </a>
+        <a href="/installer" class="win-btn">
+          📦 Inspect NSIS Wizard95 Installer Scripts →
+        </a>
+      </div>
+    </div>
+
+    <div class="retro-grid-2">
+      <section class="retro-dialog-card" aria-labelledby="why-built-heading">
+        <h2 id="why-built-heading" style="margin-top: 0;">Why StoreTrainer Was Built (2018–2020)</h2>
+        <p>
+          Many classic 1990s and 2000s PC games require either specific command-line switches (such as resolution overrides, <code>-windowed</code>, or mod directory flags) or companion memory-resident <strong>game trainers</strong> that must be launched in the proper working directory before or alongside the game executable.
+        </p>
+        <p style="margin-bottom: 0;">
+          Built inside a <strong>Windows 2000 Professional SP4 VM</strong> using pure Win32 API calls (<code>shell32.dll</code> <code>ShellExecuteA</code>, <code>comdlg32.dll</code> <code>GetOpenFileNameA</code>, and <code>SHBrowseForFolder</code>) without heavy third-party ActiveX/OCX dependencies, StoreTrainer runs natively on a Pentium-era Windows 95/98 retro rig just as cleanly as on a modern Windows 11 workstation.
+        </p>
+      </section>
+
+      <section class="retro-dialog-card" aria-labelledby="sfile-spec-heading">
+        <h2 id="sfile-spec-heading" style="margin-top: 0;">Zero-Database <code>.sfile</code> Flat-File Specification</h2>
+        <p>
+          True to RaggieSoft's zero-database philosophy, StoreTrainer stores each game profile as a human-readable 6-line sequential text file (<code>&lt;GameName&gt;.sfile</code>) alongside <code>StoreTrainer.cfg</code>:
+        </p>
+        <pre class="code-viewer" style="max-height: 200px; margin: 0;">Line 1: GameName     (Display title in the StoreTrainer list)
+Line 2: GameFile     (Full path to the game .exe binary)
+Line 3: GameArgs     (Optional command-line switches for the game)
+Line 4: TrainerFile  (Full path to the companion trainer .exe, or empty)
+Line 5: TrainerArgs  (Optional command-line switches for the trainer)
+Line 6: GamePath     (Working directory passed to ShellExecuteA)
+Line 7: TrainerPath  (Trainer working directory passed to ShellExecuteA)</pre>
+      </section>
+    </div>
+
+    <section aria-labelledby="os-matrix-heading">
+      <h2 id="os-matrix-heading">Verified Windows Operating System Compatibility Matrix</h2>
+      <table class="retro-table">
+        <thead>
+          <tr>
+            <th scope="col">Operating System Family</th>
+            <th scope="col">Supported Releases</th>
+            <th scope="col">Architecture &amp; Runtime Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Windows 9x (Win32)</strong></td>
+            <td>Windows 95, Windows 98, Windows 98 SE, Windows ME</td>
+            <td>Verified via NSIS <code>WinVer.nsh</code> (<code>AtLeastWin95</code>); deploys <code>msvbvm60.dll</code> if absent.</td>
+          </tr>
+          <tr>
+            <td><strong>Windows NT Classic</strong></td>
+            <td>Windows NT 4.0, Windows 2000 Professional SP4, Windows XP</td>
+            <td><strong>Primary Development Environment:</strong> Built &amp; compiled inside Windows 2000 Professional SP4.</td>
+          </tr>
+          <tr>
+            <td><strong>Modern Windows NT (x86/x64)</strong></td>
+            <td>Windows Vista, Windows 7, Windows 8.1, Windows 10, Windows 11</td>
+            <td>Runs seamlessly via WOW64 (<code>TStore.exe</code> VB6) or natively via the included <code>TStore.NET</code> port.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  
+      </main>
+
+      <!-- Netscape Status Bar & Global Legal Footer -->
+      <footer class="netscape-statusbar" role="contentinfo">
+        <div class="status-cell">🔒 TLS 1.3 Modern Security • Document: Done (WCAG 2.1 AA / Section 508 Verified)</div>
+        <div class="status-cell">
+          Code: <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT License</a> |
+          Docs: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Global Fictitious Disclaimer & Network Links Outside Window Frame -->
+    <div class="netscape-window win-outset" style="margin-top: 0.75rem; padding: 0.85rem 1.15rem; font-size: 12.5px;">
+      <p style="margin: 0 0 0.5rem;">
+        <strong>RaggieSoft Ecosystem Links:</strong>
+        <a href="https://raggiesoft.com">RaggieSoft Hub</a> •
+        <a href="https://corporate.raggiesoft.com">RaggieSoft Media (B2B)</a> •
+        <a href="https://michaelpragsdale.com">Michael P. Ragsdale Portfolio</a> •
+        <a href="https://music.raggiesoft.com">The Listening Room</a> •
+        <a href="https://books.raggiesoft.com">RaggieSoft Book Reader</a> •
+        <a href="https://lore.raggiesoft.com">Lore Omnibus</a> •
+        <a href="https://engineroom.raggiesoft.com">Engine Room Records</a> •
+        <a href="https://stardust.raggiesoft.com">The Stardust Engine</a> •
+        <a href="https://nebulae.raggiesoft.com">The RaggieSoft Nebulae</a>
+      </p>
+      <p style="margin: 0;">
+        <strong>Fictitious Persons &amp; Entities Disclaimer:</strong> While <strong>RaggieSoft StoreTrainer</strong> is a real-world Win32 desktop utility authored by <strong>Michael P. Ragsdale</strong>, all narrative characters, bands, biographies, universities (including Commonwealth Polytechnic Institute / CPI, The Forgers, and The Crucible), corporations (including OmniCorp, Apex Records, Prairie Coachworks, and Sainte-Claire), transit agencies (Blue Ridge Transit), in-universe legal filings, and any entity with <strong>&ldquo;LLC&rdquo;</strong>, <strong>&ldquo;Trust&rdquo;</strong>, or <strong>&ldquo;Holdings&rdquo;</strong> in its name across the wider RaggieSoft network are works of fiction. Any resemblance to actual persons (living or dead), businesses, institutions, or events is purely coincidental.
+      </p>
+    </div>
+
+    <script src="https://assets.raggiesoft.com/storetrainer/js/netscape-ui.js" defer></script>
+    <script src="https://assets.raggiesoft.com/common/js/raggiesoft-network.js" defer></script>
+  </body>
+</html>

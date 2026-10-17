@@ -1,4 +1,3 @@
 node_modules/
-dist/
+# dist/ <- Tracked in Git so Jenna pushes pre-compiled static bundle for Sarah to deploy
 .DS_Store
-

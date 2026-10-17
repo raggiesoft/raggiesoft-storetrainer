@@ -1,0 +1,3508 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      try {
+        var storedScheme = localStorage.getItem('color-scheme');
+        document.querySelector('meta[name="color-scheme"]').content = storedScheme ?? 'light dark';
+        var resolvedTheme = (storedScheme === 'light' || storedScheme === 'dark')
+          ? storedScheme
+          : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', resolvedTheme);
+      } catch (e) {}
+    </script>
+    <title>VB6 &amp; .NET Source Code | RaggieSoft StoreTrainer</title>
+    <meta name="description" content="Inspect the original Visual Basic 6.0 (TStore.vbp), Win32 API modules, and VB.NET source code for RaggieSoft StoreTrainer." />
+    <link rel="canonical" href="https://storetrainer.raggiesoft.com/source" />
+    <meta property="og:title" content="VB6 &amp; .NET Source Code | RaggieSoft StoreTrainer" />
+    <meta property="og:description" content="Inspect the original Visual Basic 6.0 (TStore.vbp), Win32 API modules, and VB.NET source code for RaggieSoft StoreTrainer." />
+    <meta property="og:image" content="https://assets.raggiesoft.com/raggiesoft-corporate/images/og/raggiesoft-corporate-og.jpg" />
+    <meta property="og:url" content="https://storetrainer.raggiesoft.com/source" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="RaggieSoft StoreTrainer" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="VB6 &amp; .NET Source Code | RaggieSoft StoreTrainer" />
+    <meta name="twitter:description" content="Inspect the original Visual Basic 6.0 (TStore.vbp), Win32 API modules, and VB.NET source code for RaggieSoft StoreTrainer." />
+    <meta name="twitter:image" content="https://assets.raggiesoft.com/raggiesoft-corporate/images/og/raggiesoft-corporate-og.jpg" />
+    <link rel="icon" type="image/png" href="https://assets.raggiesoft.com/raggiesoft-corporate/images/logos/raggiesoft-logo.png" />
+    <link rel="stylesheet" href="https://assets.raggiesoft.com/storetrainer/css/win98-netscape.css" />
+    <link rel="stylesheet" href="https://assets.raggiesoft.com/common/css/raggiesoft-network.css" />
+  </head>
+  <body>
+    <a href="#content" class="skip-link">Skip to main document content</a>
+
+    <nav class="rs-network-bar" aria-label="RaggieSoft Ecosystem Network" style="margin-bottom: 0.45rem; border-radius: 4px;">
+      <div class="rs-network-bar-inner">
+        <span class="rs-network-label">✦ RaggieSoft Network:</span>
+        <ul class="rs-network-links">
+          <li><a href="https://raggiesoft.com">🌐 Hub</a></li>
+          <li><a href="https://nebulae.raggiesoft.com">🌌 Nebulae</a></li>
+          <li><a href="https://music.raggiesoft.com">🎧 Music</a></li>
+          <li><a href="https://books.raggiesoft.com">📚 Books</a></li>
+          <li><a href="https://stardust.raggiesoft.com">🚀 Stardust</a></li>
+          <li><a href="https://engineroom.raggiesoft.com">⚙️ Engine Room</a></li>
+          <li><a href="https://lore.raggiesoft.com">🏛️ Lore</a></li>
+          <li><a href="https://corporate.raggiesoft.com">🏢 Corporate</a></li>
+          <li><a href="https://storetrainer.raggiesoft.com" aria-current="page" class="is-active">💾 StoreTrainer</a></li>
+          <li><a href="https://michaelpragsdale.com">👔 Michael P. Ragsdale</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="netscape-window win-outset" role="application" aria-label="Netscape Communicator 4.78 — RaggieSoft StoreTrainer Portal">
+      <!-- Win2000 Title Bar -->
+      <header class="win-titlebar" role="banner">
+        <div class="win-titlebar-left">
+          <span aria-hidden="true">🖳</span>
+          <span>VB6 &amp; .NET Source Code | RaggieSoft StoreTrainer - Netscape Communicator 4.78 [Windows 2000 Professional SP4]</span>
+        </div>
+        <div class="win-titlebar-controls" aria-hidden="true">
+          <span class="win-ctrl-box">_</span>
+          <span class="win-ctrl-box">□</span>
+          <span class="win-ctrl-box">×</span>
+        </div>
+      </header>
+
+      <!-- Menu Bar -->
+      <div class="netscape-menubar" role="navigation" aria-label="Application Menu Bar">
+        <ul class="netscape-menu-items">
+          <li><a href="/"><u>F</u>ile</a></li>
+          <li><a href="/source"><u>E</u>dit / Source</a></li>
+          <li><a href="/installer"><u>V</u>iew Installer</a></li>
+          <li><a href="https://raggiesoft.com"><u>H</u>ub</a></li>
+          <li><a href="https://music.raggiesoft.com"><u>M</u>usic</a></li>
+          <li><a href="https://books.raggiesoft.com"><u>B</u>ooks</a></li>
+          <li><a href="https://stardust.raggiesoft.com"><u>S</u>tardust</a></li>
+          <li><a href="https://engineroom.raggiesoft.com"><u>L</u>abel</a></li>
+          <li><a href="https://corporate.raggiesoft.com/projects/storetrainer"><u>C</u>orporate</a></li>
+          <li><a href="https://michaelpragsdale.com"><u>A</u>rchitect</a></li>
+          <li><a href="https://nebulae.raggiesoft.com"><u>N</u>ebulae Sitemap</a></li>
+        </ul>
+        <span style="font-size: 11.5px;">Pre-AI Hand-Written Win32 Freeware (2018–2020)</span>
+      </div>
+
+      <!-- Navigation Toolbar -->
+      <nav class="netscape-toolbar" aria-label="Primary StoreTrainer Navigation">
+        <ul class="netscape-nav-list">
+          <li><a href="/" class="win-btn">🏠 Home &amp; Download</a></li>
+            <li><a href="/source" class="win-btn" aria-current="page">💾 VB6 &amp; .NET Source</a></li>
+            <li><a href="/installer" class="win-btn">📦 NSIS Wizard95 Installer</a></li>
+          <li>
+            <a href="https://assets.raggiesoft.com/storetrainer/tssetup100.exe" class="win-btn win-btn-primary">
+              ⬇️ Download tssetup100.exe (v1.0)
+            </a>
+          </li>
+          <li>
+            <button
+              type="button"
+              id="theme-toggle"
+              class="win-btn"
+              aria-label="Toggle between Windows 98 Classic Light Mode and Windows 2000 High-Contrast Dark Mode"
+            >
+              <span id="theme-toggle-label">🖥️ Theme</span>
+            </button>
+          </li>
+        </ul>
+        <div class="netscape-throbber" aria-hidden="true" title="Netscape Communicator">N</div>
+      </nav>
+
+      <!-- Location / Address Bar -->
+      <div class="netscape-locationbar">
+        <strong>Netsite:</strong>
+        <div class="location-input win-inset" aria-label="Current URL">https://storetrainer.raggiesoft.com/source</div>
+        <a href="https://raggiesoft.com" class="win-btn">🌐 RaggieSoft Hub</a>
+      </div>
+
+      <!-- Sunken Document Viewport -->
+      <main id="content" class="netscape-viewport win-inset" tabindex="-1">
+        
+    <h1>Visual Basic 6.0 (<code>TStore.vbp</code>) &amp; VB.NET Source Code Inspector</h1>
+    <p>
+      Browse the complete, unmodified source code of <strong>RaggieSoft StoreTrainer</strong> authored between 2018 and 2020 inside a Windows 2000 Professional SP4 virtual machine. All source code is released under the <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT License</a>.
+    </p>
+    <div class="retro-banner">
+      <h2 style="margin-top: 0;">Source File Index (16 Modules &amp; Forms)</h2>
+      <ul style="margin: 0; padding-left: 1.25rem;">
+        <li><a href="#tstore-vbp"><strong>TStore.vbp</strong></a> — Master Visual Basic 6.0 project file defining forms, Win32 API modules, version metadata (v1.0.0), and compilation flags.</li>
+          <li><a href="#frmmain-frm"><strong>frmMain.frm</strong></a> — Main application form managing the PC game &amp; trainer profile selector, command-line switch fields, and process launch triggers.</li>
+          <li><a href="#tstore-bas"><strong>TStore.bas</strong></a> — Core Visual Basic 6.0 module orchestrating initialization, profile loading, and Win32 execution flow.</li>
+          <li><a href="#sfile-bas"><strong>SFile.bas</strong></a> — Win32 file management and shell operations module for locating, copying, and launching game and trainer binaries.</li>
+          <li><a href="#inifile-bas"><strong>INIFile.bas</strong></a> — Direct Win32 `GetPrivateProfileString` / `WritePrivateProfileString` (`kernel32.dll`) bindings for zero-database INI configuration persistence.</li>
+          <li><a href="#registry-bas"><strong>Registry.bas</strong></a> — Direct Win32 `RegOpenKeyEx` / `RegQueryValueEx` (`advapi32.dll`) bindings for reading game installation paths across 32-bit and 64-bit Windows.</li>
+          <li><a href="#specialfolder-bas"><strong>SpecialFolder.bas</strong></a> — Resolves `AppData`, `Program Files`, and user profile directories across Windows 95 through Windows 11.</li>
+          <li><a href="#osversioninfo-bas"><strong>OSVersionInfo.bas</strong></a> — Queries `GetVersionExA` (`OSVERSIONINFO`) to detect Windows 9x vs. Windows NT kernels at runtime.</li>
+          <li><a href="#detectosbits-bas"><strong>DetectOSBits.bas</strong></a> — Dynamically probes `IsWow64Process` in `kernel32.dll` so 32-bit `TStore.exe` knows whether it is running on a 64-bit Windows OS.</li>
+          <li><a href="#versioncompare-bas"><strong>VersionCompare.bas</strong></a> — Uses `version.dll` (`GetFileVersionInfoA`) to inspect and compare executable version headers.</li>
+          <li><a href="#whwnd-bas"><strong>wHwnd.bas</strong></a> — Win32 `user32.dll` window handle (`HWND`) enumeration and process state tracking for launched games and trainers.</li>
+          <li><a href="#readme-txt"><strong>README.txt</strong></a> — Original plaintext user documentation bundled with StoreTrainer.</li>
+          <li><a href="#readme-dev-txt"><strong>README-dev.txt</strong></a> — Original developer notes documenting the Windows 2000 SP4 build environment and runtime packaging.</li>
+          <li><a href="#tstore-net-frmmain"><strong>TStore.NET/frmMain.vb</strong></a> — Visual Basic .NET upgraded form (`frmMain.vb`) preserving StoreTrainer functionality on modern .NET runtimes.</li>
+          <li><a href="#tstore-net-core"><strong>TStore.NET/TStore.vb</strong></a> — Visual Basic .NET core module ported from `TStore.bas`.</li>
+          <li><a href="#tstore-net-sfile"><strong>TStore.NET/SFile.vb</strong></a> — Visual Basic .NET file system module ported from `SFile.bas`.</li>
+      </ul>
+    </div>
+    
+      <section id="tstore-vbp" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-tstore-vbp">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem;">
+          <h2 id="heading-tstore-vbp" style="margin: 0; border: 0;">TStore.vbp (Visual Basic 6.0 Project Manifest)</h2>
+          <span style="font-family: monospace; font-weight: 700;">[VB6 Core]</span>
+        </div>
+        <p style="margin: 0.4rem 0 0.75rem;">Master Visual Basic 6.0 project file defining forms, Win32 API modules, version metadata (v1.0.0), and compilation flags.</p>
+        <pre class="code-viewer"><code>Type=Exe
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\WINNT\System32\stdole2.tlb#OLE Automation
+Reference=*\G{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}#1.0#0#C:\WINNT\System32\wshom.ocx#Windows Script Host Object Model
+Object={FE0065C0-1B7B-11CF-9D53-00AA003C9CB6}#1.1#0; COMCT232.OCX
+Object={F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0; Comdlg32.ocx
+Form=frmMain.frm
+Module=TStoreMod; TStore.bas
+Module=INIFile; INIFile.bas
+Module=DetectOSBits; DetectOSBits.bas
+Module=OSVersionInfo; OSVersionInfo.bas
+Module=Registry; Registry.bas
+Module=SFile; SFile.bas
+Module=SpecialFolder; SpecialFolder.bas
+Module=VersionCompare; VersionCompare.bas
+Module=wHwnd; wHwnd.bas
+IconForm=&quot;frmMain&quot;
+Startup=&quot;Sub Main&quot;
+HelpFile=&quot;&quot;
+Title=&quot;RaggieSoft StoreTrainer&quot;
+ExeName32=&quot;TStore.exe&quot;
+Path32=&quot;Build&quot;
+Command32=&quot;&quot;
+Name=&quot;TStore&quot;
+HelpContextID=&quot;0&quot;
+CompatibleMode=&quot;0&quot;
+MajorVer=1
+MinorVer=0
+RevisionVer=0
+AutoIncrementVer=0
+ServerSupportFiles=0
+VersionCompanyName=&quot;RaggieSoft&quot;
+VersionFileDescription=&quot;Stores the location of games and trainers&quot;
+VersionProductName=&quot;RaggieSoft StoreTrainer&quot;
+CompilationType=0
+OptimizationType=0
+FavorPentiumPro(tm)=0
+CodeViewDebugInfo=0
+NoAliasing=0
+BoundsCheck=0
+OverflowCheck=0
+FlPointCheck=0
+FDIVCheck=0
+UnroundedFP=0
+StartMode=0
+Unattended=0
+Retained=0
+ThreadPerObject=0
+MaxNumberOfThreads=1
+DebugStartupOption=0
+
+[MS Transaction Server]
+AutoRefresh=1
+</code></pre>
+      </section>
+
+      <section id="frmmain-frm" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-frmmain-frm">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem;">
+          <h2 id="heading-frmmain-frm" style="margin: 0; border: 0;">frmMain.frm (Primary StoreTrainer Win32 Form UI)</h2>
+          <span style="font-family: monospace; font-weight: 700;">[VB6 Forms]</span>
+        </div>
+        <p style="margin: 0.4rem 0 0.75rem;">Main application form managing the PC game &amp; trainer profile selector, command-line switch fields, and process launch triggers.</p>
+        <pre class="code-viewer"><code>VERSION 5.00
+Object = &quot;{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0&quot;; &quot;comdlg32.ocx&quot;
+Begin VB.Form frmMain 
+   BorderStyle     =   1  &#39;Fixed Single
+   Caption         =   &quot;[UNTITLED] - RaggieSoft StoreTrainer&quot;
+   ClientHeight    =   4905
+   ClientLeft      =   45
+   ClientTop       =   615
+   ClientWidth     =   6615
+   Icon            =   &quot;frmMain.frx&quot;:0000
+   LinkTopic       =   &quot;Form1&quot;
+   MaxButton       =   0   &#39;False
+   ScaleHeight     =   4905
+   ScaleWidth      =   6615
+   StartUpPosition =   2  &#39;CenterScreen
+   Begin VB.CommandButton cmdLaunch 
+      Caption         =   &quot;&amp;Launch&quot;
+      Height          =   495
+      Left            =   5400
+      TabIndex        =   16
+      Top             =   4320
+      Width           =   1095
+   End
+   Begin VB.Frame fraTrainerData 
+      Caption         =   &quot;Trainer Data&quot;
+      Height          =   1335
+      Left            =   120
+      TabIndex        =   10
+      Top             =   2880
+      Width           =   6375
+      Begin VB.TextBox txtTrainerPath 
+         Height          =   285
+         Left            =   120
+         TabIndex        =   12
+         Top             =   240
+         Width           =   6135
+      End
+      Begin VB.PictureBox picXPShim3 
+         BorderStyle     =   0  &#39;None
+         Height          =   975
+         Left            =   120
+         ScaleHeight     =   975
+         ScaleWidth      =   6135
+         TabIndex        =   11
+         Top             =   240
+         Width           =   6135
+         Begin VB.CommandButton cmdBrowseTrainer 
+            Caption         =   &quot;Browse...&quot;
+            Height          =   375
+            Left            =   4680
+            TabIndex        =   15
+            Top             =   360
+            Width           =   1335
+         End
+         Begin VB.TextBox txtTrainerSwitch 
+            Height          =   285
+            Left            =   720
+            TabIndex        =   14
+            Top             =   360
+            Width           =   3855
+         End
+         Begin VB.Label lblTrainerSwitch 
+            AutoSize        =   -1  &#39;True
+            Caption         =   &quot;Switch:&quot;
+            Height          =   195
+            Left            =   0
+            TabIndex        =   13
+            Top             =   360
+            Width           =   525
+         End
+      End
+   End
+   Begin VB.Frame fraGameData 
+      Caption         =   &quot;Game Data&quot;
+      Height          =   1215
+      Left            =   120
+      TabIndex        =   4
+      Top             =   1560
+      Width           =   6375
+      Begin VB.PictureBox picXPShim2 
+         BorderStyle     =   0  &#39;None
+         Height          =   855
+         Left            =   120
+         ScaleHeight     =   855
+         ScaleWidth      =   6135
+         TabIndex        =   5
+         Top             =   240
+         Width           =   6135
+         Begin VB.CommandButton cmdBrowseGame 
+            Caption         =   &quot;Browse...&quot;
+            Height          =   375
+            Left            =   4680
+            TabIndex        =   9
+            Top             =   360
+            Width           =   1335
+         End
+         Begin VB.TextBox txtGameSwitch 
+            Height          =   285
+            Left            =   720
+            TabIndex        =   8
+            Top             =   360
+            Width           =   3855
+         End
+         Begin VB.TextBox txtGamePath 
+            Height          =   285
+            Left            =   0
+            TabIndex        =   6
+            Top             =   0
+            Width           =   6135
+         End
+         Begin VB.Label lblGameSwitch 
+            AutoSize        =   -1  &#39;True
+            Caption         =   &quot;Switch:&quot;
+            Height          =   195
+            Left            =   0
+            TabIndex        =   7
+            Top             =   360
+            Width           =   525
+         End
+      End
+   End
+   Begin VB.Frame fraStoreFileDetails 
+      Caption         =   &quot;General Data&quot;
+      Height          =   1335
+      Left            =   120
+      TabIndex        =   0
+      Top             =   120
+      Width           =   6375
+      Begin VB.PictureBox picXPShim1 
+         BorderStyle     =   0  &#39;None
+         Height          =   975
+         Left            =   120
+         ScaleHeight     =   975
+         ScaleWidth      =   6135
+         TabIndex        =   1
+         Top             =   240
+         Width           =   6135
+         Begin VB.CheckBox chkLaunchGameFirst 
+            Caption         =   &quot;&amp;Launch Game First&quot;
+            Height          =   255
+            Left            =   120
+            TabIndex        =   3
+            Top             =   360
+            Width           =   2415
+         End
+         Begin VB.CheckBox chkTrainerLaunchesGame 
+            Caption         =   &quot;&amp;Trainer Launches Game&quot;
+            Height          =   255
+            Left            =   120
+            TabIndex        =   2
+            Top             =   0
+            Width           =   2655
+         End
+      End
+   End
+   Begin MSComDlg.CommonDialog cdgStoreFile 
+      Left            =   120
+      Top             =   4320
+      _ExtentX        =   847
+      _ExtentY        =   847
+      _Version        =   393216
+   End
+   Begin VB.Menu mnuFile 
+      Caption         =   &quot;&amp;File&quot;
+      Begin VB.Menu mnuFileNew 
+         Caption         =   &quot;&amp;New&quot;
+         Shortcut        =   ^N
+      End
+      Begin VB.Menu mnuFileOpen 
+         Caption         =   &quot;&amp;Open...&quot;
+         Shortcut        =   ^O
+      End
+      Begin VB.Menu mnuFileDash1 
+         Caption         =   &quot;-&quot;
+      End
+      Begin VB.Menu mnuFileSave 
+         Caption         =   &quot;&amp;Save&quot;
+         Shortcut        =   ^S
+      End
+      Begin VB.Menu mnuFileSaveAs 
+         Caption         =   &quot;Save &amp;As...&quot;
+      End
+      Begin VB.Menu mnuFileDash2 
+         Caption         =   &quot;-&quot;
+      End
+      Begin VB.Menu mnuFileExit 
+         Caption         =   &quot;E&amp;xit&quot;
+      End
+   End
+   Begin VB.Menu mnuProject 
+      Caption         =   &quot;&amp;Project&quot;
+      Begin VB.Menu mnuProjectBrowse 
+         Caption         =   &quot;&amp;Browse&quot;
+         Begin VB.Menu mnuProjectBrowseGame 
+            Caption         =   &quot;&amp;Game...&quot;
+         End
+         Begin VB.Menu mnuProjectBrowseTrainer 
+            Caption         =   &quot;&amp;Trainer...&quot;
+         End
+      End
+      Begin VB.Menu mnuProjectDash1 
+         Caption         =   &quot;-&quot;
+      End
+      Begin VB.Menu mnuProjectSwitch 
+         Caption         =   &quot;&amp;Switch&quot;
+         Begin VB.Menu mnuProjrectSwitchGame 
+            Caption         =   &quot;&amp;Game...&quot;
+         End
+         Begin VB.Menu mnuProjectSwitchTrainer 
+            Caption         =   &quot;&amp;Trainer...&quot;
+         End
+      End
+      Begin VB.Menu mnuProjectDash2 
+         Caption         =   &quot;-&quot;
+      End
+      Begin VB.Menu mnuProjectLaunch 
+         Caption         =   &quot;&amp;Launch&quot;
+         Shortcut        =   ^L
+      End
+   End
+   Begin VB.Menu mnuHelp 
+      Caption         =   &quot;&amp;Help&quot;
+      Begin VB.Menu mnuHelpAbout 
+         Caption         =   &quot;&amp;About...&quot;
+      End
+   End
+End
+Attribute VB_Name = &quot;frmMain&quot;
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Option Explicit
+
+
+Private Sub Form_Load()
+    SetFileName &quot;untitled&quot;
+    SetFileFlag False, Me
+End Sub
+
+
+
+Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+    Dim iMSG As VbMsgBoxResult
+    
+    &#39; When a StoreFile is launched, we must quickly close up
+    If GetLaunchingSTF = True Then
+        Cancel = False
+        Exit Sub
+    End If
+    
+    &#39; A files is not being launched
+    If GetFileFlag() = False Then
+        iMSG = MsgBox(&quot;Are you sure you want to exit &quot; &amp; App.Title &amp; &quot;?&quot;, vbQuestion + vbYesNo)
+        If iMSG = vbNo Then
+            Cancel = True
+        End If
+        If iMSG = vbYes Then
+            Cancel = False
+        End If
+    Else
+        
+        iMSG = MsgBox(&quot;Would you like to save your work before exiting?&quot;, vbQuestion + vbYesNoCancel, App.ProductName)
+        If iMSG = vbYes Then
+            &#39; File isn&#39;t saved yet.  Show a Save As dialog
+            If LCase$(GetFileName()) = &quot;untitled&quot; Then
+                Dim strSaveFile As String
+                strSaveFile = DisplaySaveAs()
+                If strSaveFile = &quot;32755&quot; Then
+                    &#39; User clicked Cancel in the Save As dialog
+                    Cancel = True
+                    Exit Sub
+                End If
+                
+                &#39; Write that filename to memory
+                SetFileName (strSaveFile)
+            End If
+            
+            &#39; Write data to disk
+            SaveStoreFile Me, GetFileName()
+            Cancel = False
+        End If
+        If iMSG = vbNo Then
+            Cancel = False
+        End If
+        If iMSG = vbCancel Then
+            &#39; Cancel.  No exit, No save.
+            Cancel = True
+        End If
+    End If
+End Sub
+
+
+Private Sub chkLaunchGameFirst_Click()
+    If chkLaunchGameFirst.value = True Then
+        SetLaunchGameFirst True
+        GoTo SetFlag
+    End If
+    If chkLaunchGameFirst.value = False Then
+        SetLaunchGameFirst False
+        GoTo SetFlag
+    End If
+SetFlag:
+    SetFileFlag True, Me
+End Sub
+
+Private Sub chkTrainerLaunchesGame_Click()
+    &#39; Turn on or off being able to locate a game if the trainer launches it
+    Select Case chkTrainerLaunchesGame.value
+        Case vbChecked
+            SetTrainerLaunchesGame True
+            Me.txtGamePath.Enabled = False
+            Me.txtGameSwitch.Enabled = False
+            Me.cmdBrowseGame.Enabled = False
+            Me.mnuProjectBrowseGame.Enabled = False
+            Me.mnuProjrectSwitchGame.Enabled = False
+            Me.picXPShim2.Enabled = False
+            Me.fraGameData.Enabled = False
+            Me.lblGameSwitch.Enabled = False
+            Me.txtGamePath.BackColor = vbButtonFace
+            Me.txtGameSwitch.BackColor = vbButtonFace
+            GoTo SetFlag
+        Case vbUnchecked
+            SetTrainerLaunchesGame False
+            Me.txtGamePath.Enabled = True
+            Me.txtGameSwitch.Enabled = True
+            Me.cmdBrowseGame.Enabled = True
+            Me.mnuProjectBrowseGame.Enabled = True
+            Me.mnuProjrectSwitchGame.Enabled = True
+            Me.picXPShim2.Enabled = True
+            Me.fraGameData.Enabled = True
+            Me.lblGameSwitch.Enabled = True
+            Me.txtGamePath.BackColor = vbWindowBackground
+            Me.txtGameSwitch.BackColor = vbWindowBackground
+            GoTo SetFlag
+    End Select
+SetFlag:
+    SetFileFlag True, Me
+End Sub
+
+Private Sub cmdBrowseGame_Click()
+    On Error GoTo Trap
+    Dim winInfo As osInfo
+    With Me.cdgStoreFile
+        .CancelError = True
+        .Filter = &quot;Executable Files (*.exe)|*.exe|All Files (*.*)|*.*&quot;
+        .DefaultExt = &quot;exe&quot;
+        .DialogTitle = &quot;Locate Game&quot;
+        .Flags = cdlOFNFileMustExist
+        .InitDir = Environ(&quot;ProgramFiles&quot;) &#39; Default to %PROGRAM_FILES% since most games would be there (unlike SpecialFolder, this works on Win95/98)
+        .ShowOpen
+        Me.txtGamePath.Text = .FileName
+        SetGamePath (.FileName)
+    End With
+    validateFile txtGamePath
+    SetFileFlag True, Me
+    Exit Sub
+Trap:
+    &#39;User clicked cancel
+    Exit Sub
+End Sub
+
+Private Sub cmdBrowseTrainer_Click()
+    On Error GoTo Trap
+    With Me.cdgStoreFile
+        .CancelError = True
+        .InitDir = FGetSpecialFolder(CSIDL_DOCUMENTS) &#39;%MY_DOCUMENTS%
+        .Filter = &quot;Executable Files (*.exe)|*.exe|All Files (*.*)|*.*&quot;
+        .DefaultExt = &quot;exe&quot;
+        .DialogTitle = &quot;Locate Trainer&quot;
+        .Flags = cdlOFNFileMustExist
+        .ShowOpen
+        Me.txtTrainerPath.Text = .FileName
+        SetTrainerPath (.FileName)
+    End With
+    validateFile txtTrainerPath
+    SetFileFlag True, Me
+    Exit Sub
+Trap:
+    &#39;User clicked cancel
+    Exit Sub
+End Sub
+
+Private Sub cmdLaunch_Click()
+    doLaunch
+End Sub
+
+Private Function DisplaySaveAs() As String
+    On Error GoTo Trapper:
+    With Me.cdgStoreFile
+        .CancelError = True
+        .DialogTitle = &quot;Save StoreFile&quot;
+        .Filter = &quot;StoreFile (*.stf)|*.stf&quot;
+        .InitDir = GetStoreFileFolder()
+        .DefaultExt = &quot;stf&quot;
+        .ShowSave
+        DisplaySaveAs = .FileName
+    End With
+    Exit Function
+Trapper:
+    If Err.Number = 32755 Then &#39;Cancel
+        DisplaySaveAs = &quot;32755&quot;
+        Exit Function
+    End If
+End Function
+
+
+Private Sub mnuFileExit_Click()
+    Unload Me
+End Sub
+
+Private Sub mnuFileNew_Click()
+    createNewStoreFile
+End Sub
+
+Private Sub mnuFileOpen_Click()
+    On Error GoTo Trapper
+    With Me.cdgStoreFile
+        .CancelError = True
+        .DialogTitle = &quot;Open StoreFile&quot;
+        .DefaultExt = &quot;stf&quot;
+        .Filter = &quot;StoreTrainer File (*.stf)|*.stf&quot;
+        .InitDir = GetStoreFileFolder()
+        .Flags = cdlOFNFileMustExist
+        .ShowOpen
+        
+        &#39; Reads STF data into StoreTrainer
+        OpenStoreFile .FileName
+        
+        &#39; Brings StoreData into the form
+        Me.chkLaunchGameFirst.value = GetLaunchGameFirst
+        Me.chkTrainerLaunchesGame.value = GetTrainerLaunchesGame
+        Me.txtGamePath.Text = GetGamePath
+        Me.txtGameSwitch.Text = GetGameSwitch
+        Me.txtTrainerPath.Text = GetTrainerPath
+        Me.txtTrainerSwitch.Text = GetTrainerSwitch
+        
+        &#39; Sets our form name
+        SetFileName .FileName
+        SetFileFlag False, Me
+    End With
+    Exit Sub
+Trapper:
+    &#39; Assume CancelError
+    Exit Sub
+End Sub
+
+Private Sub mnuFileSave_Click()
+    &#39; Bring up Save As if needed
+    Dim strFileName As String
+    strFileName = GetFileName()
+    If LCase$(strFileName = &quot;untitled&quot;) Then
+        mnuFileSaveAs_Click
+    End If
+    
+    &#39; Write file to disk
+    Dim iRet As Integer
+    iRet = SaveStoreFile(Me, GetFileName)
+    
+    &#39; iRet is any error number the disk writing routine returns
+    If iRet = 0 Then Exit Sub
+    If iRet &lt;&gt; 0 Then
+        Select Case iRet
+            Case 32755: &#39;Cancel Button somewhere
+                Exit Sub
+            Case Else
+                MsgBox &quot;Error &quot; &amp; iRet
+        End Select
+    End If
+End Sub
+
+Private Sub mnuFileSaveAs_Click()
+    &#39; Brings up a Save As dialog
+    Dim strFile As String
+    strFile = DisplaySaveAs()
+    If strFile = &quot;32755&quot; Then
+        Exit Sub
+    End If
+    
+    &#39; Continues with writing file to disk here
+    SetFileName (strFile)
+    mnuFileSave_Click
+        
+End Sub
+
+Private Sub mnuHelpAbout_Click()
+    AboutStoreTrainer
+End Sub
+
+Private Sub mnuProjectBrowseGame_Click()
+    cmdBrowseGame_Click
+End Sub
+
+Private Sub mnuProjectBrowseTrainer_Click()
+    cmdBrowseTrainer_Click
+End Sub
+
+Private Sub mnuProjectLaunch_Click()
+    doLaunch
+End Sub
+
+Private Sub mnuProjectSwitchTrainer_Click()
+    On Error GoTo Done &#39;We don&#39;t need to handle any errors
+    Dim strTrainerSwitch As String
+    strTrainerSwitch = InputBox$(&quot;Please enter a trainer switch&quot;, &quot;Input Trainer Switch&quot;)
+    If strTrainerSwitch &lt;&gt; &quot;&quot; Then
+        txtTrainerSwitch.Text = strTrainerSwitch
+        SetTrainerSwitch (strTrainerSwitch)
+        SetFileFlag True, Me
+    End If
+Done:
+    Exit Sub
+End Sub
+
+Private Sub mnuProjrectSwitchGame_Click()
+    On Error GoTo Done &#39;We don&#39;t need to handle any errors
+    Dim strGameSwitch As String
+    strGameSwitch = InputBox$(&quot;Please enter a game switch&quot;, &quot;Input Game Switch&quot;)
+    If strGameSwitch &lt;&gt; &quot;&quot; Then
+        txtGameSwitch.Text = strGameSwitch
+        SetGameSwitch (strGameSwitch)
+        SetFileFlag True, Me
+    End If
+Done:
+    Exit Sub
+End Sub
+
+Private Sub txtGamePath_Change()
+    SetFileFlag True, Me
+End Sub
+
+Private Sub txtGamePath_GotFocus()
+    validateFile txtGamePath
+End Sub
+
+Private Sub txtGamePath_LostFocus()
+    validateFile txtGamePath
+End Sub
+
+Private Sub txtGameSwitch_Change()
+    SetGameSwitch txtGameSwitch.Text
+    SetFileFlag True, Me
+End Sub
+
+Private Sub txtTrainerPath_Change()
+    SetFileFlag True, Me
+End Sub
+
+Private Sub txtTrainerPath_GotFocus()
+    validateFile txtTrainerPath
+End Sub
+
+Private Sub txtTrainerPath_LostFocus()
+    validateFile txtTrainerPath
+End Sub
+
+Private Sub txtTrainerSwitch_Change()
+    SetTrainerSwitch txtTrainerSwitch.Text
+    SetFileFlag True, Me
+End Sub
+
+Private Sub validateFile(txt As TextBox)
+    If txt.Text = &quot;&quot; Then Exit Sub
+    
+    If DoesFileExist(txt.Text) = False Then
+        txt.BackColor = vbRed
+        MsgBox &quot;The file &quot; &amp; Chr$(34) &amp; txtGamePath.Text &amp; Chr$(34) &amp; &quot; does not exist!&quot;, vbExclamation, App.Title
+    Else
+        txt.BackColor = vbWindowBackground
+    End If
+End Sub
+Private Sub createNewStoreFile()
+    Dim iMSG As VbMsgBoxResult
+    If GetFileFlag = True Then
+        &#39; Save first?
+        iMSG = MsgBox(&quot;Would you like to save your work before creating a new StoreFile?&quot;, vbYesNoCancel + vbQuestion, App.Title)
+        If iMSG = vbCancel Then Exit Sub
+        If iMSG = vbYes Then
+            mnuFileSave_Click
+            GoTo CreateNewFile
+        End If
+        If iMSG = vbNo Then GoTo CreateNewFile
+    End If
+    
+    If GetFileFlag = False Then
+        iMSG = MsgBox(&quot;Close &quot; &amp; GetFileName(True) &amp; &quot; and create a new StoreFile?&quot;, vbYesNo + vbQuestion, App.Title)
+        If iMSG = vbNo Then Exit Sub
+        If iMSG = vbYes Then GoTo CreateNewFile
+    End If
+    
+    &#39; Done the formalities.  Create our new StoreFile
+CreateNewFile:
+    NewStoreFile
+    Me.chkLaunchGameFirst.value = GetLaunchGameFirst
+    Me.chkTrainerLaunchesGame.value = GetTrainerLaunchesGame
+    Me.txtGamePath.Text = GetGamePath
+    Me.txtGameSwitch.Text = GetGameSwitch
+    Me.txtTrainerPath.Text = GetTrainerPath
+    Me.txtTrainerSwitch = GetTrainerSwitch
+    SetFileFlag False, Me
+End Sub
+
+Private Sub doLaunch()
+    Dim iLaunch As Integer
+    iLaunch = Launch()
+    If iLaunch &lt;&gt; 0 Then
+        Select Case iLaunch
+            Case 1 &#39;File not saved
+                MsgBox &quot;Please save your work before launching the StoreFile!&quot;, vbExclamation, App.Title
+                Exit Sub
+            Case 2 &#39; Bad game path
+                MsgBox &quot;The game path you have doesn&#39;t exist!&quot;, vbExclamation, App.Title
+                Exit Sub
+            Case 3 &#39;Bad trainer path
+                MsgBox &quot;The trainer path you have doesn&#39;t exist!&quot;, vbExclamation, App.Title
+                Exit Sub
+        End Select
+    End If
+End Sub
+</code></pre>
+      </section>
+
+      <section id="tstore-bas" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-tstore-bas">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem;">
+          <h2 id="heading-tstore-bas" style="margin: 0; border: 0;">TStore.bas (Core Application Logic &amp; Entrypoint)</h2>
+          <span style="font-family: monospace; font-weight: 700;">[VB6 Core]</span>
+        </div>
+        <p style="margin: 0.4rem 0 0.75rem;">Core Visual Basic 6.0 module orchestrating initialization, profile loading, and Win32 execution flow.</p>
+        <pre class="code-viewer"><code>Attribute VB_Name = &quot;TStoreMod&quot;
+Option Explicit
+
+
+
+&#39; On Windows XP or later, turns on Visual Styles
+Public Declare Function InitCommonControls Lib &quot;comctl32.dll&quot; () As Long
+
+&#39;Allows us to have a return code (use in place of an End statement)
+Public Declare Sub ExitProcess Lib &quot;kernel32&quot; (ByVal uExitCode As Long)
+
+Sub Main()
+    &#39; Checks the command line to see if we have a file to operate on
+    &#39; /e filename.stf to Edit a file
+    &#39; /l filename.stf to Launch a file
+    Dim intCmdReturn As Integer
+    intCmdReturn = CheckCommandLine(Command$)
+    
+    &#39; Tells StoreTrainer that we want to turn on Visual Styles in Windows XP or later
+    InitCommonControls
+    
+    &#39; Let&#39;s create TStore.INI if necessary
+    If GetStoreTrainerDataFile = &quot;&quot; Then
+        CreateStoreTrainerData
+    End If
+    
+    &#39; Let&#39;s refresh the StoreTrainer Path if necessary
+    &#39; This is primarily used for refreshing when switching from DEBUG to PRODUCTION
+    Dim strCurPath As String
+    strCurPath = IniGetValueString(GetStoreTrainerDataFile, &quot;General&quot;, &quot;Path&quot;, &quot;PATH_NAME&quot;)
+    If strCurPath &lt;&gt; App.Path Then
+        Dim iMSG As VbMsgBoxResult
+        iMSG = MsgBox(&quot;The &quot; &amp; App.ProductName &amp; &quot; configuration settings need to be updated.  Do that now?&quot;, vbYesNoCancel + vbQuestion, App.ProductName)
+        If iMSG = vbCancel Then ExitProcess 4 &#39;User Canceled updating TSTORE.INI
+        If iMSG = vbYes Then
+            IniWriteValueString GetStoreTrainerDataFile, &quot;General&quot;, &quot;Path&quot;, App.Path
+        End If
+    End If
+        
+
+    &#39; Let&#39;s make sure the StoreFile folder exists
+    &#39; By default, it should be &lt;MY_DOCUMENTS&gt;\StoreFiles
+    Dim strSTFFolder As String
+    strSTFFolder = GetStoreFileFolder(True, True)
+    If (strSTFFolder = &quot;NO_FOLDER_CREATED&quot;) Then
+        &#39; Error: folder does not exist, or wasn&#39;t created
+        MsgBox App.ProductName &amp; &quot; requires that you create a StoreFile folder.  Now exiting!&quot;, vbCritical, App.ProductName
+        
+        &#39; Exit with a Code 1 ERROR_NO_STF_FOLDER
+        ExitProcess 1
+    End If
+    &#39; Brings up the main screen
+    frmMain.Show
+End Sub
+
+&#39; This checks for a command line switch being passed in
+&#39; Returns an integer based on results:
+&#39; 0 - no command line switch found, load as normal
+&#39; 1 - File loaded for editing /e filename.stf
+&#39; 2 - File loaded for launching /l filename.stf
+Public Function CheckCommandLine(Optional CommandLine As String = &quot;&quot;) As Integer
+    
+End Function
+
+Public Sub AboutStoreTrainer()
+    MsgBox App.ProductName &amp; &quot; v&quot; &amp; App.Major &amp; &quot;.&quot; &amp; App.Minor &amp; &quot;.&quot; &amp; App.Revision &amp; vbCrLf &amp; &quot;&quot; &amp; vbCrLf &amp; &quot;Copyright (C) 2024-2025 &quot; &amp; App.CompanyName, vbInformation + vbOKOnly, App.ProductName
+End Sub
+
+Public Sub CreateStoreTrainerData()
+    &#39; First, let&#39;s create folders as necessary
+    Dim FSO As FileSystemObject
+    Set FSO = CreateObject(&quot;Scripting.FileSystemObject&quot;)
+    If Not FSO.FolderExists(FGetSpecialFolder(CSIDL_APPDATA) &amp; &quot;\RaggieSoft&quot;) Then
+        MkDir FGetSpecialFolder(CSIDL_APPDATA) &amp; &quot;\RaggieSoft&quot;
+    End If
+    If Not FSO.FolderExists(FGetSpecialFolder(CSIDL_APPDATA) &amp; &quot;\RaggieSoft\StoreTrainer&quot;) Then
+        MkDir FGetSpecialFolder(CSIDL_APPDATA) &amp; &quot;\RaggieSoft\StoreTrainer&quot;
+    End If
+    
+    &#39; Now, let&#39;s work on StoreTrainer data
+    IniWriteValueString GetStoreTrainerDataDir &amp; &quot;\TStore.ini&quot;, &quot;General&quot;, &quot;Version&quot;, App.Major &amp; &quot;.&quot; &amp; App.Minor &amp; &quot;.&quot; &amp; App.Revision
+    IniWriteValueString GetStoreTrainerDataDir &amp; &quot;\TStore.ini&quot;, &quot;General&quot;, &quot;Path&quot;, App.Path
+End Sub
+
+Public Function GetStoreTrainerDataDir() As String
+    GetStoreTrainerDataDir = FGetSpecialFolder(CSIDL_APPDATA) &amp; &quot;\RaggieSoft\StoreTrainer&quot;
+End Function
+Public Function GetStoreTrainerDataFile() As String
+    If DoesFileExist(FGetSpecialFolder(CSIDL_APPDATA) &amp; &quot;\RaggieSoft\StoreTrainer\TStore.ini&quot;) Then
+        GetStoreTrainerDataFile = FGetSpecialFolder(CSIDL_APPDATA) &amp; &quot;\RaggieSoft\StoreTrainer\TStore.ini&quot;
+    Else
+        GetStoreTrainerDataFile = &quot;&quot;
+    End If
+End Function
+</code></pre>
+      </section>
+
+      <section id="sfile-bas" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-sfile-bas">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem;">
+          <h2 id="heading-sfile-bas" style="margin: 0; border: 0;">SFile.bas (Flat-File &amp; File System Operations)</h2>
+          <span style="font-family: monospace; font-weight: 700;">[VB6 Win32 API]</span>
+        </div>
+        <p style="margin: 0.4rem 0 0.75rem;">Win32 file management and shell operations module for locating, copying, and launching game and trainer binaries.</p>
+        <pre class="code-viewer"><code>Attribute VB_Name = &quot;SFile&quot;
+Option Explicit
+                 
+&#39; Holds our file data temporarily in memory
+Private isFileDirty As Boolean
+Private strFileName As String
+
+Private StoreFileVersion As String &#39;YES, As String (file format limitation)
+
+Private TrainerLaunchesGame As Boolean
+Private LaunchGameFirst As Boolean
+
+Private GamePath As String, GameSwitch As String
+Private TrainerPath As String, TrainerSwitch As String
+
+Private doLaunch As Boolean &#39;Fast Exit when launching a StoreFile
+
+Public Function GetLaunchingSTF() As Boolean
+    GetLaunchingSTF = doLaunch
+End Function
+Public Sub SetLaunchingSTF(boolDoLaunch As Boolean)
+    doLaunch = boolDoLaunch
+End Sub
+&#39; Returns the Release ID of the STF File Version.  Increment every time we need to update the file format
+Public Function GetSTFVersionStr() As String
+    GetSTFVersionStr = &quot;1.0&quot;
+End Function
+
+&#39; Returns the same as above, but converted to a Long to make math comparison easy
+Public Function GetSTFVersionLng() As Long
+    GetSTFVersionLng = CLng(GetSTFVersionStr)
+End Function
+
+&#39; New StoreFile (remember to work the form)
+Public Sub NewStoreFile()
+    SetLaunchGameFirst False
+    SetTrainerLaunchesGame False
+    SetGamePath &quot;&quot;
+    SetGameSwitch &quot;&quot;
+    SetTrainerPath &quot;&quot;
+    SetTrainerSwitch &quot;&quot;
+    SetFileName &quot;untitled&quot;
+End Sub
+
+&#39; Some trainers expect the game to be launched first
+Public Function GetLaunchGameFirst() As Boolean
+    GetLaunchGameFirst = LaunchGameFirst
+End Function
+Public Sub SetLaunchGameFirst(boolLaunchGameFirst As Boolean)
+    LaunchGameFirst = boolLaunchGameFirst
+End Sub
+
+Public Sub SetTrainerLaunchesGame(boolLaunchType As Boolean)
+    TrainerLaunchesGame = boolLaunchType
+End Sub
+Public Function GetTrainerLaunchesGame() As Boolean
+    GetTrainerLaunchesGame = TrainerLaunchesGame
+End Function
+
+Public Function GetGamePath() As String
+    GetGamePath = GamePath
+End Function
+Public Sub SetGamePath(strGamePath As String)
+    GamePath = strGamePath
+End Sub
+Public Function GetTrainerPath() As String
+    GetTrainerPath = TrainerPath
+End Function
+Public Sub SetTrainerPath(strTrainerPath As String)
+    TrainerPath = strTrainerPath
+End Sub
+Public Function GetGameSwitch() As String
+    GetGameSwitch = GameSwitch
+End Function
+Public Sub SetGameSwitch(strGameSwitch As String)
+    GameSwitch = strGameSwitch
+End Sub
+Public Function GetTrainerSwitch() As String
+    GetTrainerSwitch = TrainerSwitch
+End Function
+Public Sub SetTrainerSwitch(strTrainerSwitch As String)
+    TrainerSwitch = strTrainerSwitch
+End Sub
+&#39; File Access Functions
+
+&#39; Tells StoreTrainer if the file is saved or not
+Public Sub SetFileFlag(dirtyFlag As Boolean, frmName As Form)
+    On Error GoTo ErrorTrap
+    Dim errorType As String
+    errorType = &quot;Not Yet Set&quot;
+    If dirtyFlag = True Then
+        errorType = &quot;Dirty = true&quot;
+        isFileDirty = True
+        frmName.Caption = GetFileName(True) &amp; &quot; * - &quot; &amp; App.ProductName
+    ElseIf dirtyFlag = False Then
+        errorType = &quot;Dirty = false&quot;
+        isFileDirty = False
+        errorType = errorType &amp; &quot; - Did Set Flag&quot;
+        frmName.Caption = GetFileName(True) &amp; &quot; - &quot; &amp; App.ProductName
+        errorType = errorType &amp; &quot; - Did (not) Set Form Name&quot;
+    Else
+        MsgBox &quot;Improper Usage: setFileFlag() requires true or false!&quot;, vbExclamation + vbOKOnly, App.ProductName
+        errorType = &quot;Improper Usage&quot;
+    End If
+    Exit Sub
+ErrorTrap:
+    MsgBox errorType &amp; vbCrLf &amp; Err.Number &amp; &quot;: &quot; &amp; Err.Description
+End Sub
+
+&#39; Queries the Dirty state
+Public Function GetFileFlag() As Boolean
+    GetFileFlag = isFileDirty
+End Function
+
+
+&#39; This writes StoreFile data to disk
+Public Function SaveStoreFile(frmName As Form, strFileName As String) As Integer
+    On Error GoTo ErrorTrapper
+    &#39; Write StoreFile data to the disk
+    
+    &#39; General Info
+    IniWriteValueString strFileName, &quot;General&quot;, &quot;STF.Version&quot;, GetSTFVersionStr
+    
+    
+    &#39; Trainer Launches Game
+    Dim strTrainerLaunchesGame As String
+    If GetTrainerLaunchesGame() = True Then
+        strTrainerLaunchesGame = &quot;true&quot;
+    End If
+    If GetTrainerLaunchesGame() = False Then
+        strTrainerLaunchesGame = &quot;false&quot;
+    End If
+    IniWriteValueString strFileName, &quot;Trainer&quot;, &quot;TrainerLaunchesGame&quot;, strTrainerLaunchesGame
+    
+    &#39; Launch Game First
+    Dim strLaunchGameFirst As String
+    If GetLaunchGameFirst() = True Then
+        strLaunchGameFirst = &quot;true&quot;
+    End If
+    If GetLaunchGameFirst() = False Then
+        strLaunchGameFirst = &quot;false&quot;
+    End If
+    IniWriteValueString strFileName, &quot;Game&quot;, &quot;LaunchGameFirst&quot;, strLaunchGameFirst
+    
+    &#39; Write Game and Trainer info
+    IniWriteValueString strFileName, &quot;Game&quot;, &quot;Path&quot;, GetGamePath
+    IniWriteValueString strFileName, &quot;Game&quot;, &quot;Switch&quot;, GetGameSwitch
+    
+    IniWriteValueString strFileName, &quot;Trainer&quot;, &quot;Path&quot;, GetTrainerPath
+    IniWriteValueString strFileName, &quot;Trainer&quot;, &quot;Switch&quot;, GetTrainerSwitch
+    
+    &#39; Unset the Dirty flag
+    SetFileFlag False, frmName
+    
+    &#39; Reports no error on saving
+    SaveStoreFile = 0
+    Exit Function
+    
+    &#39; Error Trapping
+ErrorTrapper: &#39;
+    
+    SaveStoreFile = Err.Number
+End Function
+
+&#39; Opens a StoreFile.  NOTE: this does NOT fill in the textboxes on a form
+&#39; Any return non-zero is an error
+Public Function OpenStoreFile(strFilePath As String) As Integer
+    Dim FSO As FileSystemObject
+    Set FSO = CreateObject(&quot;Scripting.FileSystemObject&quot;)
+    
+    &#39;Let&#39;s see if the file exists or not (return 53 (the same as VB6&#39;s File Not Found error) if it doesn&#39;t)
+    If Not FSO.FileExists(strFilePath) Then
+        OpenStoreFile = 53
+        Exit Function
+    End If
+    
+    &#39; File does exist.  Let&#39;s make sure it&#39;s a StoreFile this version of StoreTrainer understands
+    Dim strSTFVersion As String
+    strSTFVersion = IniGetValueString(strFilePath, &quot;General&quot;, &quot;STF.Version&quot;, &quot;0.0&quot;)
+    Dim iSTFCompare As Integer
+    iSTFCompare = CheckVersion(strSTFVersion, GetSTFVersionStr)
+    
+    &#39; The file being opened expects a newer version of StoreTrainer
+    If iSTFCompare = 1 Then
+        OpenStoreFile = 1
+        Exit Function
+    End If
+    
+    &#39; The file being opened expects an older version of StoreTrainer
+    If iSTFCompare = -1 Then
+        OpenStoreFile = 2
+        Exit Function
+    End If
+    
+    &#39; Now, let&#39;s load data into memory
+    &#39; THIS WILL NOT LOAD DATA INTO A FORM
+    
+    &#39; Load Launch Data
+    Dim strTrainerLaunchesGame As String
+    strTrainerLaunchesGame = IniGetValueString(strFilePath, &quot;Trainer&quot;, &quot;TrainerLaunchesGame&quot;, &quot;false&quot;)
+    
+    If strTrainerLaunchesGame = &quot;true&quot; Then
+        SetTrainerLaunchesGame True
+    Else
+        SetTrainerLaunchesGame False
+    End If
+    
+    Dim strLaunchGameFirst As String
+    strLaunchGameFirst = IniGetValueString(strFilePath, &quot;Game&quot;, &quot;LaunchGameFirst&quot;, &quot;false&quot;)
+    If strLaunchGameFirst = &quot;true&quot; Then
+        SetLaunchGameFirst True
+    Else
+        SetLaunchGameFirst False
+    End If
+    
+    &#39; Get the Game and Trainer path and switches
+    SetGamePath IniGetValueString(strFilePath, &quot;Game&quot;, &quot;Path&quot;, vbNullString)
+    SetGameSwitch IniGetValueString(strFilePath, &quot;Game&quot;, &quot;Switch&quot;, vbNullString)
+    
+    SetTrainerPath IniGetValueString(strFilePath, &quot;Trainer&quot;, &quot;Path&quot;, vbNullString)
+    SetTrainerSwitch IniGetValueString(strFilePath, &quot;Trainer&quot;, &quot;Switch&quot;, vbNullString)
+    
+    &#39; We&#39;re done. It is up to you to populate the form
+    OpenStoreFile = 0
+End Function
+
+Public Sub SetFileName(strLocalFileName As String)
+    strFileName = strLocalFileName
+End Sub
+
+Public Function GetFileName(Optional showFileNameOnly As Boolean) As String
+    On Error GoTo cantReadRegistry
+    &#39; Pull the filename from memory
+    Dim strLocalFileName As String
+    strLocalFileName = strFileName
+    Dim boolHideExtensions As Boolean
+    If showFileNameOnly = True Then
+        &#39; Needed if the user wants to only show the filename without path
+        Dim FSO As FileSystemObject
+        Set FSO = CreateObject(&quot;Scripting.FileSystemObject&quot;)
+        &#39; Return the filename without a path
+        &#39; First, we see if the user wants file extensions hidden or not (it&#39;s a user setting in Windows Explorer)
+        &#39; Apparently this is hardened in Vista+ (see cantReadRegistry below)
+        boolHideExtensions = CBool(RegGetValue$(HKEY_CURRENT_USER, &quot;Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced&quot;, &quot;HideFileExt&quot;))
+        If boolHideExtensions Then
+            strLocalFileName = FSO.GetBaseName(strLocalFileName)
+        Else
+            strLocalFileName = FSO.GetFileName(strLocalFileName)
+        End If
+        
+        &#39; Return that to the user
+        GetFileName = strLocalFileName
+        Exit Function
+    End If
+    &#39; Return the full filename
+    GetFileName = strFileName
+    Exit Function
+cantReadRegistry:
+    &#39; assume we don&#39;t have access to the Registry, we will NOT hide the extensions
+    &#39; Seems to be an issue with newer versions of Windows (because VB6 doesn&#39;t understand Registry Security)
+    boolHideExtensions = False
+    Resume Next
+End Function
+
+Public Function Launch() As Integer
+    &#39; Let&#39;s launch our StoreFile.  RULES:
+    &#39; * File must NOT be dirty
+    &#39; * Game and Trainer path MUST exist (unless of course, the trainer launches the game)
+    &#39; * Returns an integer based on error type.  Anything non-zero means error
+    
+    &#39; Set up the FileSystem object
+    Dim FSO As FileSystemObject
+    Set FSO = CreateObject(&quot;Scripting.FileSystemObject&quot;)
+    
+    &#39; Is the file dirty?
+    If GetFileFlag = True Or GetFileName = &quot;untitled&quot; Then
+        Launch = 1 &#39; File isn&#39;t saved.  Return code 1
+        Exit Function
+    End If
+    
+    &#39; Look for the trainer
+    If DoesFileExist(GetTrainerPath) = False Then
+        Launch = 2 &#39; Trainer doesn&#39;t exist.  Return code 2
+        Exit Function
+    End If
+    
+    &#39; Look for the game (if it&#39;s NOT launched by the trainer)
+    If GetTrainerLaunchesGame = False Then
+        If DoesFileExist(GetGamePath) = False Then
+            Launch = 3 &#39; Game doesn&#39;t exist.  Return code 3
+            Exit Function
+        End If
+    End If
+    
+    &#39; Checked all our errors.  Let&#39;s launch files
+    &#39; Let&#39;s build our file paths
+    Dim strGameAndSwitch As String, strTrainerAndSwitch As String
+    strGameAndSwitch = Chr$(34) &amp; GetGamePath &amp; Chr$(34)
+    If GetGameSwitch &lt;&gt; &quot;&quot; Then
+        strGameAndSwitch = strGameAndSwitch &amp; &quot; &quot; &amp; Chr$(34) &amp; GetGameSwitch &amp; Chr$(34)
+    End If
+    strTrainerAndSwitch = Chr$(34) &amp; GetTrainerPath &amp; Chr$(34)
+    If GetTrainerSwitch &lt;&gt; &quot;&quot; Then
+        strTrainerAndSwitch = strTrainerAndSwitch &amp; &quot; &quot; &amp; Chr$(34) &amp; GetTrainerSwitch &amp; Chr$(34)
+    End If
+    
+    &#39; We are ready to launch.  Don&#39;t forget to get the ParentFolder property because some trainers (and games?) expect the working folder to be set
+    
+    &#39; Now to see what to launch
+    If GetLaunchGameFirst = True Then
+        
+        &#39; Fall back, just in case
+        If GetTrainerLaunchesGame = False Then
+            ChDrive GetGamePath()
+            ChDir GetGamePath()
+            Shell strGameAndSwitch, vbNormalFocus
+            DoEvents
+        End If
+        ChDrive GetTrainerPath()
+        ChDir GetTrainerPath()
+        Shell strTrainerAndSwitch, vbNormalFocus
+        DoEvents
+        Launch = 0
+        Exit Function
+    End If
+    
+    &#39; We just need to launch the trainer
+    If GetTrainerLaunchesGame = True Then
+        ChDrive GetTrainerPath()
+        ChDir GetTrainerPath()
+        Shell strTrainerAndSwitch, vbNormalFocus
+        Launch = 0
+        Exit Function
+    End If
+    
+    &#39; None of the options are selected.  Launch both
+    ChDrive GetGamePath()
+    ChDir GetGamePath()
+    Shell strGameAndSwitch, vbNormalFocus
+    DoEvents
+    ChDrive GetTrainerPath()
+    ChDir GetTrainerPath()
+    Shell strTrainerAndSwitch, vbNormalFocus
+    DoEvents
+    Launch = 0
+    Exit Function
+    
+End Function
+
+                 
+                 
+
+</code></pre>
+      </section>
+
+      <section id="inifile-bas" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-inifile-bas">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem;">
+          <h2 id="heading-inifile-bas" style="margin: 0; border: 0;">INIFile.bas (Win32 kernel32 INI Configuration Parser)</h2>
+          <span style="font-family: monospace; font-weight: 700;">[VB6 Win32 API]</span>
+        </div>
+        <p style="margin: 0.4rem 0 0.75rem;">Direct Win32 `GetPrivateProfileString` / `WritePrivateProfileString` (`kernel32.dll`) bindings for zero-database INI configuration persistence.</p>
+        <pre class="code-viewer"><code>Attribute VB_Name = &quot;INIFile&quot;
+Option Explicit
+
+ &#39;API DECLARATIONS
+Declare Function GetPrivateProfileString Lib &quot;kernel32&quot; Alias _
+                 &quot;GetPrivateProfileStringA&quot; (ByVal lpApplicationName _
+                 As String, ByVal lpKeyName As Any, ByVal lpDefault _
+                 As String, ByVal lpReturnedString As String, ByVal _
+                 nSize As Long, ByVal lpFileName As String) As Long
+Declare Function WritePrivateProfileString Lib &quot;kernel32&quot; Alias _
+                 &quot;WritePrivateProfileStringA&quot; (ByVal lpApplicationName _
+                 As String, ByVal lpKeyName As Any, ByVal lpString As Any, _
+                 ByVal lpFileName As String) As Long
+
+Public Function IniGetValueString(sINIFile As String, sSection As String, sKey _
+                As String, sDefault As String) As String
+    Dim sTemp As String * 256
+    Dim nLength As Integer
+    sTemp = Space$(256)
+    nLength = GetPrivateProfileString(sSection, sKey, sDefault, sTemp, _
+              255, sINIFile)
+    IniGetValueString = Left$(sTemp, nLength)
+End Function
+Public Sub IniWriteValueString(sINIFile As String, sSection As String, sKey _
+           As String, sValue As String)
+    Dim n As Integer
+    Dim sTemp As String
+    sTemp = sValue
+    &#39;Replace any CR/LF characters with spaces
+    For n = 1 To Len(sValue)
+        If Mid$(sValue, n, 1) = vbCr Or Mid$(sValue, n, 1) = vbLf _
+        Then Mid$(sValue, n) = &quot; &quot;
+    Next n
+    n = WritePrivateProfileString(sSection, sKey, sTemp, sINIFile)
+End Sub
+
+</code></pre>
+      </section>
+
+      <section id="registry-bas" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-registry-bas">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem;">
+          <h2 id="heading-registry-bas" style="margin: 0; border: 0;">Registry.bas (Win32 advapi32 Registry Module)</h2>
+          <span style="font-family: monospace; font-weight: 700;">[VB6 Win32 API]</span>
+        </div>
+        <p style="margin: 0.4rem 0 0.75rem;">Direct Win32 `RegOpenKeyEx` / `RegQueryValueEx` (`advapi32.dll`) bindings for reading game installation paths across 32-bit and 64-bit Windows.</p>
+        <pre class="code-viewer"><code>Attribute VB_Name = &quot;Registry&quot;
+Option Explicit
+
+Type SECURITY_ATTRIBUTES
+        nLength As Long
+        lpSecurityDescriptor As Long
+        bInheritHandle As Long
+End Type
+
+Public Declare Function RegCreateKeyEx&amp; Lib &quot;advapi32.dll&quot; Alias &quot;RegCreateKeyExA&quot; (ByVal hKey&amp;, ByVal lpSubKey$, ByVal Reserved&amp;, ByVal lpClass$, ByVal dwOptions&amp;, ByVal samDesired&amp;, lpSecurityAttributes As SECURITY_ATTRIBUTES, phkResult&amp;, lpdwDisposition&amp;)
+Public Declare Function RegSetValueEx&amp; Lib &quot;advapi32.dll&quot; Alias &quot;RegSetValueExA&quot; (ByVal hKey&amp;, ByVal lpszValueName$, ByVal dwRes&amp;, ByVal dwType&amp;, lpDataBuff As Any, ByVal nSize&amp;)
+
+
+Private Declare Function RegCloseKey&amp; Lib &quot;advapi32.dll&quot; (ByVal hKey&amp;)
+Private Declare Function RegOpenKeyExA&amp; Lib &quot;advapi32.dll&quot; (ByVal hKey&amp;, ByVal lpszSubKey$, dwOptions&amp;, ByVal samDesired&amp;, lpHKey&amp;)
+Private Declare Function RegQueryValueExA&amp; Lib &quot;advapi32.dll&quot; (ByVal hKey&amp;, ByVal lpszValueName$, ByVal lpdwRes&amp;, lpdwType&amp;, ByVal lpDataBuff$, nSize&amp;)
+Private Declare Function RegQueryValueEx&amp; Lib &quot;advapi32.dll&quot; Alias &quot;RegQueryValueExA&quot; (ByVal hKey&amp;, ByVal lpszValueName$, ByVal lpdwRes&amp;, lpdwType&amp;, lpDataBuff&amp;, nSize&amp;)
+
+Public Const HKEY_CLASSES_ROOT = &amp;H80000000
+Public Const HKEY_CURRENT_USER = &amp;H80000001
+Public Const HKEY_LOCAL_MACHINE = &amp;H80000002
+Public Const HKEY_USERS = &amp;H80000003
+
+Public Const ERROR_SUCCESS = 0&amp;
+Public Const REG_SZ = 1&amp;                          &#39; Unicode nul terminated string
+Public Const REG_DWORD = 4&amp;                       &#39; 32-bit number
+
+Public Const KEY_QUERY_VALUE = &amp;H1&amp;
+Public Const KEY_SET_VALUE = &amp;H2&amp;
+Public Const KEY_CREATE_SUB_KEY = &amp;H4&amp;
+Public Const KEY_ENUMERATE_SUB_KEYS = &amp;H8&amp;
+Public Const KEY_NOTIFY = &amp;H10&amp;
+Public Const KEY_CREATE_LINK = &amp;H20&amp;
+Public Const READ_CONTROL = &amp;H20000
+Public Const WRITE_DAC = &amp;H40000
+Public Const WRITE_OWNER = &amp;H80000
+Public Const SYNCHRONIZE = &amp;H100000
+Public Const STANDARD_RIGHTS_REQUIRED = &amp;HF0000
+Public Const STANDARD_RIGHTS_READ = READ_CONTROL
+Public Const STANDARD_RIGHTS_WRITE = READ_CONTROL
+Public Const STANDARD_RIGHTS_EXECUTE = READ_CONTROL
+Public Const KEY_READ = STANDARD_RIGHTS_READ Or KEY_QUERY_VALUE Or KEY_ENUMERATE_SUB_KEYS Or KEY_NOTIFY
+Public Const KEY_WRITE = STANDARD_RIGHTS_WRITE Or KEY_SET_VALUE Or KEY_CREATE_SUB_KEY
+Public Const KEY_EXECUTE = KEY_READ
+
+Public Function RegGetValue$(MainKey&amp;, SubKey$, value$)
+   &#39; MainKey must be one of the Publicly declared HKEY constants.
+   Dim sKeyType&amp;       &#39;to return the key type.  This function expects REG_SZ or REG_DWORD
+   Dim ret&amp;            &#39;returned by registry functions, should be 0&amp;
+   Dim lpHKey&amp;         &#39;return handle to opened key
+   Dim lpcbData&amp;       &#39;length of data in returned string
+   Dim ReturnedString$ &#39;returned string value
+   Dim ReturnedLong&amp;   &#39;returned long value
+   If MainKey &gt;= &amp;H80000000 And MainKey &lt;= &amp;H80000006 Then
+      &#39; Open key
+      ret = RegOpenKeyExA(MainKey, SubKey, 0&amp;, KEY_READ, lpHKey)
+      If ret &lt;&gt; ERROR_SUCCESS Then
+         RegGetValue = &quot;&quot;
+         Exit Function     &#39;No key open, so leave
+      End If
+      
+      &#39; Set up buffer for data to be returned in.
+      &#39; Adjust next value for larger buffers.
+      lpcbData = 255
+      ReturnedString = Space$(lpcbData)
+
+      &#39; Read key
+      ret&amp; = RegQueryValueExA(lpHKey, value, ByVal 0&amp;, sKeyType, ReturnedString, lpcbData)
+      If ret &lt;&gt; ERROR_SUCCESS Then
+         RegGetValue = &quot;&quot;   &#39;Value probably doesn&#39;t exist
+      Else
+        If sKeyType = REG_DWORD Then
+            ret = RegQueryValueEx(lpHKey, value, ByVal 0&amp;, sKeyType, ReturnedLong, 4)
+            If ret = ERROR_SUCCESS Then RegGetValue = CStr(ReturnedLong)
+        Else
+            RegGetValue = Left$(ReturnedString, lpcbData - 1)
+        End If
+    End If
+      &#39; Always close opened keys.
+      ret = RegCloseKey(lpHKey)
+   End If
+End Function
+
+Public Sub RegSetValue(H_KEY&amp;, RSubKey$, ValueName$, RegValue$)
+    &#39;H_KEY must be one of the Key Constants
+    Dim lRtn&amp;         &#39;returned by registry functions, should be 0&amp;
+    Dim hKey&amp;         &#39;return handle to opened key
+    Dim lpDisp&amp;
+    Dim Sec_Att As SECURITY_ATTRIBUTES
+    Sec_Att.nLength = 12&amp;
+    Sec_Att.lpSecurityDescriptor = 0&amp;
+    Sec_Att.bInheritHandle = False
+    If RegValue = &quot;&quot; Then RegValue = &quot; &quot;
+    
+        lRtn = RegCreateKeyEx(H_KEY, RSubKey, 0&amp;, &quot;&quot;, 0&amp;, KEY_WRITE, Sec_Att, hKey, lpDisp)
+        If lRtn &lt;&gt; 0 Then
+            Exit Sub       &#39;No key open, so leave
+        End If
+        lRtn = RegSetValueEx(hKey, ValueName, 0&amp;, REG_SZ, ByVal RegValue, CLng(Len(RegValue) + 1))
+        lRtn = RegCloseKey(hKey)
+End Sub
+</code></pre>
+      </section>
+
+      <section id="specialfolder-bas" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-specialfolder-bas">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem;">
+          <h2 id="heading-specialfolder-bas" style="margin: 0; border: 0;">SpecialFolder.bas (Win32 Shell Special Folders API)</h2>
+          <span style="font-family: monospace; font-weight: 700;">[VB6 Win32 API]</span>
+        </div>
+        <p style="margin: 0.4rem 0 0.75rem;">Resolves `AppData`, `Program Files`, and user profile directories across Windows 95 through Windows 11.</p>
+        <pre class="code-viewer"><code>Attribute VB_Name = &quot;SpecialFolder&quot;
+Option Explicit
+
+
+&#39; Gives us access to Special Folders
+Declare Function SHGetSpecialFolderLocation Lib &quot;Shell32.dll&quot; _
+(ByVal hwndOwner As Long, ByVal nFolder As Long, pidl As ITEMIDLIST) As Long
+Declare Function SHGetPathFromIDList Lib &quot;Shell32.dll&quot; Alias &quot;SHGetPathFromIDListA&quot; _
+(ByVal pidl As Long, ByVal pszPath As String) As Long
+
+Public Type SHITEMID
+    cb As Long
+    abID As Byte
+End Type
+
+Public Type ITEMIDLIST
+    mkid As SHITEMID
+End Type
+Public Const MAX_PATH As Integer = 260
+
+&#39; List of folders
+Public Enum SpecialFolderID
+     CSIDL_DESKTOP = &amp;H0 &#39;// The Desktop - virtual folder
+     CSIDL_APPDATA = &amp;H1A &#39;// Roaming App Data (anywhere on network)
+     CSIDL_COMMONAPPDATA = &amp;H23 &#39;// Common App Data (probably do NOT have permission)
+     CSIDL_LOCALAPPDATA = &amp;H1C &#39;// Same as App Data, but stays LOCAL to computer
+     CSIDL_PROGRAMS = 2 &#39;// Start Menu\Programs (DO NOT CONFUSE WITH THE PROGRAM FILES FOLDER!!)
+     CSIDL_CONTROLS = 3 &#39;// Control Panel - virtual folder
+     CSIDL_PRINTERS = 4 &#39;// Printers - virtual folder
+     CSIDL_DOCUMENTS = 5 &#39;// My Documents
+     CSIDL_FAVORITES = 6 &#39;// Favourites
+     CSIDL_STARTUP = 7 &#39;// Startup Folder
+     CSIDL_RECENT = 8 &#39;// Recent Documents
+     CSIDL_SENDTO = 9 &#39;// Send To Folder
+     CSIDL_BITBUCKET = 10 &#39;// Recycle Bin - virtual folder
+     CSIDL_STARTMENU = 11 &#39;// Start Menu
+     CSIDL_DESKTOPFOLDER = 16 &#39;// Desktop folder
+     CSIDL_DRIVES = 17 &#39;// My Computer - virtual folder
+     CSIDL_NETWORK = 18 &#39;// Network Neighbourhood - virtual folder
+     CSIDL_NETHOOD = 19 &#39;// NetHood Folder
+     CSIDL_FONTS = 20 &#39;// Fonts folder
+     CSIDL_SHELLNEW = 21 &#39;// ShellNew folder
+End Enum
+
+Public Function FGetSpecialFolder(CSIDL As SpecialFolderID) As String
+    Dim sPath As String
+    Dim IDL As ITEMIDLIST
+    &#39;
+    &#39; Retrieve info about system folders such as the &quot;Recent Documents&quot; folder.
+    &#39; Info is stored in the IDL structure.
+    &#39;
+    FGetSpecialFolder = &quot;&quot;
+    If SHGetSpecialFolderLocation(GetForegroundWindow(), CSIDL, IDL) = 0 Then
+        &#39;
+        &#39; Get the path from the ID list, and return the folder.
+        &#39;
+        sPath = Space$(MAX_PATH)
+        If SHGetPathFromIDList(ByVal IDL.mkid.cb, ByVal sPath) Then
+            FGetSpecialFolder = Left$(sPath, InStr(sPath, vbNullChar) - 1) &amp; &quot;&quot;
+        End If
+    End If
+End Function
+
+
+Public Function GetStoreFileFolder(Optional doCreateFolder As Boolean = False, Optional doPromptCreateFolder As Boolean = False) As String
+    Dim FSO As FileSystemObject
+    Set FSO = CreateObject(&quot;Scripting.FileSystemObject&quot;)
+    If DoesFolderExist(iniGetValueString(getStoreTrainerDataFile, &quot;Library&quot;, &quot;Folder&quot;, vbNullString)) Then
+        &#39; My Documents\StoreFiles exists.  Give it to the user
+        GoTo ReturnFolder
+    Else
+        &#39; The folder does not exist
+        If doCreateFolder Then
+            &#39; The user wants to create the folder
+            If doPromptCreateFolder Then
+                &#39; The user needs a Yes/No
+                Dim msgCreateFolder As VbMsgBoxResult
+                msgCreateFolder = MsgBox(&quot;The StoreFile folder does not exist.  Create it?&quot;, vbYesNo + vbQuestion, App.ProductName)
+                If (msgCreateFolder = vbYes) Then
+                    GoTo CreateFolder
+                Else
+                    GoTo NoFolderCreated
+                End If
+            End If
+        Else
+            &#39; Folder wasn&#39;t created
+            GoTo NoFolderCreated
+        End If
+    End If
+    
+    &#39; Creates the folder
+CreateFolder:
+    
+    &#39; Create the StoreFiles folder
+    On Error GoTo NoFolderCreatedShowError
+    Dim strTStoreLibrary As String
+    Dim winInfo As osInfo
+    Dim strMyDocuments As String
+    Dim errorLocation As Integer
+    strMyDocuments = FGetSpecialFolder(CSIDL_DOCUMENTS)
+    If DoesFolderExist(strMyDocuments &amp; &quot;\My StoreFiles&quot;) = False Then
+        FSO.CreateFolder strMyDocuments &amp; &quot;\My StoreFiles&quot;
+    End If
+    strTStoreLibrary = strMyDocuments &amp; &quot;\My StoreFiles&quot;
+    
+    iniWriteValueString getStoreTrainerDataFile, &quot;Library&quot;, &quot;Folder&quot;, strTStoreLibrary
+    MsgBox &quot;StoreFile Library successfully created at: &quot; &amp; strTStoreLibrary, vbInformation, App.Title
+    
+    GoTo ReturnFolder
+    
+    &#39; Returns the folder path
+ReturnFolder:
+    GetStoreFileFolder = iniGetValueString(getStoreTrainerDataFile, &quot;Library&quot;, &quot;Folder&quot;, &quot;NO_FOLDER_CREATED&quot;)
+    Exit Function
+    
+NoFolderCreatedShowError:
+    MsgBox Err.Number &amp; &quot; - &quot; &amp; Err.Description &amp; vbCrLf &amp; strMyDocuments
+NoFolderCreated:
+    
+    &#39; Folder doesn&#39;t exist, user didn&#39;t create
+    GetStoreFileFolder = &quot;NO_FOLDER_CREATED&quot;
+                
+End Function
+
+&#39; Does a folder exist?
+Public Function DoesFolderExist(strFullPath As String) As Boolean
+    Dim FSO As FileSystemObject
+    Set FSO = CreateObject(&quot;Scripting.FileSystemObject&quot;)
+    
+    DoesFolderExist = FSO.FolderExists(strFullPath)
+End Function
+
+&#39; Does a file exist?
+Public Function DoesFileExist(strFullPath As String) As Boolean
+    Dim FSO As FileSystemObject
+    Set FSO = CreateObject(&quot;Scripting.FileSystemObject&quot;)
+    
+    DoesFileExist = FSO.FileExists(strFullPath)
+End Function
+</code></pre>
+      </section>
+
+      <section id="osversioninfo-bas" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-osversioninfo-bas">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem;">
+          <h2 id="heading-osversioninfo-bas" style="margin: 0; border: 0;">OSVersionInfo.bas (Win32 GetVersionEx OS Detector)</h2>
+          <span style="font-family: monospace; font-weight: 700;">[VB6 Win32 API]</span>
+        </div>
+        <p style="margin: 0.4rem 0 0.75rem;">Queries `GetVersionExA` (`OSVERSIONINFO`) to detect Windows 9x vs. Windows NT kernels at runtime.</p>
+        <pre class="code-viewer"><code>Attribute VB_Name = &quot;OSVersionInfo&quot;
+Option Explicit
+&#39; NOTE: in order for calls to GetVersionEx to function properly,
+&#39; you must include a manifest file with correct supportedOS entries
+&#39;
+&#39; Otherwise, calls will always return 6.2 at most on VER_PLATFORM_WIN32_NT
+
+Private Declare Function GetVersionEx Lib &quot;kernel32&quot; Alias &quot;GetVersionExA&quot; _
+    (lpVersionInformation As OSVERSIONINFO) As Long
+
+Private Type OSVERSIONINFO
+  OSVSize         As Long
+  dwVerMajor      As Long
+  dwVerMinor      As Long
+  dwBuildNumber   As Long
+  PlatformID      As Long
+  szCSDVersion    As String * 128
+End Type
+
+Public Enum osArch
+    VER_PLATFORM_WIN32s = 0 &#39;Windows 3.x with Win32s Library
+    VER_PLATFORM_WIN32_WINDOWS = 1 &#39;Windows 9x
+    VER_PLATFORM_WIN32_NT = 2 &#39;Windows NT
+End Enum
+&#39; Let&#39;s provide a public way to access Version Information
+Public Type osInfo
+    osArchitecture As osArch
+    osVersionMajor As Long
+    osVersionMinor As Long
+    osVersionBuild As Long
+    osServicePack As Long
+End Type
+
+Public Function GetWinVer() As osInfo
+    Dim osv As OSVERSIONINFO
+    osv.OSVSize = Len(osv)
+    If GetVersionEx(osv) = 1 Then
+        GetWinVer.osVersionMajor = osv.dwVerMajor
+        GetWinVer.osVersionMinor = osv.dwVerMinor
+        GetWinVer.osVersionBuild = osv.dwBuildNumber
+        GetWinVer.osServicePack = -1 &#39;Trap for no service pack (Windows 9x?)
+        Select Case osv.PlatformID
+            Case VER_PLATFORM_WIN32s
+                GetWinVer.osArchitecture = VER_PLATFORM_WIN32s
+            Case VER_PLATFORM_WIN32_NT
+                GetWinVer.osArchitecture = VER_PLATFORM_WIN32_NT
+                
+                &#39; Service Pack
+                
+                
+                
+                &#39; It&#39;s a pain in the rear to strip the number from the string, but here goes
+                &#39; We&#39;re going from a String() - a Character Array - to a String to a Long
+                Dim pos As Integer
+                pos = InStr(osv.szCSDVersion, Chr$(0)) &#39;Get the string &quot;Service Pack #&quot; as an Array
+                If pos Then
+                    On Error GoTo NoSP &#39;Handle not having a Service Pack
+                    Dim sSPName As String
+                    sSPName = Left$(osv.szCSDVersion, pos - 1) &#39;Convert from a String() to a String
+                    sSPName = Right$(sSPName, 1) &#39;Strip the Service Pack number from the string
+                    Dim lSPNum As Long
+                    lSPNum = CLng(sSPName) &#39;Convert the service pack number from a String to a Long
+                    GetWinVer.osServicePack = lSPNum &#39;Offer it to the user
+                    GoTo FinishNT &#39;We&#39;re done, if a Service Pack is installed
+NoSP:
+                    GetWinVer.osServicePack = 0 &#39;No Service Pack installed (or we couldn&#39;t parse the Service Pack information)
+                End If
+FinishNT:
+            Case VER_PLATFORM_WIN32_WINDOWS:
+                GetWinVer.osArchitecture = VER_PLATFORM_WIN32_WINDOWS
+        End Select
+
+    End If
+
+End Function
+
+&#39; Returns the version of Windows that the user is running
+Public Function GetWindowsVersion() As String
+    Dim osv As OSVERSIONINFO
+    osv.OSVSize = Len(osv)
+
+    If GetVersionEx(osv) = 1 Then
+        Select Case osv.PlatformID
+            Case VER_PLATFORM_WIN32s
+                GetWindowsVersion = &quot;Win32s on Windows 3.1&quot;
+            Case VER_PLATFORM_WIN32_NT
+                GetWindowsVersion = &quot;Windows NT&quot;
+
+                Select Case osv.dwVerMajor
+                    Case 3
+                        GetWindowsVersion = &quot;Windows NT 3.5&quot;
+                    Case 4
+                        GetWindowsVersion = &quot;Windows NT 4.0&quot;
+                    Case 5
+                        Select Case osv.dwVerMinor
+                            Case 0
+                                GetWindowsVersion = &quot;Windows 2000&quot;
+                            Case 1
+                                GetWindowsVersion = &quot;Windows XP&quot;
+                            Case 2
+                                GetWindowsVersion = &quot;Windows Server 2003&quot;
+                        End Select
+                    Case 6
+                        Select Case osv.dwVerMinor
+                            Case 0
+                                GetWindowsVersion = &quot;Windows Vista/Server 2008&quot;
+                            Case 1
+                                GetWindowsVersion = &quot;Windows 7/Server 2008 R2&quot;
+                            Case 2
+                                GetWindowsVersion = &quot;Windows 8/Server 2012&quot;
+                            Case 3
+                                GetWindowsVersion = &quot;Windows 8.1/Server 2012 R2&quot;
+                        End Select
+                    Case 10
+                        GetWindowsVersion = &quot;Windows 10&quot;
+                End Select
+
+            Case VER_PLATFORM_WIN32_WINDOWS:
+                Select Case osv.dwVerMinor
+                    Case 0
+                        GetWindowsVersion = &quot;Windows 95&quot;
+                    Case 90
+                        GetWindowsVersion = &quot;Windows Me&quot;
+                    Case Else
+                        GetWindowsVersion = &quot;Windows 98&quot;
+                End Select
+        End Select
+    Else
+        GetWindowsVersion = &quot;Unable to identify your version of Windows.&quot;
+    End If
+End Function
+</code></pre>
+      </section>
+
+      <section id="detectosbits-bas" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-detectosbits-bas">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem;">
+          <h2 id="heading-detectosbits-bas" style="margin: 0; border: 0;">DetectOSBits.bas (32-Bit vs. 64-Bit WOW64 Detection)</h2>
+          <span style="font-family: monospace; font-weight: 700;">[VB6 Win32 API]</span>
+        </div>
+        <p style="margin: 0.4rem 0 0.75rem;">Dynamically probes `IsWow64Process` in `kernel32.dll` so 32-bit `TStore.exe` knows whether it is running on a 64-bit Windows OS.</p>
+        <pre class="code-viewer"><code>Attribute VB_NAME = &quot;DetectOSBits&quot;
+Option Explicit
+
+Private Declare Function GetProcAddress Lib &quot;kernel32&quot; _
+    (ByVal hModule As Long, ByVal lpProcName As String) As Long
+
+Private Declare Function GetModuleHandle Lib &quot;kernel32&quot; _
+    Alias &quot;GetModuleHandleA&quot; (ByVal lpModuleName As String) As Long
+
+Private Declare Function GetCurrentProcess Lib &quot;kernel32&quot; () As Long
+
+Private Declare Function IsWow64Process Lib &quot;kernel32&quot; _
+    (ByVal hProc As Long, ByRef bWow64Process As Boolean) As Long
+
+Public Function IsHost64Bit() As Boolean
+    Dim handle As Long
+    Dim is64Bit As Boolean
+
+    &#39; Assume initially that this is not a WOW64 process
+    is64Bit = False
+
+    &#39; Then try to prove that wrong by attempting to load the
+    &#39; IsWow64Process function dynamically
+    handle = GetProcAddress(GetModuleHandle(&quot;kernel32&quot;), &quot;IsWow64Process&quot;)
+
+    &#39; The function exists, so call it
+    If handle &lt;&gt; 0 Then
+        IsWow64Process GetCurrentProcess(), is64Bit
+    End If
+
+    &#39; Return the value
+    IsHost64Bit = is64Bit
+End Function</code></pre>
+      </section>
+
+      <section id="versioncompare-bas" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-versioncompare-bas">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem;">
+          <h2 id="heading-versioncompare-bas" style="margin: 0; border: 0;">VersionCompare.bas (Binary File Version Comparator)</h2>
+          <span style="font-family: monospace; font-weight: 700;">[VB6 Win32 API]</span>
+        </div>
+        <p style="margin: 0.4rem 0 0.75rem;">Uses `version.dll` (`GetFileVersionInfoA`) to inspect and compare executable version headers.</p>
+        <pre class="code-viewer"><code>Attribute VB_Name = &quot;VersionCompare&quot;
+Option Explicit
+Public Function CompareFileVersion(sFileName1 As String, sFileName2 As String) As Integer
+
+    &#39;// Return values:
+    &#39;// -1 = File Version 2 is greater than File Version 1
+    &#39;//  0 = Versions are the same
+    &#39;//  1 = File version 1 is greater than File Version 2
+    Dim iResult As Integer
+
+    Dim sFileVersion1 As String
+    Dim sFileVersion2 As String
+    Dim arrFileVersion1() As String
+    Dim arrFileVersion2() As String
+    Dim lVersion1 As Long
+    Dim lVersion2 As Long
+    Dim fs As FileSystemObject
+
+    &#39;// Let&#39;s initialize our result with 0
+    iResult = 0
+
+    &#39;// Use FileSystemObject to get the file version
+    Set fs = CreateObject(&quot;Scripting.FileSystemObject&quot;)
+    sFileVersion1 = fs.GetFileVersion(sFileName1)
+    sFileVersion2 = fs.GetFileVersion(sFileName2)
+
+    &#39;// Split the two supplied file versions by the &quot;.&quot; character
+    arrFileVersion1() = Split(sFileVersion1, &quot;.&quot;)
+    arrFileVersion2() = Split(sFileVersion2, &quot;.&quot;)
+    
+    Dim i As Integer
+    For i = 0 To UBound(arrFileVersion1())
+        &#39;// Convert the string to a number so we don&#39;t get false positive (&quot;2&quot;&gt;&quot;19&quot;)
+        lVersion1 = CLng(arrFileVersion1(i))
+        lVersion2 = CLng(arrFileVersion2(i))
+        If lVersion1 &gt; lVersion2 Then
+            iResult = 1
+        ElseIf lVersion1 &lt; lVersion2 Then
+            iResult = -1
+        End If
+
+        &#39;If we have found that the result is not &gt; or &lt;, no need to proceed
+        If iResult &lt;&gt; 0 Then Exit For
+
+    Next
+
+    If UBound(arrFileVersion2) &gt; UBound(arrFileVersion1) _
+      And arrFileVersion2(UBound(arrFileVersion2)) &lt;&gt; 0 Then iResult = -1
+
+    CompareFileVersion = iResult
+
+End Function
+
+Public Function CheckVersion(ByVal par1 As String, ByVal par2 As String) As Integer
+    Dim arr1() As String
+    Dim arr2() As String
+    Dim looper As Integer
+    Dim returnValue As Integer
+    Dim val1 As Integer
+    Dim val2 As Integer
+    arr1 = Split(par1, &quot;.&quot;)
+    arr2 = Split(par2, &quot;.&quot;)
+
+    For looper = 0 To Max(UBound(arr1), UBound(arr2))
+        val1 = 0
+        val2 = 0
+        If UBound(arr1) &gt;= looper Then
+            val1 = Val(arr1(looper))
+        End If
+        If UBound(arr2) &gt;= looper Then
+            val2 = Val(arr2(looper))
+        End If
+
+        If val1 &gt; val2 Then
+            returnValue = 1
+            Exit For
+        ElseIf val1 &lt; val2 Then
+            returnValue = -1
+            Exit For
+        Else
+            &#39; same #, keep going
+        End If
+    Next
+    CheckVersion = returnValue
+End Function
+
+Public Function Max(ByVal par1 As Integer, ByVal par2 As Integer) As Integer
+    If par1 &gt; par2 Then
+        Max = par1
+    Else
+        Max = par2
+    End If
+End Function
+</code></pre>
+      </section>
+
+      <section id="whwnd-bas" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-whwnd-bas">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem;">
+          <h2 id="heading-whwnd-bas" style="margin: 0; border: 0;">wHwnd.bas (Win32 Window Handle &amp; Process Monitor)</h2>
+          <span style="font-family: monospace; font-weight: 700;">[VB6 Win32 API]</span>
+        </div>
+        <p style="margin: 0.4rem 0 0.75rem;">Win32 `user32.dll` window handle (`HWND`) enumeration and process state tracking for launched games and trainers.</p>
+        <pre class="code-viewer"><code>Attribute VB_NAME = &quot;wHwnd&quot;
+Option Explicit
+Declare Function GetForegroundWindow Lib &quot;user32.dll&quot; () As Long
+Declare Function GetActiveWindow Lib &quot;user32.dll&quot; () As Long </code></pre>
+      </section>
+
+      <section id="readme-txt" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-readme-txt">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem;">
+          <h2 id="heading-readme-txt" style="margin: 0; border: 0;">README.txt (Original User Documentation)</h2>
+          <span style="font-family: monospace; font-weight: 700;">[Documentation]</span>
+        </div>
+        <p style="margin: 0.4rem 0 0.75rem;">Original plaintext user documentation bundled with StoreTrainer.</p>
+        <pre class="code-viewer"><code>RAGGIESOFT STORETRAINER
+-----------------------
+
+StoreTrainer is an easy way to remember the location of games and trainers (the common name for cheat programs).  StoreTrainer is an easy to use program, and when you first launch it, you will be taken directly to the StoreFile Editor.  The StoreFile is an easy-to-understand format, and you can get started with the Project menu which allows you to locate the Game and Trainer, as well as add command line switches to each program
+
+SYSTEM REQUIREMENTS
+-------------------
+
+StoreTrainer should run on systems as old as Windows 95, as my goal is to be able to target the growing retro PC gaming market.  It is built using a Windows 2000 Professional machine and tested on Windows 2000 Professional as well as Windows 10 Professional, as I do not have access to a Windows 9x machine to test on.
+
+VERSION HISTORY
+---------------
+
+Version 1.0
+* Initial Release (rough around the edges)
+ - Stores the location of games and their associated trainers
+
+</code></pre>
+      </section>
+
+      <section id="readme-dev-txt" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-readme-dev-txt">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem;">
+          <h2 id="heading-readme-dev-txt" style="margin: 0; border: 0;">README-dev.txt (Developer Build &amp; VM Notes)</h2>
+          <span style="font-family: monospace; font-weight: 700;">[Documentation]</span>
+        </div>
+        <p style="margin: 0.4rem 0 0.75rem;">Original developer notes documenting the Windows 2000 SP4 build environment and runtime packaging.</p>
+        <pre class="code-viewer"><code>RAGGIESOFT STORETRAINER
+-----------------------
+
+StoreTrainer is an easy way to remember the location of games and trainers (the common name for cheat programs).  StoreTrainer is an easy to use program, and when you first launch it, you will be taken directly to the StoreFile Editor.  The StoreFile is an easy-to-understand format, and you can get started with the Project menu which allows you to locate the Game and Trainer, as well as add command line switches to each program
+
+SYSTEM REQUIREMENTS
+-------------------
+
+StoreTrainer should run on systems as old as Windows 95, as my goal is to be able to target the growing retro PC gaming market.  It is built using a Windows 2000 Professional machine and tested on Windows 2000 Professional as well as Windows 10 Professional, as I do not have access to a Windows 9x machine to test on.
+
+VERSION HISTORY
+---------------
+
+Version 1.0.2 (dev)
+ * Clarified how StoreData can be used, as the checkboxes should&#39;ve been mutually exclusive
+ * The start of an experimental help file
+ 
+Version 1.0.1
+ * Experimented with a different installation routine, to improve Windows 95 and Windows NT 4.0 support
+ * The StoreTrainer executable (TSTORE.EXE) is otherwise unchanged, outside of a version bump to handle this new installer, and therefore unreleased
+ 
+Version 1.0
+ * Initial Release (rough around the edges)
+  - Stores the location of games and their associated trainers</code></pre>
+      </section>
+
+      <section id="tstore-net-frmmain" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-tstore-net-frmmain">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem;">
+          <h2 id="heading-tstore-net-frmmain" style="margin: 0; border: 0;">TStore.NET/frmMain.vb (VB.NET Main Form Port)</h2>
+          <span style="font-family: monospace; font-weight: 700;">[.NET Port]</span>
+        </div>
+        <p style="margin: 0.4rem 0 0.75rem;">Visual Basic .NET upgraded form (`frmMain.vb`) preserving StoreTrainer functionality on modern .NET runtimes.</p>
+        <pre class="code-viewer"><code>Option Strict Off
+Option Explicit On
+Friend Class frmMain
+	Inherits System.Windows.Forms.Form
+#Region &quot;Windows Form Designer generated code &quot;
+	Public Sub New()
+		MyBase.New()
+		If m_vb6FormDefInstance Is Nothing Then
+			If m_InitializingDefInstance Then
+				m_vb6FormDefInstance = Me
+			Else
+				Try 
+					&#39;For the start-up form, the first instance created is the default instance.
+					If System.Reflection.Assembly.GetExecutingAssembly.EntryPoint.DeclaringType Is Me.GetType Then
+						m_vb6FormDefInstance = Me
+					End If
+				Catch
+				End Try
+			End If
+		End If
+		&#39;This call is required by the Windows Form Designer.
+		InitializeComponent()
+	End Sub
+	&#39;Form overrides dispose to clean up the component list.
+	Protected Overloads Overrides Sub Dispose(ByVal Disposing As Boolean)
+		If Disposing Then
+			If Not components Is Nothing Then
+				components.Dispose()
+			End If
+		End If
+		MyBase.Dispose(Disposing)
+	End Sub
+	&#39;Required by the Windows Form Designer
+	Private components As System.ComponentModel.IContainer
+	Public ToolTip1 As System.Windows.Forms.ToolTip
+	Public WithEvents cmdLaunch As System.Windows.Forms.Button
+	Public WithEvents txtTrainerPath As System.Windows.Forms.TextBox
+	Public WithEvents cmdBrowseTrainer As System.Windows.Forms.Button
+	Public WithEvents txtTrainerSwitch As System.Windows.Forms.TextBox
+	Public WithEvents lblTrainerSwitch As System.Windows.Forms.Label
+	Public WithEvents picXPShim3 As System.Windows.Forms.Panel
+	Public WithEvents fraTrainerData As System.Windows.Forms.GroupBox
+	Public WithEvents cmdBrowseGame As System.Windows.Forms.Button
+	Public WithEvents txtGameSwitch As System.Windows.Forms.TextBox
+	Public WithEvents txtGamePath As System.Windows.Forms.TextBox
+	Public WithEvents lblGameSwitch As System.Windows.Forms.Label
+	Public WithEvents picXPShim2 As System.Windows.Forms.Panel
+	Public WithEvents fraGameData As System.Windows.Forms.GroupBox
+	Public WithEvents chkLaunchGameFirst As System.Windows.Forms.CheckBox
+	Public WithEvents chkTrainerLaunchesGame As System.Windows.Forms.CheckBox
+	Public WithEvents picXPShim1 As System.Windows.Forms.Panel
+	Public WithEvents fraStoreFileDetails As System.Windows.Forms.GroupBox
+	Public WithEvents cdgStoreFile As AxMSComDlg.AxCommonDialog
+	Public WithEvents mnuFileNew As System.Windows.Forms.MenuItem
+	Public WithEvents mnuFileOpen As System.Windows.Forms.MenuItem
+	Public WithEvents mnuFileDash1 As System.Windows.Forms.MenuItem
+	Public WithEvents mnuFileSave As System.Windows.Forms.MenuItem
+	Public WithEvents mnuFileSaveAs As System.Windows.Forms.MenuItem
+	Public WithEvents mnuFileDash2 As System.Windows.Forms.MenuItem
+	Public WithEvents mnuFileExit As System.Windows.Forms.MenuItem
+	Public WithEvents mnuFile As System.Windows.Forms.MenuItem
+	Public WithEvents mnuProjectBrowseGame As System.Windows.Forms.MenuItem
+	Public WithEvents mnuProjectBrowseTrainer As System.Windows.Forms.MenuItem
+	Public WithEvents mnuProjectBrowse As System.Windows.Forms.MenuItem
+	Public WithEvents mnuProjectDash1 As System.Windows.Forms.MenuItem
+	Public WithEvents mnuProjrectSwitchGame As System.Windows.Forms.MenuItem
+	Public WithEvents mnuProjectSwitchTrainer As System.Windows.Forms.MenuItem
+	Public WithEvents mnuProjectSwitch As System.Windows.Forms.MenuItem
+	Public WithEvents mnuProjectDash2 As System.Windows.Forms.MenuItem
+	Public WithEvents mnuProjectLaunch As System.Windows.Forms.MenuItem
+	Public WithEvents mnuProject As System.Windows.Forms.MenuItem
+	Public WithEvents mnuHelpAbout As System.Windows.Forms.MenuItem
+	Public WithEvents mnuHelpCheckForUpdate As System.Windows.Forms.MenuItem
+	Public WithEvents mnuHelp As System.Windows.Forms.MenuItem
+	Public MainMenu1 As System.Windows.Forms.MainMenu
+	&#39;NOTE: The following procedure is required by the Windows Form Designer
+	&#39;It can be modified using the Windows Form Designer.
+	&#39;Do not modify it using the code editor.
+	&lt;System.Diagnostics.DebuggerStepThrough()&gt; Private Sub InitializeComponent()
+		Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(frmMain))
+		Me.components = New System.ComponentModel.Container()
+		Me.ToolTip1 = New System.Windows.Forms.ToolTip(components)
+		Me.ToolTip1.Active = True
+		Me.cmdLaunch = New System.Windows.Forms.Button
+		Me.fraTrainerData = New System.Windows.Forms.GroupBox
+		Me.txtTrainerPath = New System.Windows.Forms.TextBox
+		Me.picXPShim3 = New System.Windows.Forms.Panel
+		Me.cmdBrowseTrainer = New System.Windows.Forms.Button
+		Me.txtTrainerSwitch = New System.Windows.Forms.TextBox
+		Me.lblTrainerSwitch = New System.Windows.Forms.Label
+		Me.fraGameData = New System.Windows.Forms.GroupBox
+		Me.picXPShim2 = New System.Windows.Forms.Panel
+		Me.cmdBrowseGame = New System.Windows.Forms.Button
+		Me.txtGameSwitch = New System.Windows.Forms.TextBox
+		Me.txtGamePath = New System.Windows.Forms.TextBox
+		Me.lblGameSwitch = New System.Windows.Forms.Label
+		Me.fraStoreFileDetails = New System.Windows.Forms.GroupBox
+		Me.picXPShim1 = New System.Windows.Forms.Panel
+		Me.chkLaunchGameFirst = New System.Windows.Forms.CheckBox
+		Me.chkTrainerLaunchesGame = New System.Windows.Forms.CheckBox
+		Me.cdgStoreFile = New AxMSComDlg.AxCommonDialog
+		Me.MainMenu1 = New System.Windows.Forms.MainMenu
+		Me.mnuFile = New System.Windows.Forms.MenuItem
+		Me.mnuFileNew = New System.Windows.Forms.MenuItem
+		Me.mnuFileOpen = New System.Windows.Forms.MenuItem
+		Me.mnuFileDash1 = New System.Windows.Forms.MenuItem
+		Me.mnuFileSave = New System.Windows.Forms.MenuItem
+		Me.mnuFileSaveAs = New System.Windows.Forms.MenuItem
+		Me.mnuFileDash2 = New System.Windows.Forms.MenuItem
+		Me.mnuFileExit = New System.Windows.Forms.MenuItem
+		Me.mnuProject = New System.Windows.Forms.MenuItem
+		Me.mnuProjectBrowse = New System.Windows.Forms.MenuItem
+		Me.mnuProjectBrowseGame = New System.Windows.Forms.MenuItem
+		Me.mnuProjectBrowseTrainer = New System.Windows.Forms.MenuItem
+		Me.mnuProjectDash1 = New System.Windows.Forms.MenuItem
+		Me.mnuProjectSwitch = New System.Windows.Forms.MenuItem
+		Me.mnuProjrectSwitchGame = New System.Windows.Forms.MenuItem
+		Me.mnuProjectSwitchTrainer = New System.Windows.Forms.MenuItem
+		Me.mnuProjectDash2 = New System.Windows.Forms.MenuItem
+		Me.mnuProjectLaunch = New System.Windows.Forms.MenuItem
+		Me.mnuHelp = New System.Windows.Forms.MenuItem
+		Me.mnuHelpAbout = New System.Windows.Forms.MenuItem
+		Me.mnuHelpCheckForUpdate = New System.Windows.Forms.MenuItem
+		CType(Me.cdgStoreFile, System.ComponentModel.ISupportInitialize).BeginInit()
+		Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+		Me.Text = &quot;[UNTITLED] - RaggieSoft StoreTrainer&quot;
+		Me.ClientSize = New System.Drawing.Size(441, 327)
+		Me.Location = New System.Drawing.Point(3, 41)
+		Me.Icon = CType(resources.GetObject(&quot;frmMain.Icon&quot;), System.Drawing.Icon)
+		Me.MaximizeBox = False
+		Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+		Me.Font = New System.Drawing.Font(&quot;Arial&quot;, 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
+		Me.BackColor = System.Drawing.SystemColors.Control
+		Me.ControlBox = True
+		Me.Enabled = True
+		Me.KeyPreview = False
+		Me.MinimizeBox = True
+		Me.Cursor = System.Windows.Forms.Cursors.Default
+		Me.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.ShowInTaskbar = True
+		Me.HelpButton = False
+		Me.WindowState = System.Windows.Forms.FormWindowState.Normal
+		Me.Name = &quot;frmMain&quot;
+		Me.cmdLaunch.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+		Me.cmdLaunch.Text = &quot;&amp;Launch&quot;
+		Me.cmdLaunch.Size = New System.Drawing.Size(73, 33)
+		Me.cmdLaunch.Location = New System.Drawing.Point(360, 288)
+		Me.cmdLaunch.TabIndex = 16
+		Me.cmdLaunch.Font = New System.Drawing.Font(&quot;Arial&quot;, 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.cmdLaunch.BackColor = System.Drawing.SystemColors.Control
+		Me.cmdLaunch.CausesValidation = True
+		Me.cmdLaunch.Enabled = True
+		Me.cmdLaunch.ForeColor = System.Drawing.SystemColors.ControlText
+		Me.cmdLaunch.Cursor = System.Windows.Forms.Cursors.Default
+		Me.cmdLaunch.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.cmdLaunch.TabStop = True
+		Me.cmdLaunch.Name = &quot;cmdLaunch&quot;
+		Me.fraTrainerData.Text = &quot;Trainer Data&quot;
+		Me.fraTrainerData.Size = New System.Drawing.Size(425, 89)
+		Me.fraTrainerData.Location = New System.Drawing.Point(8, 192)
+		Me.fraTrainerData.TabIndex = 10
+		Me.fraTrainerData.Font = New System.Drawing.Font(&quot;Arial&quot;, 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.fraTrainerData.BackColor = System.Drawing.SystemColors.Control
+		Me.fraTrainerData.Enabled = True
+		Me.fraTrainerData.ForeColor = System.Drawing.SystemColors.ControlText
+		Me.fraTrainerData.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.fraTrainerData.Visible = True
+		Me.fraTrainerData.Name = &quot;fraTrainerData&quot;
+		Me.txtTrainerPath.AutoSize = False
+		Me.txtTrainerPath.Size = New System.Drawing.Size(409, 19)
+		Me.txtTrainerPath.Location = New System.Drawing.Point(8, 16)
+		Me.txtTrainerPath.TabIndex = 12
+		Me.txtTrainerPath.Font = New System.Drawing.Font(&quot;Arial&quot;, 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.txtTrainerPath.AcceptsReturn = True
+		Me.txtTrainerPath.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
+		Me.txtTrainerPath.BackColor = System.Drawing.SystemColors.Window
+		Me.txtTrainerPath.CausesValidation = True
+		Me.txtTrainerPath.Enabled = True
+		Me.txtTrainerPath.ForeColor = System.Drawing.SystemColors.WindowText
+		Me.txtTrainerPath.HideSelection = True
+		Me.txtTrainerPath.ReadOnly = False
+		Me.txtTrainerPath.Maxlength = 0
+		Me.txtTrainerPath.Cursor = System.Windows.Forms.Cursors.IBeam
+		Me.txtTrainerPath.MultiLine = False
+		Me.txtTrainerPath.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.txtTrainerPath.ScrollBars = System.Windows.Forms.ScrollBars.None
+		Me.txtTrainerPath.TabStop = True
+		Me.txtTrainerPath.Visible = True
+		Me.txtTrainerPath.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+		Me.txtTrainerPath.Name = &quot;txtTrainerPath&quot;
+		Me.picXPShim3.Size = New System.Drawing.Size(409, 65)
+		Me.picXPShim3.Location = New System.Drawing.Point(8, 16)
+		Me.picXPShim3.TabIndex = 11
+		Me.picXPShim3.Font = New System.Drawing.Font(&quot;Arial&quot;, 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.picXPShim3.Dock = System.Windows.Forms.DockStyle.None
+		Me.picXPShim3.BackColor = System.Drawing.SystemColors.Control
+		Me.picXPShim3.CausesValidation = True
+		Me.picXPShim3.Enabled = True
+		Me.picXPShim3.ForeColor = System.Drawing.SystemColors.ControlText
+		Me.picXPShim3.Cursor = System.Windows.Forms.Cursors.Default
+		Me.picXPShim3.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.picXPShim3.TabStop = True
+		Me.picXPShim3.Visible = True
+		Me.picXPShim3.BorderStyle = System.Windows.Forms.BorderStyle.None
+		Me.picXPShim3.Name = &quot;picXPShim3&quot;
+		Me.cmdBrowseTrainer.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+		Me.cmdBrowseTrainer.Text = &quot;Browse...&quot;
+		Me.cmdBrowseTrainer.Size = New System.Drawing.Size(89, 25)
+		Me.cmdBrowseTrainer.Location = New System.Drawing.Point(312, 24)
+		Me.cmdBrowseTrainer.TabIndex = 15
+		Me.cmdBrowseTrainer.Font = New System.Drawing.Font(&quot;Arial&quot;, 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.cmdBrowseTrainer.BackColor = System.Drawing.SystemColors.Control
+		Me.cmdBrowseTrainer.CausesValidation = True
+		Me.cmdBrowseTrainer.Enabled = True
+		Me.cmdBrowseTrainer.ForeColor = System.Drawing.SystemColors.ControlText
+		Me.cmdBrowseTrainer.Cursor = System.Windows.Forms.Cursors.Default
+		Me.cmdBrowseTrainer.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.cmdBrowseTrainer.TabStop = True
+		Me.cmdBrowseTrainer.Name = &quot;cmdBrowseTrainer&quot;
+		Me.txtTrainerSwitch.AutoSize = False
+		Me.txtTrainerSwitch.Size = New System.Drawing.Size(257, 19)
+		Me.txtTrainerSwitch.Location = New System.Drawing.Point(48, 24)
+		Me.txtTrainerSwitch.TabIndex = 14
+		Me.txtTrainerSwitch.Font = New System.Drawing.Font(&quot;Arial&quot;, 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.txtTrainerSwitch.AcceptsReturn = True
+		Me.txtTrainerSwitch.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
+		Me.txtTrainerSwitch.BackColor = System.Drawing.SystemColors.Window
+		Me.txtTrainerSwitch.CausesValidation = True
+		Me.txtTrainerSwitch.Enabled = True
+		Me.txtTrainerSwitch.ForeColor = System.Drawing.SystemColors.WindowText
+		Me.txtTrainerSwitch.HideSelection = True
+		Me.txtTrainerSwitch.ReadOnly = False
+		Me.txtTrainerSwitch.Maxlength = 0
+		Me.txtTrainerSwitch.Cursor = System.Windows.Forms.Cursors.IBeam
+		Me.txtTrainerSwitch.MultiLine = False
+		Me.txtTrainerSwitch.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.txtTrainerSwitch.ScrollBars = System.Windows.Forms.ScrollBars.None
+		Me.txtTrainerSwitch.TabStop = True
+		Me.txtTrainerSwitch.Visible = True
+		Me.txtTrainerSwitch.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+		Me.txtTrainerSwitch.Name = &quot;txtTrainerSwitch&quot;
+		Me.lblTrainerSwitch.Text = &quot;Switch:&quot;
+		Me.lblTrainerSwitch.Size = New System.Drawing.Size(35, 13)
+		Me.lblTrainerSwitch.Location = New System.Drawing.Point(0, 24)
+		Me.lblTrainerSwitch.TabIndex = 13
+		Me.lblTrainerSwitch.Font = New System.Drawing.Font(&quot;Arial&quot;, 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.lblTrainerSwitch.TextAlign = System.Drawing.ContentAlignment.TopLeft
+		Me.lblTrainerSwitch.BackColor = System.Drawing.SystemColors.Control
+		Me.lblTrainerSwitch.Enabled = True
+		Me.lblTrainerSwitch.ForeColor = System.Drawing.SystemColors.ControlText
+		Me.lblTrainerSwitch.Cursor = System.Windows.Forms.Cursors.Default
+		Me.lblTrainerSwitch.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.lblTrainerSwitch.UseMnemonic = True
+		Me.lblTrainerSwitch.Visible = True
+		Me.lblTrainerSwitch.AutoSize = True
+		Me.lblTrainerSwitch.BorderStyle = System.Windows.Forms.BorderStyle.None
+		Me.lblTrainerSwitch.Name = &quot;lblTrainerSwitch&quot;
+		Me.fraGameData.Text = &quot;Game Data&quot;
+		Me.fraGameData.Size = New System.Drawing.Size(425, 81)
+		Me.fraGameData.Location = New System.Drawing.Point(8, 104)
+		Me.fraGameData.TabIndex = 4
+		Me.fraGameData.Font = New System.Drawing.Font(&quot;Arial&quot;, 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.fraGameData.BackColor = System.Drawing.SystemColors.Control
+		Me.fraGameData.Enabled = True
+		Me.fraGameData.ForeColor = System.Drawing.SystemColors.ControlText
+		Me.fraGameData.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.fraGameData.Visible = True
+		Me.fraGameData.Name = &quot;fraGameData&quot;
+		Me.picXPShim2.Size = New System.Drawing.Size(409, 57)
+		Me.picXPShim2.Location = New System.Drawing.Point(8, 16)
+		Me.picXPShim2.TabIndex = 5
+		Me.picXPShim2.Font = New System.Drawing.Font(&quot;Arial&quot;, 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.picXPShim2.Dock = System.Windows.Forms.DockStyle.None
+		Me.picXPShim2.BackColor = System.Drawing.SystemColors.Control
+		Me.picXPShim2.CausesValidation = True
+		Me.picXPShim2.Enabled = True
+		Me.picXPShim2.ForeColor = System.Drawing.SystemColors.ControlText
+		Me.picXPShim2.Cursor = System.Windows.Forms.Cursors.Default
+		Me.picXPShim2.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.picXPShim2.TabStop = True
+		Me.picXPShim2.Visible = True
+		Me.picXPShim2.BorderStyle = System.Windows.Forms.BorderStyle.None
+		Me.picXPShim2.Name = &quot;picXPShim2&quot;
+		Me.cmdBrowseGame.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+		Me.cmdBrowseGame.Text = &quot;Browse...&quot;
+		Me.cmdBrowseGame.Size = New System.Drawing.Size(89, 25)
+		Me.cmdBrowseGame.Location = New System.Drawing.Point(312, 24)
+		Me.cmdBrowseGame.TabIndex = 9
+		Me.cmdBrowseGame.Font = New System.Drawing.Font(&quot;Arial&quot;, 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.cmdBrowseGame.BackColor = System.Drawing.SystemColors.Control
+		Me.cmdBrowseGame.CausesValidation = True
+		Me.cmdBrowseGame.Enabled = True
+		Me.cmdBrowseGame.ForeColor = System.Drawing.SystemColors.ControlText
+		Me.cmdBrowseGame.Cursor = System.Windows.Forms.Cursors.Default
+		Me.cmdBrowseGame.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.cmdBrowseGame.TabStop = True
+		Me.cmdBrowseGame.Name = &quot;cmdBrowseGame&quot;
+		Me.txtGameSwitch.AutoSize = False
+		Me.txtGameSwitch.Size = New System.Drawing.Size(257, 19)
+		Me.txtGameSwitch.Location = New System.Drawing.Point(48, 24)
+		Me.txtGameSwitch.TabIndex = 8
+		Me.txtGameSwitch.Font = New System.Drawing.Font(&quot;Arial&quot;, 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.txtGameSwitch.AcceptsReturn = True
+		Me.txtGameSwitch.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
+		Me.txtGameSwitch.BackColor = System.Drawing.SystemColors.Window
+		Me.txtGameSwitch.CausesValidation = True
+		Me.txtGameSwitch.Enabled = True
+		Me.txtGameSwitch.ForeColor = System.Drawing.SystemColors.WindowText
+		Me.txtGameSwitch.HideSelection = True
+		Me.txtGameSwitch.ReadOnly = False
+		Me.txtGameSwitch.Maxlength = 0
+		Me.txtGameSwitch.Cursor = System.Windows.Forms.Cursors.IBeam
+		Me.txtGameSwitch.MultiLine = False
+		Me.txtGameSwitch.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.txtGameSwitch.ScrollBars = System.Windows.Forms.ScrollBars.None
+		Me.txtGameSwitch.TabStop = True
+		Me.txtGameSwitch.Visible = True
+		Me.txtGameSwitch.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+		Me.txtGameSwitch.Name = &quot;txtGameSwitch&quot;
+		Me.txtGamePath.AutoSize = False
+		Me.txtGamePath.Size = New System.Drawing.Size(409, 19)
+		Me.txtGamePath.Location = New System.Drawing.Point(0, 0)
+		Me.txtGamePath.TabIndex = 6
+		Me.txtGamePath.Font = New System.Drawing.Font(&quot;Arial&quot;, 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.txtGamePath.AcceptsReturn = True
+		Me.txtGamePath.TextAlign = System.Windows.Forms.HorizontalAlignment.Left
+		Me.txtGamePath.BackColor = System.Drawing.SystemColors.Window
+		Me.txtGamePath.CausesValidation = True
+		Me.txtGamePath.Enabled = True
+		Me.txtGamePath.ForeColor = System.Drawing.SystemColors.WindowText
+		Me.txtGamePath.HideSelection = True
+		Me.txtGamePath.ReadOnly = False
+		Me.txtGamePath.Maxlength = 0
+		Me.txtGamePath.Cursor = System.Windows.Forms.Cursors.IBeam
+		Me.txtGamePath.MultiLine = False
+		Me.txtGamePath.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.txtGamePath.ScrollBars = System.Windows.Forms.ScrollBars.None
+		Me.txtGamePath.TabStop = True
+		Me.txtGamePath.Visible = True
+		Me.txtGamePath.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+		Me.txtGamePath.Name = &quot;txtGamePath&quot;
+		Me.lblGameSwitch.Text = &quot;Switch:&quot;
+		Me.lblGameSwitch.Size = New System.Drawing.Size(35, 13)
+		Me.lblGameSwitch.Location = New System.Drawing.Point(0, 24)
+		Me.lblGameSwitch.TabIndex = 7
+		Me.lblGameSwitch.Font = New System.Drawing.Font(&quot;Arial&quot;, 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.lblGameSwitch.TextAlign = System.Drawing.ContentAlignment.TopLeft
+		Me.lblGameSwitch.BackColor = System.Drawing.SystemColors.Control
+		Me.lblGameSwitch.Enabled = True
+		Me.lblGameSwitch.ForeColor = System.Drawing.SystemColors.ControlText
+		Me.lblGameSwitch.Cursor = System.Windows.Forms.Cursors.Default
+		Me.lblGameSwitch.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.lblGameSwitch.UseMnemonic = True
+		Me.lblGameSwitch.Visible = True
+		Me.lblGameSwitch.AutoSize = True
+		Me.lblGameSwitch.BorderStyle = System.Windows.Forms.BorderStyle.None
+		Me.lblGameSwitch.Name = &quot;lblGameSwitch&quot;
+		Me.fraStoreFileDetails.Text = &quot;General Data&quot;
+		Me.fraStoreFileDetails.Size = New System.Drawing.Size(425, 89)
+		Me.fraStoreFileDetails.Location = New System.Drawing.Point(8, 8)
+		Me.fraStoreFileDetails.TabIndex = 0
+		Me.fraStoreFileDetails.Font = New System.Drawing.Font(&quot;Arial&quot;, 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.fraStoreFileDetails.BackColor = System.Drawing.SystemColors.Control
+		Me.fraStoreFileDetails.Enabled = True
+		Me.fraStoreFileDetails.ForeColor = System.Drawing.SystemColors.ControlText
+		Me.fraStoreFileDetails.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.fraStoreFileDetails.Visible = True
+		Me.fraStoreFileDetails.Name = &quot;fraStoreFileDetails&quot;
+		Me.picXPShim1.Size = New System.Drawing.Size(409, 65)
+		Me.picXPShim1.Location = New System.Drawing.Point(8, 16)
+		Me.picXPShim1.TabIndex = 1
+		Me.picXPShim1.Font = New System.Drawing.Font(&quot;Arial&quot;, 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.picXPShim1.Dock = System.Windows.Forms.DockStyle.None
+		Me.picXPShim1.BackColor = System.Drawing.SystemColors.Control
+		Me.picXPShim1.CausesValidation = True
+		Me.picXPShim1.Enabled = True
+		Me.picXPShim1.ForeColor = System.Drawing.SystemColors.ControlText
+		Me.picXPShim1.Cursor = System.Windows.Forms.Cursors.Default
+		Me.picXPShim1.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.picXPShim1.TabStop = True
+		Me.picXPShim1.Visible = True
+		Me.picXPShim1.BorderStyle = System.Windows.Forms.BorderStyle.None
+		Me.picXPShim1.Name = &quot;picXPShim1&quot;
+		Me.chkLaunchGameFirst.Text = &quot;&amp;Launch Game First&quot;
+		Me.chkLaunchGameFirst.Size = New System.Drawing.Size(161, 17)
+		Me.chkLaunchGameFirst.Location = New System.Drawing.Point(8, 24)
+		Me.chkLaunchGameFirst.TabIndex = 3
+		Me.chkLaunchGameFirst.Font = New System.Drawing.Font(&quot;Arial&quot;, 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.chkLaunchGameFirst.CheckAlign = System.Drawing.ContentAlignment.MiddleLeft
+		Me.chkLaunchGameFirst.BackColor = System.Drawing.SystemColors.Control
+		Me.chkLaunchGameFirst.CausesValidation = True
+		Me.chkLaunchGameFirst.Enabled = True
+		Me.chkLaunchGameFirst.ForeColor = System.Drawing.SystemColors.ControlText
+		Me.chkLaunchGameFirst.Cursor = System.Windows.Forms.Cursors.Default
+		Me.chkLaunchGameFirst.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.chkLaunchGameFirst.Appearance = System.Windows.Forms.Appearance.Normal
+		Me.chkLaunchGameFirst.TabStop = True
+		Me.chkLaunchGameFirst.CheckState = System.Windows.Forms.CheckState.Unchecked
+		Me.chkLaunchGameFirst.Visible = True
+		Me.chkLaunchGameFirst.Name = &quot;chkLaunchGameFirst&quot;
+		Me.chkTrainerLaunchesGame.Text = &quot;&amp;Trainer Launches Game&quot;
+		Me.chkTrainerLaunchesGame.Size = New System.Drawing.Size(177, 17)
+		Me.chkTrainerLaunchesGame.Location = New System.Drawing.Point(8, 0)
+		Me.chkTrainerLaunchesGame.TabIndex = 2
+		Me.chkTrainerLaunchesGame.Font = New System.Drawing.Font(&quot;Arial&quot;, 8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+		Me.chkTrainerLaunchesGame.CheckAlign = System.Drawing.ContentAlignment.MiddleLeft
+		Me.chkTrainerLaunchesGame.BackColor = System.Drawing.SystemColors.Control
+		Me.chkTrainerLaunchesGame.CausesValidation = True
+		Me.chkTrainerLaunchesGame.Enabled = True
+		Me.chkTrainerLaunchesGame.ForeColor = System.Drawing.SystemColors.ControlText
+		Me.chkTrainerLaunchesGame.Cursor = System.Windows.Forms.Cursors.Default
+		Me.chkTrainerLaunchesGame.RightToLeft = System.Windows.Forms.RightToLeft.No
+		Me.chkTrainerLaunchesGame.Appearance = System.Windows.Forms.Appearance.Normal
+		Me.chkTrainerLaunchesGame.TabStop = True
+		Me.chkTrainerLaunchesGame.CheckState = System.Windows.Forms.CheckState.Unchecked
+		Me.chkTrainerLaunchesGame.Visible = True
+		Me.chkTrainerLaunchesGame.Name = &quot;chkTrainerLaunchesGame&quot;
+		cdgStoreFile.OcxState = CType(resources.GetObject(&quot;cdgStoreFile.OcxState&quot;), System.Windows.Forms.AxHost.State)
+		Me.cdgStoreFile.Location = New System.Drawing.Point(8, 288)
+		Me.cdgStoreFile.Name = &quot;cdgStoreFile&quot;
+		Me.mnuFile.Text = &quot;&amp;File&quot;
+		Me.mnuFile.Checked = False
+		Me.mnuFile.Enabled = True
+		Me.mnuFile.Visible = True
+		Me.mnuFile.MDIList = False
+		Me.mnuFileNew.Text = &quot;&amp;New&quot;
+		Me.mnuFileNew.Shortcut = System.Windows.Forms.Shortcut.CtrlN
+		Me.mnuFileNew.Checked = False
+		Me.mnuFileNew.Enabled = True
+		Me.mnuFileNew.Visible = True
+		Me.mnuFileNew.MDIList = False
+		Me.mnuFileOpen.Text = &quot;&amp;Open...&quot;
+		Me.mnuFileOpen.Shortcut = System.Windows.Forms.Shortcut.CtrlO
+		Me.mnuFileOpen.Checked = False
+		Me.mnuFileOpen.Enabled = True
+		Me.mnuFileOpen.Visible = True
+		Me.mnuFileOpen.MDIList = False
+		Me.mnuFileDash1.Text = &quot;-&quot;
+		Me.mnuFileDash1.Checked = False
+		Me.mnuFileDash1.Enabled = True
+		Me.mnuFileDash1.Visible = True
+		Me.mnuFileDash1.MDIList = False
+		Me.mnuFileSave.Text = &quot;&amp;Save&quot;
+		Me.mnuFileSave.Shortcut = System.Windows.Forms.Shortcut.CtrlS
+		Me.mnuFileSave.Checked = False
+		Me.mnuFileSave.Enabled = True
+		Me.mnuFileSave.Visible = True
+		Me.mnuFileSave.MDIList = False
+		Me.mnuFileSaveAs.Text = &quot;Save &amp;As...&quot;
+		Me.mnuFileSaveAs.Checked = False
+		Me.mnuFileSaveAs.Enabled = True
+		Me.mnuFileSaveAs.Visible = True
+		Me.mnuFileSaveAs.MDIList = False
+		Me.mnuFileDash2.Text = &quot;-&quot;
+		Me.mnuFileDash2.Checked = False
+		Me.mnuFileDash2.Enabled = True
+		Me.mnuFileDash2.Visible = True
+		Me.mnuFileDash2.MDIList = False
+		Me.mnuFileExit.Text = &quot;E&amp;xit&quot;
+		Me.mnuFileExit.Checked = False
+		Me.mnuFileExit.Enabled = True
+		Me.mnuFileExit.Visible = True
+		Me.mnuFileExit.MDIList = False
+		Me.mnuProject.Text = &quot;&amp;Project&quot;
+		Me.mnuProject.Checked = False
+		Me.mnuProject.Enabled = True
+		Me.mnuProject.Visible = True
+		Me.mnuProject.MDIList = False
+		Me.mnuProjectBrowse.Text = &quot;&amp;Browse&quot;
+		Me.mnuProjectBrowse.Checked = False
+		Me.mnuProjectBrowse.Enabled = True
+		Me.mnuProjectBrowse.Visible = True
+		Me.mnuProjectBrowse.MDIList = False
+		Me.mnuProjectBrowseGame.Text = &quot;&amp;Game...&quot;
+		Me.mnuProjectBrowseGame.Checked = False
+		Me.mnuProjectBrowseGame.Enabled = True
+		Me.mnuProjectBrowseGame.Visible = True
+		Me.mnuProjectBrowseGame.MDIList = False
+		Me.mnuProjectBrowseTrainer.Text = &quot;&amp;Trainer...&quot;
+		Me.mnuProjectBrowseTrainer.Checked = False
+		Me.mnuProjectBrowseTrainer.Enabled = True
+		Me.mnuProjectBrowseTrainer.Visible = True
+		Me.mnuProjectBrowseTrainer.MDIList = False
+		Me.mnuProjectDash1.Text = &quot;-&quot;
+		Me.mnuProjectDash1.Checked = False
+		Me.mnuProjectDash1.Enabled = True
+		Me.mnuProjectDash1.Visible = True
+		Me.mnuProjectDash1.MDIList = False
+		Me.mnuProjectSwitch.Text = &quot;&amp;Switch&quot;
+		Me.mnuProjectSwitch.Checked = False
+		Me.mnuProjectSwitch.Enabled = True
+		Me.mnuProjectSwitch.Visible = True
+		Me.mnuProjectSwitch.MDIList = False
+		Me.mnuProjrectSwitchGame.Text = &quot;&amp;Game...&quot;
+		Me.mnuProjrectSwitchGame.Checked = False
+		Me.mnuProjrectSwitchGame.Enabled = True
+		Me.mnuProjrectSwitchGame.Visible = True
+		Me.mnuProjrectSwitchGame.MDIList = False
+		Me.mnuProjectSwitchTrainer.Text = &quot;&amp;Trainer...&quot;
+		Me.mnuProjectSwitchTrainer.Checked = False
+		Me.mnuProjectSwitchTrainer.Enabled = True
+		Me.mnuProjectSwitchTrainer.Visible = True
+		Me.mnuProjectSwitchTrainer.MDIList = False
+		Me.mnuProjectDash2.Text = &quot;-&quot;
+		Me.mnuProjectDash2.Checked = False
+		Me.mnuProjectDash2.Enabled = True
+		Me.mnuProjectDash2.Visible = True
+		Me.mnuProjectDash2.MDIList = False
+		Me.mnuProjectLaunch.Text = &quot;&amp;Launch&quot;
+		Me.mnuProjectLaunch.Shortcut = System.Windows.Forms.Shortcut.CtrlL
+		Me.mnuProjectLaunch.Checked = False
+		Me.mnuProjectLaunch.Enabled = True
+		Me.mnuProjectLaunch.Visible = True
+		Me.mnuProjectLaunch.MDIList = False
+		Me.mnuHelp.Text = &quot;&amp;Help&quot;
+		Me.mnuHelp.Checked = False
+		Me.mnuHelp.Enabled = True
+		Me.mnuHelp.Visible = True
+		Me.mnuHelp.MDIList = False
+		Me.mnuHelpAbout.Text = &quot;&amp;About...&quot;
+		Me.mnuHelpAbout.Checked = False
+		Me.mnuHelpAbout.Enabled = True
+		Me.mnuHelpAbout.Visible = True
+		Me.mnuHelpAbout.MDIList = False
+		Me.mnuHelpCheckForUpdate.Text = &quot;&amp;Check for Update&quot;
+		Me.mnuHelpCheckForUpdate.Checked = False
+		Me.mnuHelpCheckForUpdate.Enabled = True
+		Me.mnuHelpCheckForUpdate.Visible = True
+		Me.mnuHelpCheckForUpdate.MDIList = False
+		Me.Controls.Add(cmdLaunch)
+		Me.Controls.Add(fraTrainerData)
+		Me.Controls.Add(fraGameData)
+		Me.Controls.Add(fraStoreFileDetails)
+		Me.Controls.Add(cdgStoreFile)
+		Me.fraTrainerData.Controls.Add(txtTrainerPath)
+		Me.fraTrainerData.Controls.Add(picXPShim3)
+		Me.picXPShim3.Controls.Add(cmdBrowseTrainer)
+		Me.picXPShim3.Controls.Add(txtTrainerSwitch)
+		Me.picXPShim3.Controls.Add(lblTrainerSwitch)
+		Me.fraGameData.Controls.Add(picXPShim2)
+		Me.picXPShim2.Controls.Add(cmdBrowseGame)
+		Me.picXPShim2.Controls.Add(txtGameSwitch)
+		Me.picXPShim2.Controls.Add(txtGamePath)
+		Me.picXPShim2.Controls.Add(lblGameSwitch)
+		Me.fraStoreFileDetails.Controls.Add(picXPShim1)
+		Me.picXPShim1.Controls.Add(chkLaunchGameFirst)
+		Me.picXPShim1.Controls.Add(chkTrainerLaunchesGame)
+		CType(Me.cdgStoreFile, System.ComponentModel.ISupportInitialize).EndInit()
+		Me.mnuFile.Index = 0
+		Me.mnuProject.Index = 1
+		Me.mnuHelp.Index = 2
+		MainMenu1.MenuItems.AddRange(New System.Windows.Forms.MenuItem(){Me.mnuFile, Me.mnuProject, Me.mnuHelp})
+		Me.mnuFileNew.Index = 0
+		Me.mnuFileOpen.Index = 1
+		Me.mnuFileDash1.Index = 2
+		Me.mnuFileSave.Index = 3
+		Me.mnuFileSaveAs.Index = 4
+		Me.mnuFileDash2.Index = 5
+		Me.mnuFileExit.Index = 6
+		mnuFile.MenuItems.AddRange(New System.Windows.Forms.MenuItem(){Me.mnuFileNew, Me.mnuFileOpen, Me.mnuFileDash1, Me.mnuFileSave, Me.mnuFileSaveAs, Me.mnuFileDash2, Me.mnuFileExit})
+		Me.mnuProjectBrowse.Index = 0
+		Me.mnuProjectDash1.Index = 1
+		Me.mnuProjectSwitch.Index = 2
+		Me.mnuProjectDash2.Index = 3
+		Me.mnuProjectLaunch.Index = 4
+		mnuProject.MenuItems.AddRange(New System.Windows.Forms.MenuItem(){Me.mnuProjectBrowse, Me.mnuProjectDash1, Me.mnuProjectSwitch, Me.mnuProjectDash2, Me.mnuProjectLaunch})
+		Me.mnuProjectBrowseGame.Index = 0
+		Me.mnuProjectBrowseTrainer.Index = 1
+		mnuProjectBrowse.MenuItems.AddRange(New System.Windows.Forms.MenuItem(){Me.mnuProjectBrowseGame, Me.mnuProjectBrowseTrainer})
+		Me.mnuProjrectSwitchGame.Index = 0
+		Me.mnuProjectSwitchTrainer.Index = 1
+		mnuProjectSwitch.MenuItems.AddRange(New System.Windows.Forms.MenuItem(){Me.mnuProjrectSwitchGame, Me.mnuProjectSwitchTrainer})
+		Me.mnuHelpAbout.Index = 0
+		Me.mnuHelpCheckForUpdate.Index = 1
+		mnuHelp.MenuItems.AddRange(New System.Windows.Forms.MenuItem(){Me.mnuHelpAbout, Me.mnuHelpCheckForUpdate})
+		Me.Menu = MainMenu1
+	End Sub
+#End Region 
+#Region &quot;Upgrade Support &quot;
+	Private Shared m_vb6FormDefInstance As frmMain
+	Private Shared m_InitializingDefInstance As Boolean
+	Public Shared Property DefInstance() As frmMain
+		Get
+			If m_vb6FormDefInstance Is Nothing OrElse m_vb6FormDefInstance.IsDisposed Then
+				m_InitializingDefInstance = True
+				m_vb6FormDefInstance = New frmMain()
+				m_InitializingDefInstance = False
+			End If
+			DefInstance = m_vb6FormDefInstance
+		End Get
+		Set
+			m_vb6FormDefInstance = Value
+		End Set
+	End Property
+#End Region 
+	
+	
+	Private Sub frmMain_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
+		SetFileName(&quot;untitled&quot;)
+		SetFileFlag(False, Me)
+		If DoesFileExist(VB6.GetPath &amp; &quot;\update.exe&quot;) = True Then
+			Me.mnuHelpCheckForUpdate.Visible = True
+		End If
+		If DoesFileExist(VB6.GetPath &amp; &quot;\update.exe&quot;) = False Then
+			Me.mnuHelpCheckForUpdate.Visible = False
+		End If
+	End Sub
+	
+	
+	
+	&#39;UPGRADE_WARNING: Form event frmMain.QueryUnload has a new behavior. Click for more: &#39;ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword=&quot;vbup2065&quot;&#39;
+	Private Sub frmMain_Closing(ByVal eventSender As System.Object, ByVal eventArgs As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
+		Dim Cancel As Short = eventArgs.Cancel
+		Dim iMSG As MsgBoxResult
+		
+		&#39; When a StoreFile is launched, we must quickly close up
+		If GetLaunchingSTF = True Then
+			Cancel = False
+			GoTo EventExitSub
+		End If
+		
+		&#39; A files is not being launched
+		Dim strSaveFile As String
+		If GetFileFlag() = False Then
+			iMSG = MsgBox(&quot;Are you sure you want to exit &quot; &amp; System.Reflection.Assembly.GetExecutingAssembly.GetName.Name &amp; &quot;?&quot;, MsgBoxStyle.Question + MsgBoxStyle.YesNo)
+			If iMSG = MsgBoxResult.No Then
+				Cancel = True
+			End If
+			If iMSG = MsgBoxResult.Yes Then
+				Cancel = False
+			End If
+		Else
+			
+			iMSG = MsgBox(&quot;Would you like to save your work before exiting?&quot;, MsgBoxStyle.Question + MsgBoxStyle.YesNoCancel, System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).ProductName)
+			If iMSG = MsgBoxResult.Yes Then
+				&#39; File isn&#39;t saved yet.  Show a Save As dialog
+				If LCase(GetFileName()) = &quot;untitled&quot; Then
+					strSaveFile = DisplaySaveAs()
+					If strSaveFile = &quot;32755&quot; Then
+						&#39; User clicked Cancel in the Save As dialog
+						Cancel = True
+						GoTo EventExitSub
+					End If
+					
+					&#39; Write that filename to memory
+					SetFileName((strSaveFile))
+				End If
+				
+				&#39; Write data to disk
+				SaveStoreFile(Me, GetFileName())
+				Cancel = False
+			End If
+			If iMSG = MsgBoxResult.No Then
+				Cancel = False
+			End If
+			If iMSG = MsgBoxResult.Cancel Then
+				&#39; Cancel.  No exit, No save.
+				Cancel = True
+			End If
+		End If
+EventExitSub: 
+		eventArgs.Cancel = Cancel
+	End Sub
+	
+	
+	&#39;UPGRADE_WARNING: Event chkLaunchGameFirst.CheckStateChanged may fire when form is initialized. Click for more: &#39;ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword=&quot;vbup2075&quot;&#39;
+	Private Sub chkLaunchGameFirst_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLaunchGameFirst.CheckStateChanged
+		If chkLaunchGameFirst.CheckState = True Then
+			SetLaunchGameFirst(True)
+			GoTo SetFlag
+		End If
+		If chkLaunchGameFirst.CheckState = False Then
+			SetLaunchGameFirst(False)
+			GoTo SetFlag
+		End If
+SetFlag: 
+		SetFileFlag(True, Me)
+	End Sub
+	
+	&#39;UPGRADE_WARNING: Event chkTrainerLaunchesGame.CheckStateChanged may fire when form is initialized. Click for more: &#39;ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword=&quot;vbup2075&quot;&#39;
+	Private Sub chkTrainerLaunchesGame_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkTrainerLaunchesGame.CheckStateChanged
+		&#39; Turn on or off being able to locate a game if the trainer launches it
+		Select Case chkTrainerLaunchesGame.CheckState
+			Case System.Windows.Forms.CheckState.Checked
+				SetTrainerLaunchesGame(True)
+				Me.txtGamePath.Enabled = False
+				Me.txtGameSwitch.Enabled = False
+				Me.cmdBrowseGame.Enabled = False
+				Me.mnuProjectBrowseGame.Enabled = False
+				Me.mnuProjrectSwitchGame.Enabled = False
+				Me.picXPShim2.Enabled = False
+				Me.fraGameData.Enabled = False
+				Me.lblGameSwitch.Enabled = False
+				Me.txtGamePath.BackColor = System.Drawing.SystemColors.Control
+				Me.txtGameSwitch.BackColor = System.Drawing.SystemColors.Control
+				GoTo SetFlag
+			Case System.Windows.Forms.CheckState.Unchecked
+				SetTrainerLaunchesGame(False)
+				Me.txtGamePath.Enabled = True
+				Me.txtGameSwitch.Enabled = True
+				Me.cmdBrowseGame.Enabled = True
+				Me.mnuProjectBrowseGame.Enabled = True
+				Me.mnuProjrectSwitchGame.Enabled = True
+				Me.picXPShim2.Enabled = True
+				Me.fraGameData.Enabled = True
+				Me.lblGameSwitch.Enabled = True
+				Me.txtGamePath.BackColor = System.Drawing.SystemColors.Window
+				Me.txtGameSwitch.BackColor = System.Drawing.SystemColors.Window
+				GoTo SetFlag
+		End Select
+SetFlag: 
+		SetFileFlag(True, Me)
+	End Sub
+	
+	Private Sub cmdBrowseGame_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdBrowseGame.Click
+		On Error GoTo Trap
+		Dim winInfo As osInfo
+		With Me.cdgStoreFile
+			.CancelError = True
+			.Filter = &quot;Executable Files (*.exe)|*.exe|All Files (*.*)|*.*&quot;
+			.DefaultExt = &quot;exe&quot;
+			.DialogTitle = &quot;Locate Game&quot;
+			.Flags = MSComDlg.FileOpenConstants.cdlOFNFileMustExist
+			.InitDir = Environ(&quot;ProgramFiles&quot;) &#39; Default to %PROGRAM_FILES% since most games would be there (unlike SpecialFolder, this works on Win95/98)
+			.ShowOpen()
+			Me.txtGamePath.Text = .FileName
+			SetGamePath((.FileName))
+		End With
+		validateFile(txtGamePath)
+		SetFileFlag(True, Me)
+		Exit Sub
+Trap: 
+		&#39;User clicked cancel
+		Exit Sub
+	End Sub
+	
+	Private Sub cmdBrowseTrainer_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdBrowseTrainer.Click
+		On Error GoTo Trap
+		With Me.cdgStoreFile
+			.CancelError = True
+			.InitDir = FGetSpecialFolder(SpecialFolder.SpecialFolderID.CSIDL_DOCUMENTS) &#39;%MY_DOCUMENTS%
+			.Filter = &quot;Executable Files (*.exe)|*.exe|All Files (*.*)|*.*&quot;
+			.DefaultExt = &quot;exe&quot;
+			.DialogTitle = &quot;Locate Trainer&quot;
+			.Flags = MSComDlg.FileOpenConstants.cdlOFNFileMustExist
+			.ShowOpen()
+			Me.txtTrainerPath.Text = .FileName
+			SetTrainerPath((.FileName))
+		End With
+		validateFile(txtTrainerPath)
+		SetFileFlag(True, Me)
+		Exit Sub
+Trap: 
+		&#39;User clicked cancel
+		Exit Sub
+	End Sub
+	
+	Private Sub cmdLaunch_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdLaunch.Click
+		doLaunch()
+	End Sub
+	
+	Private Function DisplaySaveAs() As String
+		On Error GoTo Trapper
+		With Me.cdgStoreFile
+			.CancelError = True
+			.DialogTitle = &quot;Save StoreFile&quot;
+			.Filter = &quot;StoreFile (*.stf)|*.stf&quot;
+			.InitDir = GetStoreFileFolder()
+			.DefaultExt = &quot;stf&quot;
+			.ShowSave()
+			DisplaySaveAs = .FileName
+		End With
+		Exit Function
+Trapper: 
+		If Err.Number = 32755 Then &#39;Cancel
+			DisplaySaveAs = &quot;32755&quot;
+			Exit Function
+		End If
+	End Function
+	
+	
+	Public Sub mnuFileExit_Popup(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileExit.Popup
+		mnuFileExit_Click(eventSender, eventArgs)
+	End Sub
+	Public Sub mnuFileExit_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileExit.Click
+		Me.Close()
+	End Sub
+	
+	Public Sub mnuFileNew_Popup(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileNew.Popup
+		mnuFileNew_Click(eventSender, eventArgs)
+	End Sub
+	Public Sub mnuFileNew_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileNew.Click
+		createNewStoreFile()
+	End Sub
+	
+	Public Sub mnuFileOpen_Popup(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileOpen.Popup
+		mnuFileOpen_Click(eventSender, eventArgs)
+	End Sub
+	Public Sub mnuFileOpen_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileOpen.Click
+		On Error GoTo Trapper
+		With Me.cdgStoreFile
+			.CancelError = True
+			.DialogTitle = &quot;Open StoreFile&quot;
+			.DefaultExt = &quot;stf&quot;
+			.Filter = &quot;StoreTrainer File (*.stf)|*.stf&quot;
+			.InitDir = GetStoreFileFolder()
+			.Flags = MSComDlg.FileOpenConstants.cdlOFNFileMustExist
+			.ShowOpen()
+			
+			&#39; Reads STF data into StoreTrainer
+			OpenStoreFile(.FileName)
+			
+			&#39; Brings StoreData into the form
+			Me.chkLaunchGameFirst.CheckState = GetLaunchGameFirst
+			Me.chkTrainerLaunchesGame.CheckState = GetTrainerLaunchesGame
+			Me.txtGamePath.Text = GetGamePath
+			Me.txtGameSwitch.Text = GetGameSwitch
+			Me.txtTrainerPath.Text = GetTrainerPath
+			Me.txtTrainerSwitch.Text = GetTrainerSwitch
+			
+			&#39; Sets our form name
+			SetFileName(.FileName)
+			SetFileFlag(False, Me)
+		End With
+		Exit Sub
+Trapper: 
+		&#39; Assume CancelError
+		Exit Sub
+	End Sub
+	
+	Public Sub mnuFileSave_Popup(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileSave.Popup
+		mnuFileSave_Click(eventSender, eventArgs)
+	End Sub
+	Public Sub mnuFileSave_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileSave.Click
+		&#39; Bring up Save As if needed
+		Dim strFileName As String
+		strFileName = GetFileName()
+		If CBool(LCase(CStr(strFileName = &quot;untitled&quot;))) Then
+			mnuFileSaveAs_Click(mnuFileSaveAs, New System.EventArgs())
+		End If
+		
+		&#39; Write file to disk
+		Dim iRet As Short
+		iRet = SaveStoreFile(Me, GetFileName)
+		
+		&#39; iRet is any error number the disk writing routine returns
+		If iRet = 0 Then Exit Sub
+		If iRet &lt;&gt; 0 Then
+			Select Case iRet
+				Case 32755 &#39;Cancel Button somewhere
+					Exit Sub
+				Case Else
+					MsgBox(&quot;Error &quot; &amp; iRet)
+			End Select
+		End If
+	End Sub
+	
+	Public Sub mnuFileSaveAs_Popup(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileSaveAs.Popup
+		mnuFileSaveAs_Click(eventSender, eventArgs)
+	End Sub
+	Public Sub mnuFileSaveAs_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuFileSaveAs.Click
+		&#39; Brings up a Save As dialog
+		Dim strFile As String
+		strFile = DisplaySaveAs()
+		If strFile = &quot;32755&quot; Then
+			Exit Sub
+		End If
+		
+		&#39; Continues with writing file to disk here
+		SetFileName((strFile))
+		mnuFileSave_Click(mnuFileSave, New System.EventArgs())
+		
+	End Sub
+	
+	Public Sub mnuHelpAbout_Popup(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuHelpAbout.Popup
+		mnuHelpAbout_Click(eventSender, eventArgs)
+	End Sub
+	Public Sub mnuHelpAbout_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuHelpAbout.Click
+		AboutStoreTrainer()
+	End Sub
+	
+	Public Sub mnuHelpCheckForUpdate_Popup(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuHelpCheckForUpdate.Popup
+		mnuHelpCheckForUpdate_Click(eventSender, eventArgs)
+	End Sub
+	Public Sub mnuHelpCheckForUpdate_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuHelpCheckForUpdate.Click
+		If DoesFileExist(VB6.GetPath &amp; &quot;\update.exe&quot;) = False Then
+			MsgBox(&quot;The updater is missing!&quot;, MsgBoxStyle.Exclamation + MsgBoxStyle.OKOnly, System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).ProductName)
+			Exit Sub
+		End If
+		Shell(VB6.GetPath &amp; &quot;\update.exe&quot;, AppWinStyle.NormalFocus)
+	End Sub
+	
+	Public Sub mnuProjectBrowseGame_Popup(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuProjectBrowseGame.Popup
+		mnuProjectBrowseGame_Click(eventSender, eventArgs)
+	End Sub
+	Public Sub mnuProjectBrowseGame_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuProjectBrowseGame.Click
+		cmdBrowseGame_Click(cmdBrowseGame, New System.EventArgs())
+	End Sub
+	
+	Public Sub mnuProjectBrowseTrainer_Popup(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuProjectBrowseTrainer.Popup
+		mnuProjectBrowseTrainer_Click(eventSender, eventArgs)
+	End Sub
+	Public Sub mnuProjectBrowseTrainer_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuProjectBrowseTrainer.Click
+		cmdBrowseTrainer_Click(cmdBrowseTrainer, New System.EventArgs())
+	End Sub
+	
+	Public Sub mnuProjectLaunch_Popup(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuProjectLaunch.Popup
+		mnuProjectLaunch_Click(eventSender, eventArgs)
+	End Sub
+	Public Sub mnuProjectLaunch_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuProjectLaunch.Click
+		doLaunch()
+	End Sub
+	
+	Public Sub mnuProjectSwitchTrainer_Popup(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuProjectSwitchTrainer.Popup
+		mnuProjectSwitchTrainer_Click(eventSender, eventArgs)
+	End Sub
+	Public Sub mnuProjectSwitchTrainer_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuProjectSwitchTrainer.Click
+		On Error GoTo Done &#39;We don&#39;t need to handle any errors
+		Dim strTrainerSwitch As String
+		strTrainerSwitch = InputBox(&quot;Please enter a trainer switch&quot;, &quot;Input Trainer Switch&quot;)
+		If strTrainerSwitch &lt;&gt; &quot;&quot; Then
+			txtTrainerSwitch.Text = strTrainerSwitch
+			SetTrainerSwitch((strTrainerSwitch))
+			SetFileFlag(True, Me)
+		End If
+Done: 
+		Exit Sub
+	End Sub
+	
+	Public Sub mnuProjrectSwitchGame_Popup(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuProjrectSwitchGame.Popup
+		mnuProjrectSwitchGame_Click(eventSender, eventArgs)
+	End Sub
+	Public Sub mnuProjrectSwitchGame_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuProjrectSwitchGame.Click
+		On Error GoTo Done &#39;We don&#39;t need to handle any errors
+		Dim strGameSwitch As String
+		strGameSwitch = InputBox(&quot;Please enter a game switch&quot;, &quot;Input Game Switch&quot;)
+		If strGameSwitch &lt;&gt; &quot;&quot; Then
+			txtGameSwitch.Text = strGameSwitch
+			SetGameSwitch((strGameSwitch))
+			SetFileFlag(True, Me)
+		End If
+Done: 
+		Exit Sub
+	End Sub
+	
+	&#39;UPGRADE_WARNING: Event txtGamePath.TextChanged may fire when form is initialized. Click for more: &#39;ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword=&quot;vbup2075&quot;&#39;
+	Private Sub txtGamePath_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtGamePath.TextChanged
+		SetFileFlag(True, Me)
+	End Sub
+	
+	Private Sub txtGamePath_Enter(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtGamePath.Enter
+		validateFile(txtGamePath)
+	End Sub
+	
+	Private Sub txtGamePath_Leave(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtGamePath.Leave
+		validateFile(txtGamePath)
+	End Sub
+	
+	&#39;UPGRADE_WARNING: Event txtGameSwitch.TextChanged may fire when form is initialized. Click for more: &#39;ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword=&quot;vbup2075&quot;&#39;
+	Private Sub txtGameSwitch_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtGameSwitch.TextChanged
+		SetGameSwitch((txtGameSwitch.Text))
+		SetFileFlag(True, Me)
+	End Sub
+	
+	&#39;UPGRADE_WARNING: Event txtTrainerPath.TextChanged may fire when form is initialized. Click for more: &#39;ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword=&quot;vbup2075&quot;&#39;
+	Private Sub txtTrainerPath_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtTrainerPath.TextChanged
+		SetFileFlag(True, Me)
+	End Sub
+	
+	Private Sub txtTrainerPath_Enter(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtTrainerPath.Enter
+		validateFile(txtTrainerPath)
+	End Sub
+	
+	Private Sub txtTrainerPath_Leave(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtTrainerPath.Leave
+		validateFile(txtTrainerPath)
+	End Sub
+	
+	&#39;UPGRADE_WARNING: Event txtTrainerSwitch.TextChanged may fire when form is initialized. Click for more: &#39;ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword=&quot;vbup2075&quot;&#39;
+	Private Sub txtTrainerSwitch_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtTrainerSwitch.TextChanged
+		SetTrainerSwitch((txtTrainerSwitch.Text))
+		SetFileFlag(True, Me)
+	End Sub
+	
+	Private Sub validateFile(ByRef txt As System.Windows.Forms.TextBox)
+		If txt.Text = &quot;&quot; Then Exit Sub
+		
+		If DoesFileExist((txt.Text)) = False Then
+			txt.BackColor = System.Drawing.Color.Red
+			MsgBox(&quot;The file &quot; &amp; Chr(34) &amp; txtGamePath.Text &amp; Chr(34) &amp; &quot; does not exist!&quot;, MsgBoxStyle.Exclamation, System.Reflection.Assembly.GetExecutingAssembly.GetName.Name)
+		Else
+			txt.BackColor = System.Drawing.SystemColors.Window
+		End If
+	End Sub
+	Private Sub createNewStoreFile()
+		Dim iMSG As MsgBoxResult
+		If GetFileFlag = True Then
+			&#39; Save first?
+			iMSG = MsgBox(&quot;Would you like to save your work before creating a new StoreFile?&quot;, MsgBoxStyle.YesNoCancel + MsgBoxStyle.Question, System.Reflection.Assembly.GetExecutingAssembly.GetName.Name)
+			If iMSG = MsgBoxResult.Cancel Then Exit Sub
+			If iMSG = MsgBoxResult.Yes Then
+				mnuFileSave_Click(mnuFileSave, New System.EventArgs())
+				GoTo CreateNewFile
+			End If
+			If iMSG = MsgBoxResult.No Then GoTo CreateNewFile
+		End If
+		
+		If GetFileFlag = False Then
+			iMSG = MsgBox(&quot;Close &quot; &amp; GetFileName(True) &amp; &quot; and create a new StoreFile?&quot;, MsgBoxStyle.YesNo + MsgBoxStyle.Question, System.Reflection.Assembly.GetExecutingAssembly.GetName.Name)
+			If iMSG = MsgBoxResult.No Then Exit Sub
+			If iMSG = MsgBoxResult.Yes Then GoTo CreateNewFile
+		End If
+		
+		&#39; Done the formalities.  Create our new StoreFile
+CreateNewFile: 
+		NewStoreFile()
+		Me.chkLaunchGameFirst.CheckState = GetLaunchGameFirst
+		Me.chkTrainerLaunchesGame.CheckState = GetTrainerLaunchesGame
+		Me.txtGamePath.Text = GetGamePath
+		Me.txtGameSwitch.Text = GetGameSwitch
+		Me.txtTrainerPath.Text = GetTrainerPath
+		Me.txtTrainerSwitch.Text = GetTrainerSwitch
+		SetFileFlag(False, Me)
+	End Sub
+	
+	Private Sub doLaunch()
+		Dim iLaunch As Short
+		iLaunch = Launch()
+		If iLaunch &lt;&gt; 0 Then
+			Select Case iLaunch
+				Case 1 &#39;File not saved
+					MsgBox(&quot;Please save your work before launching the StoreFile!&quot;, MsgBoxStyle.Exclamation, System.Reflection.Assembly.GetExecutingAssembly.GetName.Name)
+					Exit Sub
+				Case 2 &#39; Bad game path
+					MsgBox(&quot;The game path you have doesn&#39;t exist!&quot;, MsgBoxStyle.Exclamation, System.Reflection.Assembly.GetExecutingAssembly.GetName.Name)
+					Exit Sub
+				Case 3 &#39;Bad trainer path
+					MsgBox(&quot;The trainer path you have doesn&#39;t exist!&quot;, MsgBoxStyle.Exclamation, System.Reflection.Assembly.GetExecutingAssembly.GetName.Name)
+					Exit Sub
+			End Select
+		End If
+	End Sub
+End Class</code></pre>
+      </section>
+
+      <section id="tstore-net-core" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-tstore-net-core">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem;">
+          <h2 id="heading-tstore-net-core" style="margin: 0; border: 0;">TStore.NET/TStore.vb (VB.NET Core Module)</h2>
+          <span style="font-family: monospace; font-weight: 700;">[.NET Port]</span>
+        </div>
+        <p style="margin: 0.4rem 0 0.75rem;">Visual Basic .NET core module ported from `TStore.bas`.</p>
+        <pre class="code-viewer"><code>Option Strict Off
+Option Explicit On
+Imports VB = Microsoft.VisualBasic
+Module TStoreMod
+	
+	
+	
+	&#39; On Windows XP or later, turns on Visual Styles
+	Public Declare Function InitCommonControls Lib &quot;comctl32.dll&quot; () As Integer
+	
+	&#39;Allows us to have a return code (use in place of an End statement)
+	Public Declare Sub ExitProcess Lib &quot;kernel32&quot; (ByVal uExitCode As Integer)
+	
+	&#39;UPGRADE_WARNING: Application will terminate when Sub Main() finishes. Click for more: &#39;ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword=&quot;vbup1047&quot;&#39;
+	Public Sub Main()
+		&#39; Checks the command line to see if we have a file to operate on
+		&#39; /e filename.stf to Edit a file
+		&#39; /l filename.stf to Launch a file
+		Dim intCmdReturn As Short
+		intCmdReturn = CheckCommandLine(VB.Command())
+		
+		&#39; Tells StoreTrainer that we want to turn on Visual Styles in Windows XP or later
+		InitCommonControls()
+		
+		&#39; Let&#39;s create TStore.INI if necessary
+		If GetStoreTrainerDataFile = &quot;&quot; Then
+			CreateStoreTrainerData()
+		End If
+		
+		&#39; Let&#39;s refresh the StoreTrainer Path if necessary
+		&#39; This is primarily used for refreshing when switching from DEBUG to PRODUCTION
+		Dim strCurPath As String
+		strCurPath = IniGetValueString(GetStoreTrainerDataFile, &quot;General&quot;, &quot;Path&quot;, &quot;PATH_NAME&quot;)
+		Dim iMSG As MsgBoxResult
+		If strCurPath &lt;&gt; VB6.GetPath Then
+			iMSG = MsgBox(&quot;The &quot; &amp; System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).ProductName &amp; &quot; configuration settings need to be updated.  Do that now?&quot;, MsgBoxStyle.YesNoCancel + MsgBoxStyle.Question, System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).ProductName)
+			If iMSG = MsgBoxResult.Cancel Then ExitProcess(4) &#39;User Canceled updating TSTORE.INI
+			If iMSG = MsgBoxResult.Yes Then
+				IniWriteValueString(GetStoreTrainerDataFile, &quot;General&quot;, &quot;Path&quot;, VB6.GetPath)
+			End If
+		End If
+		
+		
+		&#39; Let&#39;s make sure the StoreFile folder exists
+		&#39; By default, it should be &lt;MY_DOCUMENTS&gt;\StoreFiles
+		Dim strSTFFolder As String
+		strSTFFolder = GetStoreFileFolder(True, True)
+		If (strSTFFolder = &quot;NO_FOLDER_CREATED&quot;) Then
+			&#39; Error: folder does not exist, or wasn&#39;t created
+			MsgBox(System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).ProductName &amp; &quot; requires that you create a StoreFile folder.  Now exiting!&quot;, MsgBoxStyle.Critical, System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).ProductName)
+			
+			&#39; Exit with a Code 1 ERROR_NO_STF_FOLDER
+			ExitProcess(1)
+		End If
+		&#39; Brings up the main screen
+		frmMain.DefInstance.Show()
+	End Sub
+	
+	&#39; This checks for a command line switch being passed in
+	&#39; Returns an integer based on results:
+	&#39; 0 - no command line switch found, load as normal
+	&#39; 1 - File loaded for editing /e filename.stf
+	&#39; 2 - File loaded for launching /l filename.stf
+	Public Function CheckCommandLine(Optional ByRef CommandLine As String = &quot;&quot;) As Short
+		
+	End Function
+	
+	Public Sub AboutStoreTrainer()
+		&#39;UPGRADE_ISSUE: App property App.Revision was not upgraded. Click for more: &#39;ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword=&quot;vbup2069&quot;&#39;
+		MsgBox(System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).ProductName &amp; &quot; v&quot; &amp; System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).FileMajorPart &amp; &quot;.&quot; &amp; System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).FileMinorPart &amp; &quot;.&quot; &amp; App.Revision &amp; vbCrLf &amp; &quot;&quot; &amp; vbCrLf &amp; &quot;Copyright (C) 2018 - 2021 &quot; &amp; System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).CompanyName, MsgBoxStyle.Information + MsgBoxStyle.OKOnly, System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).ProductName)
+	End Sub
+	
+	Public Sub CreateStoreTrainerData()
+		&#39; First, let&#39;s create folders as necessary
+		Dim FSO As IWshRuntimeLibrary.FileSystemObject
+		FSO = CreateObject(&quot;Scripting.FileSystemObject&quot;)
+		If Not FSO.FolderExists(FGetSpecialFolder(SpecialFolder.SpecialFolderID.CSIDL_APPDATA) &amp; &quot;\RaggieSoft&quot;) Then
+			MkDir(FGetSpecialFolder(SpecialFolder.SpecialFolderID.CSIDL_APPDATA) &amp; &quot;\RaggieSoft&quot;)
+		End If
+		If Not FSO.FolderExists(FGetSpecialFolder(SpecialFolder.SpecialFolderID.CSIDL_APPDATA) &amp; &quot;\RaggieSoft\StoreTrainer&quot;) Then
+			MkDir(FGetSpecialFolder(SpecialFolder.SpecialFolderID.CSIDL_APPDATA) &amp; &quot;\RaggieSoft\StoreTrainer&quot;)
+		End If
+		
+		&#39; Now, let&#39;s work on StoreTrainer data
+		&#39;UPGRADE_ISSUE: App property App.Revision was not upgraded. Click for more: &#39;ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword=&quot;vbup2069&quot;&#39;
+		IniWriteValueString(GetStoreTrainerDataDir &amp; &quot;\TStore.ini&quot;, &quot;General&quot;, &quot;Version&quot;, System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).FileMajorPart &amp; &quot;.&quot; &amp; System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).FileMinorPart &amp; &quot;.&quot; &amp; App.Revision)
+		IniWriteValueString(GetStoreTrainerDataDir &amp; &quot;\TStore.ini&quot;, &quot;General&quot;, &quot;Path&quot;, VB6.GetPath)
+	End Sub
+	
+	Public Function GetStoreTrainerDataDir() As String
+		GetStoreTrainerDataDir = FGetSpecialFolder(SpecialFolder.SpecialFolderID.CSIDL_APPDATA) &amp; &quot;\RaggieSoft\StoreTrainer&quot;
+	End Function
+	Public Function GetStoreTrainerDataFile() As String
+		If DoesFileExist(FGetSpecialFolder(SpecialFolder.SpecialFolderID.CSIDL_APPDATA) &amp; &quot;\RaggieSoft\StoreTrainer\TStore.ini&quot;) Then
+			GetStoreTrainerDataFile = FGetSpecialFolder(SpecialFolder.SpecialFolderID.CSIDL_APPDATA) &amp; &quot;\RaggieSoft\StoreTrainer\TStore.ini&quot;
+		Else
+			GetStoreTrainerDataFile = &quot;&quot;
+		End If
+	End Function
+End Module</code></pre>
+      </section>
+
+      <section id="tstore-net-sfile" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-tstore-net-sfile">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem;">
+          <h2 id="heading-tstore-net-sfile" style="margin: 0; border: 0;">TStore.NET/SFile.vb (VB.NET File Operations Module)</h2>
+          <span style="font-family: monospace; font-weight: 700;">[.NET Port]</span>
+        </div>
+        <p style="margin: 0.4rem 0 0.75rem;">Visual Basic .NET file system module ported from `SFile.bas`.</p>
+        <pre class="code-viewer"><code>Option Strict Off
+Option Explicit On
+Module SFile
+	
+	&#39; Holds our file data temporarily in memory
+	Private isFileDirty As Boolean
+	Private strFileName As String
+	
+	Private StoreFileVersion As String &#39;YES, As String (file format limitation)
+	
+	Private TrainerLaunchesGame As Boolean
+	Private LaunchGameFirst As Boolean
+	
+	Private GamePath, GameSwitch As String
+	Private TrainerPath, TrainerSwitch As String
+	
+	Private doLaunch As Boolean &#39;Fast Exit when launching a StoreFile
+	
+	Public Function GetLaunchingSTF() As Boolean
+		GetLaunchingSTF = doLaunch
+	End Function
+	Public Sub SetLaunchingSTF(ByRef boolDoLaunch As Boolean)
+		doLaunch = boolDoLaunch
+	End Sub
+	&#39; Returns the Release ID of the STF File Version.  Increment every time we need to update the file format
+	Public Function GetSTFVersionStr() As String
+		GetSTFVersionStr = &quot;1.0&quot;
+	End Function
+	
+	&#39; Returns the same as above, but converted to a Long to make math comparison easy
+	Public Function GetSTFVersionLng() As Integer
+		GetSTFVersionLng = CInt(GetSTFVersionStr)
+	End Function
+	
+	&#39; New StoreFile (remember to work the form)
+	Public Sub NewStoreFile()
+		SetLaunchGameFirst(False)
+		SetTrainerLaunchesGame(False)
+		SetGamePath(&quot;&quot;)
+		SetGameSwitch(&quot;&quot;)
+		SetTrainerPath(&quot;&quot;)
+		SetTrainerSwitch(&quot;&quot;)
+		SetFileName(&quot;untitled&quot;)
+	End Sub
+	
+	&#39; Some trainers expect the game to be launched first
+	Public Function GetLaunchGameFirst() As Boolean
+		GetLaunchGameFirst = LaunchGameFirst
+	End Function
+	Public Sub SetLaunchGameFirst(ByRef boolLaunchGameFirst As Boolean)
+		LaunchGameFirst = boolLaunchGameFirst
+	End Sub
+	
+	Public Sub SetTrainerLaunchesGame(ByRef boolLaunchType As Boolean)
+		TrainerLaunchesGame = boolLaunchType
+	End Sub
+	Public Function GetTrainerLaunchesGame() As Boolean
+		GetTrainerLaunchesGame = TrainerLaunchesGame
+	End Function
+	
+	Public Function GetGamePath() As String
+		GetGamePath = GamePath
+	End Function
+	Public Sub SetGamePath(ByRef strGamePath As String)
+		GamePath = strGamePath
+	End Sub
+	Public Function GetTrainerPath() As String
+		GetTrainerPath = TrainerPath
+	End Function
+	Public Sub SetTrainerPath(ByRef strTrainerPath As String)
+		TrainerPath = strTrainerPath
+	End Sub
+	Public Function GetGameSwitch() As String
+		GetGameSwitch = GameSwitch
+	End Function
+	Public Sub SetGameSwitch(ByRef strGameSwitch As String)
+		GameSwitch = strGameSwitch
+	End Sub
+	Public Function GetTrainerSwitch() As String
+		GetTrainerSwitch = TrainerSwitch
+	End Function
+	Public Sub SetTrainerSwitch(ByRef strTrainerSwitch As String)
+		TrainerSwitch = strTrainerSwitch
+	End Sub
+	&#39; File Access Functions
+	
+	&#39; Tells StoreTrainer if the file is saved or not
+	Public Sub SetFileFlag(ByRef dirtyFlag As Boolean, ByRef frmName As System.Windows.Forms.Form)
+		On Error GoTo ErrorTrap
+		Dim errorType As String
+		errorType = &quot;Not Yet Set&quot;
+		If dirtyFlag = True Then
+			errorType = &quot;Dirty = true&quot;
+			isFileDirty = True
+			frmName.Text = GetFileName(True) &amp; &quot; * - &quot; &amp; System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).ProductName
+		ElseIf dirtyFlag = False Then 
+			errorType = &quot;Dirty = false&quot;
+			isFileDirty = False
+			errorType = errorType &amp; &quot; - Did Set Flag&quot;
+			frmName.Text = GetFileName(True) &amp; &quot; - &quot; &amp; System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).ProductName
+			errorType = errorType &amp; &quot; - Did (not) Set Form Name&quot;
+		Else
+			MsgBox(&quot;Improper Usage: setFileFlag() requires true or false!&quot;, MsgBoxStyle.Exclamation + MsgBoxStyle.OKOnly, System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).ProductName)
+			errorType = &quot;Improper Usage&quot;
+		End If
+		Exit Sub
+ErrorTrap: 
+		MsgBox(errorType &amp; vbCrLf &amp; Err.Number &amp; &quot;: &quot; &amp; Err.Description)
+	End Sub
+	
+	&#39; Queries the Dirty state
+	Public Function GetFileFlag() As Boolean
+		GetFileFlag = isFileDirty
+	End Function
+	
+	
+	&#39; This writes StoreFile data to disk
+	Public Function SaveStoreFile(ByRef frmName As System.Windows.Forms.Form, ByRef strFileName As String) As Short
+		On Error GoTo ErrorTrapper
+		&#39; Write StoreFile data to the disk
+		
+		&#39; General Info
+		IniWriteValueString(strFileName, &quot;General&quot;, &quot;STF.Version&quot;, GetSTFVersionStr)
+		
+		
+		&#39; Trainer Launches Game
+		Dim strTrainerLaunchesGame As String
+		If GetTrainerLaunchesGame() = True Then
+			strTrainerLaunchesGame = &quot;true&quot;
+		End If
+		If GetTrainerLaunchesGame() = False Then
+			strTrainerLaunchesGame = &quot;false&quot;
+		End If
+		IniWriteValueString(strFileName, &quot;Trainer&quot;, &quot;TrainerLaunchesGame&quot;, strTrainerLaunchesGame)
+		
+		&#39; Launch Game First
+		Dim strLaunchGameFirst As String
+		If GetLaunchGameFirst() = True Then
+			strLaunchGameFirst = &quot;true&quot;
+		End If
+		If GetLaunchGameFirst() = False Then
+			strLaunchGameFirst = &quot;false&quot;
+		End If
+		IniWriteValueString(strFileName, &quot;Game&quot;, &quot;LaunchGameFirst&quot;, strLaunchGameFirst)
+		
+		&#39; Write Game and Trainer info
+		IniWriteValueString(strFileName, &quot;Game&quot;, &quot;Path&quot;, GetGamePath)
+		IniWriteValueString(strFileName, &quot;Game&quot;, &quot;Switch&quot;, GetGameSwitch)
+		
+		IniWriteValueString(strFileName, &quot;Trainer&quot;, &quot;Path&quot;, GetTrainerPath)
+		IniWriteValueString(strFileName, &quot;Trainer&quot;, &quot;Switch&quot;, GetTrainerSwitch)
+		
+		&#39; Unset the Dirty flag
+		SetFileFlag(False, frmName)
+		
+		&#39; Reports no error on saving
+		SaveStoreFile = 0
+		Exit Function
+		
+		&#39; Error Trapping
+ErrorTrapper: &#39;
+		
+		SaveStoreFile = Err.Number
+	End Function
+	
+	&#39; Opens a StoreFile.  NOTE: this does NOT fill in the textboxes on a form
+	&#39; Any return non-zero is an error
+	Public Function OpenStoreFile(ByRef strFilePath As String) As Short
+		Dim FSO As IWshRuntimeLibrary.FileSystemObject
+		FSO = CreateObject(&quot;Scripting.FileSystemObject&quot;)
+		
+		&#39;Let&#39;s see if the file exists or not (return 53 (the same as VB6&#39;s File Not Found error) if it doesn&#39;t)
+		If Not FSO.FileExists(strFilePath) Then
+			OpenStoreFile = 53
+			Exit Function
+		End If
+		
+		&#39; File does exist.  Let&#39;s make sure it&#39;s a StoreFile this version of StoreTrainer understands
+		Dim strSTFVersion As String
+		strSTFVersion = IniGetValueString(strFilePath, &quot;General&quot;, &quot;STF.Version&quot;, &quot;0.0&quot;)
+		Dim iSTFCompare As Short
+		iSTFCompare = CheckVersion(strSTFVersion, GetSTFVersionStr)
+		
+		&#39; The file being opened expects a newer version of StoreTrainer
+		If iSTFCompare = 1 Then
+			OpenStoreFile = 1
+			Exit Function
+		End If
+		
+		&#39; The file being opened expects an older version of StoreTrainer
+		If iSTFCompare = -1 Then
+			OpenStoreFile = 2
+			Exit Function
+		End If
+		
+		&#39; Now, let&#39;s load data into memory
+		&#39; THIS WILL NOT LOAD DATA INTO A FORM
+		
+		&#39; Load Launch Data
+		Dim strTrainerLaunchesGame As String
+		strTrainerLaunchesGame = IniGetValueString(strFilePath, &quot;Trainer&quot;, &quot;TrainerLaunchesGame&quot;, &quot;false&quot;)
+		
+		If strTrainerLaunchesGame = &quot;true&quot; Then
+			SetTrainerLaunchesGame(True)
+		Else
+			SetTrainerLaunchesGame(False)
+		End If
+		
+		Dim strLaunchGameFirst As String
+		strLaunchGameFirst = IniGetValueString(strFilePath, &quot;Game&quot;, &quot;LaunchGameFirst&quot;, &quot;false&quot;)
+		If strLaunchGameFirst = &quot;true&quot; Then
+			SetLaunchGameFirst(True)
+		Else
+			SetLaunchGameFirst(False)
+		End If
+		
+		&#39; Get the Game and Trainer path and switches
+		SetGamePath(IniGetValueString(strFilePath, &quot;Game&quot;, &quot;Path&quot;, vbNullString))
+		SetGameSwitch(IniGetValueString(strFilePath, &quot;Game&quot;, &quot;Switch&quot;, vbNullString))
+		
+		SetTrainerPath(IniGetValueString(strFilePath, &quot;Trainer&quot;, &quot;Path&quot;, vbNullString))
+		SetTrainerSwitch(IniGetValueString(strFilePath, &quot;Trainer&quot;, &quot;Switch&quot;, vbNullString))
+		
+		&#39; We&#39;re done. It is up to you to populate the form
+		OpenStoreFile = 0
+	End Function
+	
+	Public Sub SetFileName(ByRef strLocalFileName As String)
+		strFileName = strLocalFileName
+	End Sub
+	
+	Public Function GetFileName(Optional ByRef showFileNameOnly As Boolean = False) As String
+		On Error GoTo cantReadRegistry
+		&#39; Pull the filename from memory
+		Dim strLocalFileName As String
+		strLocalFileName = strFileName
+		Dim boolHideExtensions As Boolean
+		Dim FSO As IWshRuntimeLibrary.FileSystemObject
+		If showFileNameOnly = True Then
+			&#39; Needed if the user wants to only show the filename without path
+			FSO = CreateObject(&quot;Scripting.FileSystemObject&quot;)
+			&#39; Return the filename without a path
+			&#39; First, we see if the user wants file extensions hidden or not (it&#39;s a user setting in Windows Explorer)
+			&#39; Apparently this is hardened in Vista+ (see cantReadRegistry below)
+			boolHideExtensions = CBool(RegGetValue(HKEY_CURRENT_USER, &quot;Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced&quot;, &quot;HideFileExt&quot;))
+			If boolHideExtensions Then
+				strLocalFileName = FSO.GetBaseName(strLocalFileName)
+			Else
+				strLocalFileName = FSO.GetFileName(strLocalFileName)
+			End If
+			
+			&#39; Return that to the user
+			GetFileName = strLocalFileName
+			Exit Function
+		End If
+		&#39; Return the full filename
+		GetFileName = strFileName
+		Exit Function
+cantReadRegistry: 
+		&#39; assume we don&#39;t have access to the Registry, we will NOT hide the extensions
+		&#39; Seems to be an issue with newer versions of Windows (because VB6 doesn&#39;t understand Registry Security)
+		boolHideExtensions = False
+		Resume Next
+	End Function
+	
+	Public Function Launch() As Short
+		&#39; Let&#39;s launch our StoreFile.  RULES:
+		&#39; * File must NOT be dirty
+		&#39; * Game and Trainer path MUST exist (unless of course, the trainer launches the game)
+		&#39; * Returns an integer based on error type.  Anything non-zero means error
+		
+		&#39; Set up the FileSystem object
+		Dim FSO As IWshRuntimeLibrary.FileSystemObject
+		FSO = CreateObject(&quot;Scripting.FileSystemObject&quot;)
+		
+		&#39; Is the file dirty?
+		If GetFileFlag = True Or GetFileName = &quot;untitled&quot; Then
+			Launch = 1 &#39; File isn&#39;t saved.  Return code 1
+			Exit Function
+		End If
+		
+		&#39; Look for the trainer
+		If DoesFileExist(GetTrainerPath) = False Then
+			Launch = 2 &#39; Trainer doesn&#39;t exist.  Return code 2
+			Exit Function
+		End If
+		
+		&#39; Look for the game (if it&#39;s NOT launched by the trainer)
+		If GetTrainerLaunchesGame = False Then
+			If DoesFileExist(GetGamePath) = False Then
+				Launch = 3 &#39; Game doesn&#39;t exist.  Return code 3
+				Exit Function
+			End If
+		End If
+		
+		&#39; Checked all our errors.  Let&#39;s launch files
+		&#39; Let&#39;s build our file paths
+		Dim strGameAndSwitch, strTrainerAndSwitch As String
+		strGameAndSwitch = Chr(34) &amp; GetGamePath &amp; Chr(34)
+		If GetGameSwitch &lt;&gt; &quot;&quot; Then
+			strGameAndSwitch = strGameAndSwitch &amp; &quot; &quot; &amp; Chr(34) &amp; GetGameSwitch &amp; Chr(34)
+		End If
+		strTrainerAndSwitch = Chr(34) &amp; GetTrainerPath &amp; Chr(34)
+		If GetTrainerSwitch &lt;&gt; &quot;&quot; Then
+			strTrainerAndSwitch = strTrainerAndSwitch &amp; &quot; &quot; &amp; Chr(34) &amp; GetTrainerSwitch &amp; Chr(34)
+		End If
+		
+		&#39; We are ready to launch.  Don&#39;t forget to get the ParentFolder property because some trainers (and games?) expect the working folder to be set
+		
+		&#39; Now to see what to launch
+		If GetLaunchGameFirst = True Then
+			
+			&#39; Fall back, just in case
+			If GetTrainerLaunchesGame = False Then
+				ChDrive(GetGamePath())
+				ChDir(GetGamePath())
+				Shell(strGameAndSwitch, AppWinStyle.NormalFocus)
+				System.Windows.Forms.Application.DoEvents()
+			End If
+			ChDrive(GetTrainerPath())
+			ChDir(GetTrainerPath())
+			Shell(strTrainerAndSwitch, AppWinStyle.NormalFocus)
+			System.Windows.Forms.Application.DoEvents()
+			Launch = 0
+			Exit Function
+		End If
+		
+		&#39; We just need to launch the trainer
+		If GetTrainerLaunchesGame = True Then
+			ChDrive(GetTrainerPath())
+			ChDir(GetTrainerPath())
+			Shell(strTrainerAndSwitch, AppWinStyle.NormalFocus)
+			Launch = 0
+			Exit Function
+		End If
+		
+		&#39; None of the options are selected.  Launch both
+		ChDrive(GetGamePath())
+		ChDir(GetGamePath())
+		Shell(strGameAndSwitch, AppWinStyle.NormalFocus)
+		System.Windows.Forms.Application.DoEvents()
+		ChDrive(GetTrainerPath())
+		ChDir(GetTrainerPath())
+		Shell(strTrainerAndSwitch, AppWinStyle.NormalFocus)
+		System.Windows.Forms.Application.DoEvents()
+		Launch = 0
+		Exit Function
+		
+	End Function
+End Module</code></pre>
+      </section>
+  
+      </main>
+
+      <!-- Netscape Status Bar & Global Legal Footer -->
+      <footer class="netscape-statusbar" role="contentinfo">
+        <div class="status-cell">🔒 TLS 1.3 Modern Security • Document: Done (WCAG 2.1 AA / Section 508 Verified)</div>
+        <div class="status-cell">
+          Code: <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT License</a> |
+          Docs: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Global Fictitious Disclaimer & Network Links Outside Window Frame -->
+    <div class="netscape-window win-outset" style="margin-top: 0.75rem; padding: 0.85rem 1.15rem; font-size: 12.5px;">
+      <p style="margin: 0 0 0.5rem;">
+        <strong>RaggieSoft Ecosystem Links:</strong>
+        <a href="https://raggiesoft.com">RaggieSoft Hub</a> •
+        <a href="https://corporate.raggiesoft.com">RaggieSoft Media (B2B)</a> •
+        <a href="https://michaelpragsdale.com">Michael P. Ragsdale Portfolio</a> •
+        <a href="https://music.raggiesoft.com">The Listening Room</a> •
+        <a href="https://books.raggiesoft.com">RaggieSoft Book Reader</a> •
+        <a href="https://lore.raggiesoft.com">Lore Omnibus</a> •
+        <a href="https://engineroom.raggiesoft.com">Engine Room Records</a> •
+        <a href="https://stardust.raggiesoft.com">The Stardust Engine</a> •
+        <a href="https://nebulae.raggiesoft.com">The RaggieSoft Nebulae</a>
+      </p>
+      <p style="margin: 0;">
+        <strong>Fictitious Persons &amp; Entities Disclaimer:</strong> While <strong>RaggieSoft StoreTrainer</strong> is a real-world Win32 desktop utility authored by <strong>Michael P. Ragsdale</strong>, all narrative characters, bands, biographies, universities (including Commonwealth Polytechnic Institute / CPI, The Forgers, and The Crucible), corporations (including OmniCorp, Apex Records, Prairie Coachworks, and Sainte-Claire), transit agencies (Blue Ridge Transit), in-universe legal filings, and any entity with <strong>&ldquo;LLC&rdquo;</strong>, <strong>&ldquo;Trust&rdquo;</strong>, or <strong>&ldquo;Holdings&rdquo;</strong> in its name across the wider RaggieSoft network are works of fiction. Any resemblance to actual persons (living or dead), businesses, institutions, or events is purely coincidental.
+      </p>
+    </div>
+
+    <script src="https://assets.raggiesoft.com/storetrainer/js/netscape-ui.js" defer></script>
+    <script src="https://assets.raggiesoft.com/common/js/raggiesoft-network.js" defer></script>
+  </body>
+</html>

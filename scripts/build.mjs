@@ -486,6 +486,7 @@ function renderNetscapeShell({ title, description, canonicalPath, bodyHtml }) {
     </div>
 
     <script src="https://assets.raggiesoft.com/storetrainer/js/netscape-ui.js" defer></script>
+    <script src="https://assets.raggiesoft.com/common/js/raggiesoft-network.js" defer></script>
   </body>
 </html>`;
 }
