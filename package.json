@@ -1,0 +1,13 @@
+{
+  "name": "raggiesoft-storetrainer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "RaggieSoft StoreTrainer (storetrainer.raggiesoft.com) — Official Win32 Retro PC Game & Trainer Manager Portal styled after Netscape Communicator 4 / Windows 98–2000 Classic UI with modern WCAG 2.1 AA accessibility.",
+  "license": "MIT",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/build.mjs --serve",
+    "preview": "node scripts/build.mjs --serve"
+  }
+}
