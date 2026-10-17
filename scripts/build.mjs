@@ -269,8 +269,9 @@ function buildNetscapeClientJs() {
   }
 
   function updateLabel() {
-    if (!toggleLabel) return;
     var current = getRenderedScheme();
+    document.documentElement.setAttribute('data-theme', current);
+    if (!toggleLabel) return;
     var stored = null;
     try {
       stored = localStorage.getItem('color-scheme');
@@ -342,8 +343,12 @@ function renderNetscapeShell({ title, description, canonicalPath, bodyHtml }) {
     <meta name="color-scheme" content="light dark" />
     <script>
       try {
-        document.querySelector('meta[name="color-scheme"]').content =
-          localStorage.getItem('color-scheme') ?? 'light dark';
+        var storedScheme = localStorage.getItem('color-scheme');
+        document.querySelector('meta[name="color-scheme"]').content = storedScheme ?? 'light dark';
+        var resolvedTheme = (storedScheme === 'light' || storedScheme === 'dark')
+          ? storedScheme
+          : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', resolvedTheme);
       } catch (e) {}
     </script>
     <title>${safeTitle}</title>
@@ -360,7 +365,7 @@ function renderNetscapeShell({ title, description, canonicalPath, bodyHtml }) {
     <meta name="twitter:description" content="${safeDesc}" />
     <meta name="twitter:image" content="${escapeHtml(ogImage)}" />
     <link rel="icon" type="image/png" href="https://assets.raggiesoft.com/raggiesoft-corporate/images/logos/raggiesoft-logo.png" />
-    <link rel="stylesheet" href="/assets/win98-netscape.css" />
+    <link rel="stylesheet" href="https://assets.raggiesoft.com/storetrainer/css/win98-netscape.css" />
   </head>
   <body>
     <a href="#content" class="skip-link">Skip to main document content</a>
@@ -456,7 +461,7 @@ function renderNetscapeShell({ title, description, canonicalPath, bodyHtml }) {
       </p>
     </div>
 
-    <script src="/assets/netscape-ui.js" defer></script>
+    <script src="https://assets.raggiesoft.com/storetrainer/js/netscape-ui.js" defer></script>
   </body>
 </html>`;
 }
@@ -639,8 +644,17 @@ function buildStoreTrainerSite() {
     path.join(projectRoot, 'src', 'styles', 'win98-netscape.css'),
     'utf-8'
   );
+  const clientJsContent = buildNetscapeClientJs();
   writeDistFile('assets/win98-netscape.css', cssContent);
-  writeDistFile('assets/netscape-ui.js', buildNetscapeClientJs());
+  writeDistFile('assets/netscape-ui.js', clientJsContent);
+
+  const workspaceRoot = path.resolve(projectRoot, '..', '..', '..');
+  const sharedCdnCssDir = path.join(workspaceRoot, 'raggiesoft-assets', 'storetrainer', 'css');
+  const sharedCdnJsDir = path.join(workspaceRoot, 'raggiesoft-assets', 'storetrainer', 'js');
+  fs.mkdirSync(sharedCdnCssDir, { recursive: true });
+  fs.mkdirSync(sharedCdnJsDir, { recursive: true });
+  fs.writeFileSync(path.join(sharedCdnCssDir, 'win98-netscape.css'), cssContent, 'utf-8');
+  fs.writeFileSync(path.join(sharedCdnJsDir, 'netscape-ui.js'), clientJsContent, 'utf-8');
 
   writeDistFile('index.html', renderHomePage(sourceFiles));
   writeDistFile('source/index.html', renderSourcePage(sourceFiles));

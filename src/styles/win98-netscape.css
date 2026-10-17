@@ -22,7 +22,8 @@
  * ============================================================================
  */
 
-:root {
+:root,
+[data-theme="light"] {
   color-scheme: light dark;
   --win-desktop: #006666;
   --win-chrome-bg: #d4d0c8;
@@ -51,7 +52,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --win-desktop: #070b10;
     --win-chrome-bg: #1e2530;
     --win-chrome-alt: #262f3d;
@@ -77,6 +78,33 @@
     --doc-badge-bg: #0284c7;
     --doc-badge-text: #ffffff;
   }
+}
+
+[data-theme="dark"] {
+  --win-desktop: #070b10;
+  --win-chrome-bg: #1e2530;
+  --win-chrome-alt: #262f3d;
+  --win-chrome-text: #f8fafc;
+  --win-bevel-light: #475569;
+  --win-bevel-mid: #334155;
+  --win-bevel-dark: #0f172a;
+  --win-bevel-deep: #020617;
+  --win-title-start: #0f172a;
+  --win-title-end: #0369a1;
+  --win-title-text: #ffffff;
+  --doc-bg: #0f141c;
+  --doc-surface: #18202c;
+  --doc-code-bg: #090d14;
+  --doc-code-text: #f1f5f9;
+  --doc-text: #f8fafc;
+  --doc-muted: #cbd5e1;
+  --doc-link: #38bdf8;
+  --doc-link-visited: #c084fc;
+  --doc-heading: #7dd3fc;
+  --doc-border: #475569;
+  --doc-highlight: #1e293b;
+  --doc-badge-bg: #0284c7;
+  --doc-badge-text: #ffffff;
 }
 
 *,
@@ -375,13 +403,22 @@ a:visited {
   border: 2px outset var(--win-bevel-light);
   padding: 1.25rem;
   margin-bottom: 1.5rem;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  overflow-wrap: break-word;
 }
 
 .retro-grid-2 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   gap: 1.25rem;
   margin-bottom: 1.5rem;
+}
+
+.retro-grid-2 > * {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .retro-dialog-card {
@@ -391,6 +428,10 @@ a:visited {
   border-right: 2px solid var(--win-bevel-deep);
   border-bottom: 2px solid var(--win-bevel-deep);
   padding: 1rem 1.2rem;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  overflow-wrap: break-word;
 }
 
 .retro-table {
