@@ -366,9 +366,28 @@ function renderNetscapeShell({ title, description, canonicalPath, bodyHtml }) {
     <meta name="twitter:image" content="${escapeHtml(ogImage)}" />
     <link rel="icon" type="image/png" href="https://assets.raggiesoft.com/raggiesoft-corporate/images/logos/raggiesoft-logo.png" />
     <link rel="stylesheet" href="https://assets.raggiesoft.com/storetrainer/css/win98-netscape.css" />
+    <link rel="stylesheet" href="https://assets.raggiesoft.com/common/css/raggiesoft-network.css" />
   </head>
   <body>
     <a href="#content" class="skip-link">Skip to main document content</a>
+
+    <nav class="rs-network-bar" aria-label="RaggieSoft Ecosystem Network" style="margin-bottom: 0.45rem; border-radius: 4px;">
+      <div class="rs-network-bar-inner">
+        <span class="rs-network-label">✦ RaggieSoft Network:</span>
+        <ul class="rs-network-links">
+          <li><a href="https://raggiesoft.com">🌐 Hub</a></li>
+          <li><a href="https://nebulae.raggiesoft.com">🌌 Nebulae</a></li>
+          <li><a href="https://music.raggiesoft.com">🎧 Music</a></li>
+          <li><a href="https://books.raggiesoft.com">📚 Books</a></li>
+          <li><a href="https://stardust.raggiesoft.com">🚀 Stardust</a></li>
+          <li><a href="https://engineroom.raggiesoft.com">⚙️ Engine Room</a></li>
+          <li><a href="https://lore.raggiesoft.com">🏛️ Lore</a></li>
+          <li><a href="https://corporate.raggiesoft.com">🏢 Corporate</a></li>
+          <li><a href="https://storetrainer.raggiesoft.com" aria-current="page" class="is-active">💾 StoreTrainer</a></li>
+          <li><a href="https://michaelpragsdale.com">👔 Michael P. Ragsdale</a></li>
+        </ul>
+      </div>
+    </nav>
 
     <div class="netscape-window win-outset" role="application" aria-label="Netscape Communicator 4.78 — RaggieSoft StoreTrainer Portal">
       <!-- Win2000 Title Bar -->
@@ -390,9 +409,14 @@ function renderNetscapeShell({ title, description, canonicalPath, bodyHtml }) {
           <li><a href="/"><u>F</u>ile</a></li>
           <li><a href="/source"><u>E</u>dit / Source</a></li>
           <li><a href="/installer"><u>V</u>iew Installer</a></li>
-          <li><a href="https://corporate.raggiesoft.com/projects/storetrainer"><u>G</u>o to RaggieSoft Media</a></li>
-          <li><a href="https://michaelpragsdale.com"><u>C</u>ommunicator (Architect Dossier)</a></li>
-          <li><a href="https://nebulae.raggiesoft.com"><u>H</u>elp / Network Sitemap</a></li>
+          <li><a href="https://raggiesoft.com"><u>H</u>ub</a></li>
+          <li><a href="https://music.raggiesoft.com"><u>M</u>usic</a></li>
+          <li><a href="https://books.raggiesoft.com"><u>B</u>ooks</a></li>
+          <li><a href="https://stardust.raggiesoft.com"><u>S</u>tardust</a></li>
+          <li><a href="https://engineroom.raggiesoft.com"><u>L</u>abel</a></li>
+          <li><a href="https://corporate.raggiesoft.com/projects/storetrainer"><u>C</u>orporate</a></li>
+          <li><a href="https://michaelpragsdale.com"><u>A</u>rchitect</a></li>
+          <li><a href="https://nebulae.raggiesoft.com"><u>N</u>ebulae Sitemap</a></li>
         </ul>
         <span style="font-size: 11.5px;">Pre-AI Hand-Written Win32 Freeware (2018–2020)</span>
       </div>
