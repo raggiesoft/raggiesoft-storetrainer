@@ -364,6 +364,49 @@ function renderNetscapeShell({ title, description, canonicalPath, bodyHtml }) {
     <meta name="twitter:title" content="${safeTitle}" />
     <meta name="twitter:description" content="${safeDesc}" />
     <meta name="twitter:image" content="${escapeHtml(ogImage)}" />
+    <script type="application/ld+json">${JSON.stringify({
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'SoftwareApplication',
+          '@id': 'https://storetrainer.raggiesoft.com/#software',
+          name: 'RaggieSoft StoreTrainer',
+          alternateName: 'TStore.exe',
+          url: 'https://storetrainer.raggiesoft.com',
+          downloadUrl: 'https://assets.raggiesoft.com/storetrainer/tssetup100.exe',
+          softwareVersion: '1.0',
+          applicationCategory: 'UtilitiesApplication, GameApplication',
+          operatingSystem: 'Windows 95, Windows 98, Windows ME, Windows NT 4.0, Windows 2000, Windows XP, Windows Vista, Windows 7, Windows 8.1, Windows 10, Windows 11',
+          license: 'https://opensource.org/licenses/MIT',
+          author: {
+            '@type': 'Person',
+            '@id': 'https://michaelpragsdale.com/#michael-ragsdale',
+            name: 'Michael P. Ragsdale',
+            url: 'https://michaelpragsdale.com'
+          },
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'USD'
+          }
+        },
+        {
+          '@type': 'WebSite',
+          '@id': 'https://storetrainer.raggiesoft.com/#website',
+          url: 'https://storetrainer.raggiesoft.com',
+          name: 'RaggieSoft StoreTrainer Portal'
+        },
+        {
+          '@type': 'WebPage',
+          '@id': `${canonicalUrl}#webpage`,
+          url: canonicalUrl,
+          name: title,
+          description: description,
+          isPartOf: { '@id': 'https://storetrainer.raggiesoft.com/#website' },
+          about: { '@id': 'https://storetrainer.raggiesoft.com/#software' }
+        }
+      ]
+    })}</script>
     <link rel="icon" type="image/png" href="https://assets.raggiesoft.com/raggiesoft-corporate/images/logos/raggiesoft-logo.png" />
     <link rel="stylesheet" href="https://assets.raggiesoft.com/storetrainer/css/win98-netscape.css" />
     <link rel="stylesheet" href="https://assets.raggiesoft.com/common/css/raggiesoft-network.css?v=20261029f" />
