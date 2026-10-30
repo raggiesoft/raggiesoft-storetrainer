@@ -366,7 +366,7 @@ function renderNetscapeShell({ title, description, canonicalPath, bodyHtml }) {
     <meta name="twitter:image" content="${escapeHtml(ogImage)}" />
     <link rel="icon" type="image/png" href="https://assets.raggiesoft.com/raggiesoft-corporate/images/logos/raggiesoft-logo.png" />
     <link rel="stylesheet" href="https://assets.raggiesoft.com/storetrainer/css/win98-netscape.css" />
-    <link rel="stylesheet" href="https://assets.raggiesoft.com/common/css/raggiesoft-network.css?v=20261017m" />
+    <link rel="stylesheet" href="https://assets.raggiesoft.com/common/css/raggiesoft-network.css?v=20261029f" />
     <!-- Google Analytics 4 (GA4) Telemetry Integration (G-P9RG9JVYB6) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9RG9JVYB6"></script>
     <script>
@@ -493,7 +493,7 @@ function renderNetscapeShell({ title, description, canonicalPath, bodyHtml }) {
     </div>
 
     <script src="https://assets.raggiesoft.com/storetrainer/js/netscape-ui.js" defer></script>
-    <script src="https://assets.raggiesoft.com/common/js/raggiesoft-network.js?v=20261017m" defer></script>
+    <script src="https://assets.raggiesoft.com/common/js/raggiesoft-network.js?v=20261029f" defer></script>
   </body>
 </html>`;
 }
