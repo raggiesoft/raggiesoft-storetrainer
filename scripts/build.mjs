@@ -101,31 +101,31 @@ function loadStoreTrainerSourceFiles() {
     },
     {
       id: 'sfile-bas',
-      title: 'SFile.bas (Flat-File & File System Operations)',
+      title: 'SFile.bas (Game Profile & File Operations)',
       category: 'VB6 Win32 API',
       relPath: 'SFile.bas',
-      description: 'Win32 file management and shell operations module for locating, copying, and launching game and trainer binaries.'
+      description: 'File management and shell operations module for locating, copying, and launching game and trainer programs.'
     },
     {
       id: 'inifile-bas',
-      title: 'INIFile.bas (Win32 kernel32 INI Configuration Parser)',
+      title: 'INIFile.bas (INI Configuration Parser)',
       category: 'VB6 Win32 API',
       relPath: 'INIFile.bas',
-      description: 'Direct Win32 `GetPrivateProfileString` / `WritePrivateProfileString` (`kernel32.dll`) bindings for zero-database INI configuration persistence.'
+      description: 'Configuration reader and writer for saving local INI settings.'
     },
     {
       id: 'registry-bas',
-      title: 'Registry.bas (Win32 advapi32 Registry Module)',
+      title: 'Registry.bas (System Paths Helper Module)',
       category: 'VB6 Win32 API',
       relPath: 'Registry.bas',
-      description: 'Direct Win32 `RegOpenKeyEx` / `RegQueryValueEx` (`advapi32.dll`) bindings for reading game installation paths across 32-bit and 64-bit Windows.'
+      description: 'Helper module for locating installed game folders across classic and modern PCs.'
     },
     {
       id: 'specialfolder-bas',
-      title: 'SpecialFolder.bas (Win32 Shell Special Folders API)',
+      title: 'SpecialFolder.bas (Special Folders Helper)',
       category: 'VB6 Win32 API',
       relPath: 'SpecialFolder.bas',
-      description: 'Resolves `AppData`, `Program Files`, and user profile directories across Windows 95 through Windows 11.'
+      description: 'Resolves application data, program folders, and user profile directories across classic and modern Windows.'
     },
     {
       id: 'osversioninfo-bas',
@@ -192,10 +192,10 @@ function loadStoreTrainerSourceFiles() {
     },
     {
       id: 'tssetup-nsi',
-      title: 'Installer/TSSetup.nsi (Full NSIS Wizard95 Installer)',
+      title: 'Installer/TSSetup.nsi (Full Wizard95 Setup Script)',
       category: 'NSIS Installer',
       relPath: 'Installer/TSSetup.nsi',
-      description: 'Full Nullsoft Scriptable Install System (NSIS) script featuring the classic Wizard95 bitmap, Windows 95–11 OS check, and VB6 runtime DLL registration.'
+      description: 'Full Nullsoft Scriptable Install System (NSIS) script featuring the classic Wizard95 bitmap, system compatibility check, and VB6 runtime library setup.'
     },
     {
       id: 'tssetup-patch-nsi',
@@ -376,7 +376,7 @@ function renderNetscapeShell({ title, description, canonicalPath, bodyHtml }) {
           downloadUrl: 'https://assets.raggiesoft.com/storetrainer/tssetup100.exe',
           softwareVersion: '1.0',
           applicationCategory: 'UtilitiesApplication, GameApplication',
-          operatingSystem: 'Windows 95, Windows 98, Windows ME, Windows NT 4.0, Windows 2000, Windows XP, Windows Vista, Windows 7, Windows 8.1, Windows 10, Windows 11',
+          operatingSystem: 'Windows',
           license: 'https://opensource.org/licenses/MIT',
           author: {
             '@type': 'Person',
@@ -508,7 +508,7 @@ function renderNetscapeShell({ title, description, canonicalPath, bodyHtml }) {
 
       <!-- Netscape Status Bar & Global Legal Footer -->
       <footer class="netscape-statusbar" role="contentinfo">
-        <div class="status-cell">🔒 TLS 1.3 Modern Security • Document: Done (WCAG 2.1 AA / Section 508 Verified)</div>
+        <div class="status-cell">🔒 Secure Connection • Document: Done</div>
         <div class="status-cell">
           Code: <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT License</a> |
           Docs: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>
@@ -544,13 +544,13 @@ function renderNetscapeShell({ title, description, canonicalPath, bodyHtml }) {
 function renderHomePage(sourceFiles) {
   const bodyHtml = `
     <div class="retro-banner">
-      <h1>RaggieSoft StoreTrainer v1.0 (Win32 Retro PC Game &amp; Trainer Manager)</h1>
+      <h1>RaggieSoft StoreTrainer v1.0 (Retro PC Game &amp; Trainer Manager)</h1>
       <p style="margin: 0 0 0.85rem; font-size: 1.02rem;">
-        <strong>RaggieSoft StoreTrainer (<code>TStore.exe</code>)</strong> is a <strong>100% hand-written (pre-AI, 2018–2020)</strong> Win32 desktop utility authored by <strong>Michael P. Ragsdale</strong> in <strong>Visual Basic 6.0 (<code>TStore.vbp</code>)</strong> inside a <strong>Windows 2000 Professional SP4 virtual machine</strong>. It indexes, stores, and launches classic and modern PC games alongside their associated <strong>game trainers (cheat utilities)</strong> and custom command-line switches across every desktop release of Windows from <strong>Windows 95 through Windows 11</strong>.
+        <strong>RaggieSoft StoreTrainer (<code>TStore.exe</code>)</strong> is a <strong>100% hand-written (pre-AI, 2018–2020)</strong> desktop utility authored by <strong>Michael P. Ragsdale</strong> in <strong>Visual Basic 6.0 (<code>TStore.vbp</code>)</strong> inside a <strong>Windows 2000 Professional SP4 virtual machine</strong>. It indexes, stores, and launches classic and modern PC games alongside their associated <strong>game trainers (cheat utilities)</strong> and custom launch options across classic and modern PCs.
       </p>
       <div style="display: flex; flex-wrap: wrap; gap: 0.65rem;">
         <a href="https://assets.raggiesoft.com/storetrainer/tssetup100.exe" class="win-btn win-btn-primary">
-          💾 Download Official Installer: tssetup100.exe (Win95–Win11)
+          💾 Download Official Installer: tssetup100.exe
         </a>
         <a href="/source" class="win-btn">
           🔍 Inspect VB6 &amp; .NET Source Code (${sourceFiles.length} Files) →
@@ -565,17 +565,17 @@ function renderHomePage(sourceFiles) {
       <section class="retro-dialog-card" aria-labelledby="why-built-heading">
         <h2 id="why-built-heading" style="margin-top: 0;">Why StoreTrainer Was Built (2018–2020)</h2>
         <p>
-          Many classic 1990s and 2000s PC games require either specific command-line switches (such as resolution overrides, <code>-windowed</code>, or mod directory flags) or companion memory-resident <strong>game trainers</strong> that must be launched in the proper working directory before or alongside the game executable.
+          Many classic 1990s and 2000s PC games require either specific launch switches (such as resolution overrides, windowed mode, or mod directory flags) or companion <strong>game trainers</strong> that must be launched in the proper working directory before or alongside the game.
         </p>
         <p style="margin-bottom: 0;">
-          Built inside a <strong>Windows 2000 Professional SP4 VM</strong> using pure Win32 API calls (<code>shell32.dll</code> <code>ShellExecuteA</code>, <code>comdlg32.dll</code> <code>GetOpenFileNameA</code>, and <code>SHBrowseForFolder</code>) without heavy third-party ActiveX/OCX dependencies, StoreTrainer runs natively on a Pentium-era Windows 95/98 retro rig just as cleanly as on a modern Windows 11 workstation.
+          Built inside a <strong>Windows 2000 Professional SP4</strong> environment without heavy third-party dependencies, StoreTrainer runs just as cleanly on a classic 1990s retro gaming PC as it does on a modern desktop.
         </p>
       </section>
 
       <section class="retro-dialog-card" aria-labelledby="sfile-spec-heading">
-        <h2 id="sfile-spec-heading" style="margin-top: 0;">Zero-Database <code>.sfile</code> Flat-File Specification</h2>
+        <h2 id="sfile-spec-heading" style="margin-top: 0;">Saved Game Profile (<code>.sfile</code>) Format</h2>
         <p>
-          True to RaggieSoft's zero-database philosophy, StoreTrainer stores each game profile as a human-readable 6-line sequential text file (<code>&lt;GameName&gt;.sfile</code>) alongside <code>StoreTrainer.cfg</code>:
+          StoreTrainer saves each game profile as a simple, human-readable 6-line text file (<code>&lt;GameName&gt;.sfile</code>) alongside <code>StoreTrainer.cfg</code>:
         </p>
         <pre class="code-viewer" style="max-height: 200px; margin: 0;">Line 1: GameName     (Display title in the StoreTrainer list)
 Line 2: GameFile     (Full path to the game .exe binary)
@@ -588,30 +588,30 @@ Line 7: TrainerPath  (Trainer working directory passed to ShellExecuteA)</pre>
     </div>
 
     <section aria-labelledby="os-matrix-heading">
-      <h2 id="os-matrix-heading">Verified Windows Operating System Compatibility Matrix</h2>
+      <h2 id="os-matrix-heading">Supported PC Systems</h2>
       <table class="retro-table">
         <thead>
           <tr>
-            <th scope="col">Operating System Family</th>
+            <th scope="col">System Era</th>
             <th scope="col">Supported Releases</th>
-            <th scope="col">Architecture &amp; Runtime Notes</th>
+            <th scope="col">Notes</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>Windows 9x (Win32)</strong></td>
+            <td><strong>Classic 1990s PCs</strong></td>
             <td>Windows 95, Windows 98, Windows 98 SE, Windows ME</td>
-            <td>Verified via NSIS <code>WinVer.nsh</code> (<code>AtLeastWin95</code>); deploys <code>msvbvm60.dll</code> if absent.</td>
+            <td>Includes the Visual Basic 6.0 runtime library if not already installed.</td>
           </tr>
           <tr>
-            <td><strong>Windows NT Classic</strong></td>
+            <td><strong>Classic 2000s PCs</strong></td>
             <td>Windows NT 4.0, Windows 2000 Professional SP4, Windows XP</td>
-            <td><strong>Primary Development Environment:</strong> Built &amp; compiled inside Windows 2000 Professional SP4.</td>
+            <td><strong>Original Design Era:</strong> Created and tested inside Windows 2000 Professional SP4.</td>
           </tr>
           <tr>
-            <td><strong>Modern Windows NT (x86/x64)</strong></td>
-            <td>Windows Vista, Windows 7, Windows 8.1, Windows 10, Windows 11</td>
-            <td>Runs seamlessly via WOW64 (<code>TStore.exe</code> VB6) or natively via the included <code>TStore.NET</code> port.</td>
+            <td><strong>Modern PCs</strong></td>
+            <td>Windows Vista, Windows 7, Windows 8.1, Windows 10, and newer</td>
+            <td>Works out of the box with both the classic edition and the included <code>TStore.NET</code> edition.</td>
           </tr>
         </tbody>
       </table>
@@ -619,8 +619,8 @@ Line 7: TrainerPath  (Trainer working directory passed to ShellExecuteA)</pre>
   `;
 
   return renderNetscapeShell({
-    title: 'RaggieSoft StoreTrainer | Win32 Game & Trainer Manager',
-    description: 'Official portal for RaggieSoft StoreTrainer (TStore.exe)—a hand-written VB6 Win32 utility to store and launch PC games and game trainers on Windows 95–11.',
+    title: 'RaggieSoft StoreTrainer | PC Game & Trainer Manager',
+    description: 'Official portal for RaggieSoft StoreTrainer (TStore.exe)—a hand-written utility to store and launch PC games and game trainers on classic and modern PCs.',
     canonicalPath: '/',
     bodyHtml
   });
