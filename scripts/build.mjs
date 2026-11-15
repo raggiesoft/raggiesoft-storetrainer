@@ -316,10 +316,17 @@ function buildNetscapeClientJs() {
  * @param {string} opts.bodyHtml
  * @returns {string}
  */
-function renderNetscapeShell({ title, description, canonicalPath, bodyHtml }) {
+function renderNetscapeShell({ title, description, canonicalPath, noindex = false, bodyHtml }) {
   const safeTitle = escapeHtml(title.slice(0, 60));
   const safeDesc = escapeHtml(description.slice(0, 155));
+  const isErrorPage = canonicalPath === '/404';
   const canonicalUrl = `https://storetrainer.raggiesoft.com${canonicalPath === '/' ? '' : canonicalPath}`;
+  const robotsMetaHtml = noindex
+    ? '\n    <meta name="robots" content="noindex, follow" />'
+    : '';
+  const canonicalLinkHtml = isErrorPage
+    ? ''
+    : `\n    <link rel="canonical" href="${escapeHtml(canonicalUrl)}" />`;
   const ogImage = 'https://assets.raggiesoft.com/raggiesoft-corporate/images/og/raggiesoft-corporate-og.jpg';
 
   const navItems = [
@@ -352,8 +359,7 @@ function renderNetscapeShell({ title, description, canonicalPath, bodyHtml }) {
       } catch (e) {}
     </script>
     <title>${safeTitle}</title>
-    <meta name="description" content="${safeDesc}" />
-    <link rel="canonical" href="${escapeHtml(canonicalUrl)}" />
+    <meta name="description" content="${safeDesc}" />${robotsMetaHtml}${canonicalLinkHtml}
     <meta property="og:title" content="${safeTitle}" />
     <meta property="og:description" content="${safeDesc}" />
     <meta property="og:image" content="${escapeHtml(ogImage)}" />
@@ -734,9 +740,45 @@ function buildStoreTrainerSite() {
   writeDistFile('index.html', renderHomePage(sourceFiles));
   writeDistFile('source/index.html', renderSourcePage(sourceFiles));
   writeDistFile('installer/index.html', renderInstallerPage(sourceFiles));
+  writeDistFile(
+    '404.html',
+    renderNetscapeShell({
+      title: 'Page Not Found | RaggieSoft StoreTrainer',
+      description: 'The requested RaggieSoft StoreTrainer page could not be found.',
+      canonicalPath: '/404',
+      noindex: true,
+      bodyHtml: `
+        <div class="retro-banner">
+          <h1>Page Not Found — RaggieSoft StoreTrainer</h1>
+          <p style="margin: 0 0 0.85rem;">
+            The StoreTrainer page or source file link you requested could not be found. Choose one of the sections below to continue browsing or download StoreTrainer v1.0.
+          </p>
+          <div style="display: flex; flex-wrap: wrap; gap: 0.65rem;">
+            <a href="/" class="win-btn win-btn-primary">🏠 StoreTrainer Home &amp; Download</a>
+            <a href="/source" class="win-btn">💾 VB6 &amp; .NET Source Code</a>
+            <a href="/installer" class="win-btn">📦 NSIS Wizard95 Installer</a>
+          </div>
+        </div>`
+    })
+  );
+
+  const todayIso = new Date().toISOString().split('T')[0];
+  const canonicalRoutes = ['/', '/installer', '/source'];
+  const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${canonicalRoutes
+    .map((route) => {
+      const loc = `https://storetrainer.raggiesoft.com${route === '/' ? '/' : route}`;
+      return `  <url>\n    <loc>${escapeHtml(loc)}</loc>\n    <lastmod>${todayIso}</lastmod>\n  </url>`;
+    })
+    .join('\n')}\n</urlset>\n`;
+  writeDistFile('sitemap.xml', sitemapXml);
+  writeDistFile(
+    'robots.txt',
+    `User-agent: *\nAllow: /\n\nSitemap: https://storetrainer.raggiesoft.com/sitemap.xml\n`
+  );
+  writeDistFile('726167676965736f6674696e6465786e.txt', '726167676965736f6674696e6465786e\n');
 
   console.log(
-    `✅ Built storetrainer.raggiesoft.com static bundle in ${distDir} (3 routes + ${sourceFiles.length} VB6/.NET/NSIS source files indexed).`
+    `✅ Built storetrainer.raggiesoft.com static bundle in ${distDir} (3 routes + sitemap/404 + ${sourceFiles.length} VB6/.NET/NSIS source files indexed).`
   );
 }
 
