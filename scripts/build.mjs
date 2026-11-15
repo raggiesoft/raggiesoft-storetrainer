@@ -245,11 +245,20 @@ function buildNetscapeClientJs() {
  * @license MIT
  * netscape-ui.js — Client Progressive Enhancement for storetrainer.raggiesoft.com
  * Implements Modern Web Guidance dark-mode-toggle (Win98 Light vs. Win2000 Dark)
+ * plus automatic Quantum OS 98 Holiday Desktop Edition chrome & taskbar clock.
  */
 (function () {
   var meta = document.querySelector('meta[name="color-scheme"]');
   var toggleBtn = document.getElementById('theme-toggle');
   var toggleLabel = document.getElementById('theme-toggle-label');
+  var titleCaption = document.getElementById('win-titlebar-caption');
+  var startIcon = document.getElementById('win98-start-icon');
+  var holidayTray = document.getElementById('win98-holiday-tray');
+  var clockEl = document.getElementById('win98-clock');
+
+  function isHolidayActive() {
+    return document.documentElement.classList.contains('rs-holiday-season');
+  }
 
   function getSystemScheme() {
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -268,14 +277,40 @@ function buildNetscapeClientJs() {
     return getSystemScheme();
   }
 
+  function syncQuantumHolidayChrome() {
+    var holiday = isHolidayActive();
+    if (titleCaption) {
+      var baseTitle = titleCaption.getAttribute('data-base-title') || 'RaggieSoft StoreTrainer';
+      titleCaption.textContent = holiday
+        ? baseTitle + ' - Netscape Communicator 4.78 [Quantum OS 98 — Holiday Desktop]'
+        : baseTitle + ' - Netscape Communicator 4.78 [Windows 2000 Professional SP4]';
+    }
+    if (startIcon) {
+      startIcon.textContent = holiday ? '🎄' : '🪟';
+    }
+    if (holidayTray) {
+      holidayTray.hidden = !holiday;
+    }
+  }
+
   function updateLabel() {
     var current = getRenderedScheme();
+    var holiday = isHolidayActive();
     document.documentElement.setAttribute('data-theme', current);
+    syncQuantumHolidayChrome();
     if (!toggleLabel) return;
     var stored = null;
     try {
       stored = localStorage.getItem('color-scheme');
     } catch (e) {}
+    if (holiday) {
+      if (stored === 'light' || stored === 'dark') {
+        toggleLabel.textContent = current === 'dark' ? '🎄 Holiday Dark (Pinned)' : '🎄 Holiday Pine (Pinned)';
+      } else {
+        toggleLabel.textContent = current === 'dark' ? '🎄 Quantum Holiday Dark' : '🎄 Quantum Holiday Pine';
+      }
+      return;
+    }
     if (stored === 'light' || stored === 'dark') {
       toggleLabel.textContent = current === 'dark' ? '🖥️ Win2000 Dark (Pinned)' : '🖥️ Win98 Classic (Pinned)';
     } else {
@@ -283,8 +318,22 @@ function buildNetscapeClientJs() {
     }
   }
 
+  function updateTaskbarClock() {
+    if (!clockEl) return;
+    try {
+      var now = new Date();
+      clockEl.textContent = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    } catch (e) {}
+  }
+
+  updateLabel();
+  updateTaskbarClock();
+  setInterval(updateTaskbarClock, 30000);
+
+  window.addEventListener('raggiesoft:holidaychange', updateLabel);
+  window.addEventListener('load', updateLabel);
+
   if (toggleBtn && meta) {
-    updateLabel();
     toggleBtn.addEventListener('click', function () {
       var current = getRenderedScheme();
       var target = current === 'dark' ? 'light' : 'dark';
@@ -414,8 +463,8 @@ function renderNetscapeShell({ title, description, canonicalPath, noindex = fals
       ]
     })}</script>
     <link rel="icon" type="image/png" href="https://assets.raggiesoft.com/raggiesoft-corporate/images/logos/raggiesoft-logo.png" />
-    <link rel="stylesheet" href="https://assets.raggiesoft.com/storetrainer/css/win98-netscape.css" />
-    <link rel="stylesheet" href="https://assets.raggiesoft.com/common/css/raggiesoft-network.css?v=20261029f" />
+    <link rel="stylesheet" href="https://assets.raggiesoft.com/storetrainer/css/win98-netscape.css?v=20261115h" />
+    <link rel="stylesheet" href="https://assets.raggiesoft.com/common/css/raggiesoft-network.css?v=20261115h" />
     <!-- Google Analytics 4 (GA4) Telemetry Integration (G-P9RG9JVYB6) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9RG9JVYB6"></script>
     <script>
@@ -428,7 +477,7 @@ function renderNetscapeShell({ title, description, canonicalPath, noindex = fals
   <body>
     <a href="#content" class="skip-link">Skip to main document content</a>
 
-    <nav class="rs-network-bar" aria-label="RaggieSoft Ecosystem Network" style="margin-bottom: 0.45rem; border-radius: 4px;">
+    <nav class="rs-network-bar" aria-label="RaggieSoft Ecosystem Network">
       <div class="rs-network-bar-inner">
         <span class="rs-network-label">✦ RaggieSoft Network:</span>
         <ul class="rs-network-links">
@@ -445,104 +494,129 @@ function renderNetscapeShell({ title, description, canonicalPath, noindex = fals
       </div>
     </nav>
 
-    <div class="netscape-window win-outset" role="application" aria-label="Netscape Communicator 4.78 — RaggieSoft StoreTrainer Portal">
-      <!-- Win2000 Title Bar -->
-      <header class="win-titlebar" role="banner">
-        <div class="win-titlebar-left">
-          <span aria-hidden="true">🖳</span>
-          <span>${safeTitle} - Netscape Communicator 4.78 [Windows 2000 Professional SP4]</span>
-        </div>
-        <div class="win-titlebar-controls" aria-hidden="true">
-          <span class="win-ctrl-box">_</span>
-          <span class="win-ctrl-box">□</span>
-          <span class="win-ctrl-box">×</span>
-        </div>
-      </header>
+    <div class="win98-desktop-workspace">
+      <div class="netscape-window win-outset" role="region" aria-label="Netscape Communicator 4.78 — RaggieSoft StoreTrainer Portal">
+        <!-- Win2000 / Quantum OS 98 Title Bar -->
+        <header class="win-titlebar" role="banner">
+          <div class="win-titlebar-left">
+            <span aria-hidden="true">🖳</span>
+            <span id="win-titlebar-caption" class="win-titlebar-text" data-base-title="${safeTitle}">${safeTitle} - Netscape Communicator 4.78 [Windows 2000 Professional SP4]</span>
+          </div>
+          <div class="win-titlebar-controls" aria-hidden="true">
+            <span class="win-ctrl-box">_</span>
+            <span class="win-ctrl-box">□</span>
+            <span class="win-ctrl-box">×</span>
+          </div>
+        </header>
 
-      <!-- Menu Bar -->
-      <div class="netscape-menubar" role="navigation" aria-label="Application Menu Bar">
-        <ul class="netscape-menu-items">
-          <li><a href="/"><u>F</u>ile</a></li>
-          <li><a href="/source"><u>E</u>dit / Source</a></li>
-          <li><a href="/installer"><u>V</u>iew Installer</a></li>
-          <li><a href="https://raggiesoft.com"><u>H</u>ub</a></li>
-          <li><a href="https://music.raggiesoft.com"><u>M</u>usic</a></li>
-          <li><a href="https://books.raggiesoft.com"><u>B</u>ooks</a></li>
-          <li><a href="https://stardust.raggiesoft.com"><u>S</u>tardust</a></li>
-          <li><a href="https://engineroom.raggiesoft.com"><u>L</u>abel</a></li>
-          <li><a href="https://corporate.raggiesoft.com/projects/storetrainer"><u>C</u>orporate</a></li>
-          <li><a href="https://michaelpragsdale.com"><u>A</u>rchitect</a></li>
-          <li><a href="https://nebulae.raggiesoft.com"><u>N</u>ebulae Sitemap</a></li>
-        </ul>
-        <span style="font-size: 11.5px;">Pre-AI Hand-Written Win32 Freeware (2018–2020)</span>
+        <!-- Menu Bar -->
+        <div class="netscape-menubar" role="navigation" aria-label="Application Menu Bar">
+          <ul class="netscape-menu-items">
+            <li><a href="/"><u>F</u>ile</a></li>
+            <li><a href="/source"><u>E</u>dit / Source</a></li>
+            <li><a href="/installer"><u>V</u>iew Installer</a></li>
+            <li class="menu-item-crosssite"><a href="https://raggiesoft.com"><u>H</u>ub</a></li>
+            <li class="menu-item-crosssite"><a href="https://music.raggiesoft.com"><u>M</u>usic</a></li>
+            <li class="menu-item-crosssite"><a href="https://books.raggiesoft.com"><u>B</u>ooks</a></li>
+            <li class="menu-item-crosssite"><a href="https://stardust.raggiesoft.com"><u>S</u>tardust</a></li>
+            <li class="menu-item-crosssite"><a href="https://engineroom.raggiesoft.com"><u>L</u>abel</a></li>
+            <li class="menu-item-crosssite"><a href="https://corporate.raggiesoft.com/projects/storetrainer"><u>C</u>orporate</a></li>
+            <li class="menu-item-crosssite"><a href="https://michaelpragsdale.com"><u>A</u>rchitect</a></li>
+            <li class="menu-item-crosssite"><a href="https://nebulae.raggiesoft.com"><u>N</u>ebulae Sitemap</a></li>
+          </ul>
+          <span class="netscape-era-note">Pre-AI Hand-Written Desktop Freeware (2018–2020)</span>
+        </div>
+
+        <!-- Navigation Toolbar -->
+        <nav class="netscape-toolbar" aria-label="Primary StoreTrainer Navigation">
+          <ul class="netscape-nav-list">
+            ${navHtml}
+            <li>
+              <button
+                type="button"
+                id="theme-toggle"
+                class="win-btn"
+                aria-label="Toggle between classic light desktop theme and dark desktop theme"
+              >
+                <span id="theme-toggle-label">🖥️ Theme</span>
+              </button>
+            </li>
+            <li class="nav-item-primary-download">
+              <a href="https://assets.raggiesoft.com/storetrainer/tssetup100.exe" class="win-btn win-btn-primary">
+                ⬇️ Download tssetup100.exe (v1.0)
+              </a>
+            </li>
+          </ul>
+          <div class="netscape-throbber" aria-hidden="true" title="Netscape Communicator">N</div>
+        </nav>
+
+        <!-- Location / Address Bar -->
+        <div class="netscape-locationbar">
+          <strong>Netsite:</strong>
+          <div class="location-input win-inset" aria-label="Current URL">${escapeHtml(canonicalUrl)}</div>
+          <a href="https://raggiesoft.com" class="win-btn location-hub-btn">🌐 RaggieSoft Hub</a>
+        </div>
+
+        <!-- Sunken Document Viewport -->
+        <main id="content" class="netscape-viewport win-inset" tabindex="-1">
+          <div class="quantum-holiday-callout" role="note" aria-label="Quantum OS 98 Holiday Desktop Theme">
+            <span><strong>🎄 Quantum OS 98 — Holiday Desktop Pack:</strong> Evergreen Pine &amp; Holly Crimson desktop colors are active for the holiday season.</span>
+            <span>Happy Holidays from RaggieSoft!</span>
+          </div>
+          ${bodyHtml}
+        </main>
+
+        <!-- Netscape Status Bar & Global Legal Footer -->
+        <footer class="netscape-statusbar" role="contentinfo">
+          <div class="status-cell">🔒 Secure Connection • Document: Done</div>
+          <div class="status-cell">
+            Code: <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT License</a> |
+            Docs: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>
+          </div>
+        </footer>
       </div>
 
-      <!-- Navigation Toolbar -->
-      <nav class="netscape-toolbar" aria-label="Primary StoreTrainer Navigation">
-        <ul class="netscape-nav-list">
-          ${navHtml}
-          <li>
-            <a href="https://assets.raggiesoft.com/storetrainer/tssetup100.exe" class="win-btn win-btn-primary">
-              ⬇️ Download tssetup100.exe (v1.0)
-            </a>
-          </li>
-          <li>
-            <button
-              type="button"
-              id="theme-toggle"
-              class="win-btn"
-              aria-label="Toggle between Windows 98 Classic Light Mode and Windows 2000 High-Contrast Dark Mode"
-            >
-              <span id="theme-toggle-label">🖥️ Theme</span>
-            </button>
-          </li>
-        </ul>
-        <div class="netscape-throbber" aria-hidden="true" title="Netscape Communicator">N</div>
-      </nav>
-
-      <!-- Location / Address Bar -->
-      <div class="netscape-locationbar">
-        <strong>Netsite:</strong>
-        <div class="location-input win-inset" aria-label="Current URL">${escapeHtml(canonicalUrl)}</div>
-        <a href="https://raggiesoft.com" class="win-btn">🌐 RaggieSoft Hub</a>
+      <!-- Global Fictitious Disclaimer & Network Links Outside Window Frame -->
+      <div class="netscape-window win-outset netscape-footer-card">
+        <p style="margin: 0 0 0.5rem;">
+          <strong>RaggieSoft Ecosystem Links:</strong>
+          <a href="https://raggiesoft.com">RaggieSoft Hub</a> •
+          <a href="https://corporate.raggiesoft.com">RaggieSoft Media</a> •
+          <a href="https://michaelpragsdale.com">Michael P. Ragsdale Portfolio</a> •
+          <a href="https://music.raggiesoft.com">The Listening Room</a> •
+          <a href="https://books.raggiesoft.com">RaggieSoft Book Reader</a> •
+          <a href="https://backstage.raggiesoft.com">RaggieSoft Backstage</a> •
+          <a href="https://lore.raggiesoft.com">Lore Omnibus</a> •
+          <a href="https://engineroom.raggiesoft.com">Engine Room Records</a> •
+          <a href="https://stardust.raggiesoft.com">The Stardust Engine</a> •
+          <a href="https://nebulae.raggiesoft.com">The RaggieSoft Nebulae</a>
+        </p>
+        <p style="margin: 0;">
+          <strong>Fictitious Persons &amp; Entities Disclaimer:</strong> While <strong>RaggieSoft StoreTrainer</strong> is a real-world desktop utility authored by <strong>Michael P. Ragsdale</strong>, all narrative characters, bands, biographies, universities (including Commonwealth Polytechnic Institute / CPI, The Forgers, and The Crucible), corporations (including OmniCorp, Apex Records, Prairie Coachworks, and Sainte-Claire), transit agencies (Blue Ridge Transit and Coastal Virginia Transit Authority), in-universe legal filings, and any entity with <strong>&ldquo;LLC&rdquo;</strong>, <strong>&ldquo;Trust&rdquo;</strong>, or <strong>&ldquo;Holdings&rdquo;</strong> in its name across the wider RaggieSoft network are works of fiction. Any resemblance to actual persons (living or dead), businesses, institutions, or events is purely coincidental.
+        </p>
       </div>
-
-      <!-- Sunken Document Viewport -->
-      <main id="content" class="netscape-viewport win-inset" tabindex="-1">
-        ${bodyHtml}
-      </main>
-
-      <!-- Netscape Status Bar & Global Legal Footer -->
-      <footer class="netscape-statusbar" role="contentinfo">
-        <div class="status-cell">🔒 Secure Connection • Document: Done</div>
-        <div class="status-cell">
-          Code: <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT License</a> |
-          Docs: <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>
-        </div>
-      </footer>
     </div>
 
-    <!-- Global Fictitious Disclaimer & Network Links Outside Window Frame -->
-    <div class="netscape-window win-outset" style="margin-top: 0.75rem; padding: 0.85rem 1.15rem; font-size: 12.5px;">
-      <p style="margin: 0 0 0.5rem;">
-        <strong>RaggieSoft Ecosystem Links:</strong>
-        <a href="https://raggiesoft.com">RaggieSoft Hub</a> •
-        <a href="https://corporate.raggiesoft.com">RaggieSoft Media (B2B)</a> •
-        <a href="https://michaelpragsdale.com">Michael P. Ragsdale Portfolio</a> •
-        <a href="https://music.raggiesoft.com">The Listening Room</a> •
-        <a href="https://books.raggiesoft.com">RaggieSoft Book Reader</a> •
-        <a href="https://lore.raggiesoft.com">Lore Omnibus</a> •
-        <a href="https://engineroom.raggiesoft.com">Engine Room Records</a> •
-        <a href="https://stardust.raggiesoft.com">The Stardust Engine</a> •
-        <a href="https://nebulae.raggiesoft.com">The RaggieSoft Nebulae</a>
-      </p>
-      <p style="margin: 0;">
-        <strong>Fictitious Persons &amp; Entities Disclaimer:</strong> While <strong>RaggieSoft StoreTrainer</strong> is a real-world Win32 desktop utility authored by <strong>Michael P. Ragsdale</strong>, all narrative characters, bands, biographies, universities (including Commonwealth Polytechnic Institute / CPI, The Forgers, and The Crucible), corporations (including OmniCorp, Apex Records, Prairie Coachworks, and Sainte-Claire), transit agencies (Blue Ridge Transit), in-universe legal filings, and any entity with <strong>&ldquo;LLC&rdquo;</strong>, <strong>&ldquo;Trust&rdquo;</strong>, or <strong>&ldquo;Holdings&rdquo;</strong> in its name across the wider RaggieSoft network are works of fiction. Any resemblance to actual persons (living or dead), businesses, institutions, or events is purely coincidental.
-      </p>
+    <!-- Classic Desktop Taskbar (Transforms into Quantum OS 98 Holiday Taskbar during Holiday Mode) -->
+    <div class="win98-taskbar win-outset" role="region" aria-label="Classic Desktop Taskbar">
+      <div class="win98-taskbar-left">
+        <a href="/" class="win-btn win98-start-btn">
+          <span id="win98-start-icon" aria-hidden="true">🪟</span>
+          <span>Start</span>
+        </a>
+        <span class="win98-task-tab win-inset">
+          <span aria-hidden="true">💾</span>
+          <span>RaggieSoft StoreTrainer v1.0</span>
+        </span>
+      </div>
+      <div class="win98-systray win-inset" aria-label="Desktop Status Tray">
+        <span id="win98-holiday-tray" hidden><span aria-hidden="true">🎄</span> <span class="win98-holiday-tray-label">Holiday Desktop</span></span>
+        <span id="win98-clock">12:00 PM</span>
+      </div>
     </div>
 
-    <script src="https://assets.raggiesoft.com/storetrainer/js/netscape-ui.js" defer></script>
-    <script src="https://assets.raggiesoft.com/common/js/raggiesoft-network.js?v=20261029f" defer></script>
+    <script src="https://assets.raggiesoft.com/storetrainer/js/netscape-ui.js?v=20261115h" defer></script>
+    <script src="https://assets.raggiesoft.com/common/js/raggiesoft-network.js?v=20261115h" defer></script>
   </body>
 </html>`;
 }
@@ -554,7 +628,7 @@ function renderHomePage(sourceFiles) {
       <p style="margin: 0 0 0.85rem; font-size: 1.02rem;">
         <strong>RaggieSoft StoreTrainer (<code>TStore.exe</code>)</strong> is a <strong>100% hand-written (pre-AI, 2018–2020)</strong> desktop utility authored by <strong>Michael P. Ragsdale</strong> in <strong>Visual Basic 6.0 (<code>TStore.vbp</code>)</strong> inside a <strong>Windows 2000 Professional SP4 virtual machine</strong>. It indexes, stores, and launches classic and modern PC games alongside their associated <strong>game trainers (cheat utilities)</strong> and custom launch options across classic and modern PCs.
       </p>
-      <div style="display: flex; flex-wrap: wrap; gap: 0.65rem;">
+      <div class="hero-cta-row">
         <a href="https://assets.raggiesoft.com/storetrainer/tssetup100.exe" class="win-btn win-btn-primary">
           💾 Download Official Installer: tssetup100.exe
         </a>
@@ -595,32 +669,34 @@ Line 7: TrainerPath  (Trainer working directory passed to ShellExecuteA)</pre>
 
     <section aria-labelledby="os-matrix-heading">
       <h2 id="os-matrix-heading">Supported PC Systems</h2>
-      <table class="retro-table">
-        <thead>
-          <tr>
-            <th scope="col">System Era</th>
-            <th scope="col">Supported Releases</th>
-            <th scope="col">Notes</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Classic 1990s PCs</strong></td>
-            <td>Windows 95, Windows 98, Windows 98 SE, Windows ME</td>
-            <td>Includes the Visual Basic 6.0 runtime library if not already installed.</td>
-          </tr>
-          <tr>
-            <td><strong>Classic 2000s PCs</strong></td>
-            <td>Windows NT 4.0, Windows 2000 Professional SP4, Windows XP</td>
-            <td><strong>Original Design Era:</strong> Created and tested inside Windows 2000 Professional SP4.</td>
-          </tr>
-          <tr>
-            <td><strong>Modern PCs</strong></td>
-            <td>Windows Vista, Windows 7, Windows 8.1, Windows 10, and newer</td>
-            <td>Works out of the box with both the classic edition and the included <code>TStore.NET</code> edition.</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper" style="--label-2: 'Supported Releases'; --label-3: 'Notes';">
+        <table class="retro-table">
+          <thead>
+            <tr>
+              <th scope="col">System Era</th>
+              <th scope="col">Supported Releases</th>
+              <th scope="col">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Classic 1990s PCs</strong></td>
+              <td>Windows 95, Windows 98, Windows 98 SE, Windows ME</td>
+              <td>Includes the Visual Basic 6.0 runtime library if not already installed.</td>
+            </tr>
+            <tr>
+              <td><strong>Classic 2000s PCs</strong></td>
+              <td>Windows NT 4.0, Windows 2000 Professional SP4, Windows XP</td>
+              <td><strong>Original Design Era:</strong> Created and tested inside Windows 2000 Professional SP4.</td>
+            </tr>
+            <tr>
+              <td><strong>Modern PCs</strong></td>
+              <td>Windows Vista, Windows 7, Windows 8.1, Windows 10, and newer</td>
+              <td>Works out of the box with both the classic edition and the included <code>TStore.NET</code> edition.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   `;
 

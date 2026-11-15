@@ -5,19 +5,20 @@
  * ============================================================================
  * Architectural Overview:
  * Recreates the authentic 1998–2000 "Windows 98 / Windows 2000 Professional SP4
- * + Netscape Communicator 4.78" visual interface using modern CSS3 & HTML5
- * while strictly passing WCAG 2.1 AA / Section 508 accessibility standards.
+ * + Netscape Communicator 4.78" visual interface using modern CSS3 & HTML5,
+ * mobile-first fluid layouts, container-queried responsive tables, and an
+ * automatic annual "Quantum OS 98 — Holiday Desktop Edition" seasonal theme.
  *
  * Dual Color Scheme Support (`prefers-color-scheme: light | dark`):
  * 1. Light Mode (Win98 / Win2000 Classic Silver & Teal Desktop):
- *    - Desktop Canvas: `#008080` (Classic Windows 98/2000 Teal)
+ *    - Desktop Canvas: `#006666` (Classic Teal; Evergreen Pine `#0d3b26` in Holiday Mode)
  *    - 3D Chrome Surface: `#d4d0c8` / `#c0c0c0` with `#ffffff` top/left bevel
- *      highlights and `#404040` / `#808080` bottom/right bevel shadows.
+ *      highlights and `#202020` / `#808080` bottom/right bevel shadows.
  *    - Document Viewport: `#ffffff` paper with `#000000` ink (21:1 contrast).
  * 2. Dark Mode (Win2000 High-Contrast Dark / Midnight Terminal):
- *    - Desktop Canvas: `#070b10`
+ *    - Desktop Canvas: `#070b10` (Midnight Spruce `#05160f` in Holiday Mode)
  *    - 3D Chrome Surface: `#1e2530` with `#475569` top/left bevel highlights
- *      and `#090d14` bottom/right bevel shadows.
+ *      and `#020617` bottom/right bevel shadows.
  *    - Document Viewport: `#0f141c` with `#f8fafc` ink (17.8:1 contrast).
  * ============================================================================
  */
@@ -26,6 +27,7 @@
 [data-theme="light"] {
   color-scheme: light dark;
   --win-desktop: #006666;
+  --win-desktop-pattern: none;
   --win-chrome-bg: #d4d0c8;
   --win-chrome-alt: #c0c0c0;
   --win-chrome-text: #000000;
@@ -54,6 +56,7 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --win-desktop: #070b10;
+    --win-desktop-pattern: none;
     --win-chrome-bg: #1e2530;
     --win-chrome-alt: #262f3d;
     --win-chrome-text: #f8fafc;
@@ -82,6 +85,7 @@
 
 [data-theme="dark"] {
   --win-desktop: #070b10;
+  --win-desktop-pattern: none;
   --win-chrome-bg: #1e2530;
   --win-chrome-alt: #262f3d;
   --win-chrome-text: #f8fafc;
@@ -107,6 +111,103 @@
   --doc-badge-text: #ffffff;
 }
 
+/* ==========================================================================
+   Quantum OS 98 — Holiday Desktop Edition (`html.rs-holiday-season`)
+   Automatically active from Black Friday (Nov 29 in 2026) through Jan 1 EST
+   ========================================================================== */
+html.rs-holiday-season,
+html.rs-holiday-season[data-theme="light"] {
+  --win-desktop: #0d3b26;
+  --win-desktop-pattern:
+    radial-gradient(rgba(255, 255, 255, 0.22) 1px, transparent 1px),
+    radial-gradient(rgba(253, 230, 138, 0.18) 1px, transparent 1px);
+  --win-chrome-bg: #ded9ce;
+  --win-chrome-alt: #cfc8ba;
+  --win-chrome-text: #111827;
+  --win-bevel-light: #ffffff;
+  --win-bevel-mid: #ebe7de;
+  --win-bevel-dark: #7c7669;
+  --win-bevel-deep: #1f2421;
+  --win-title-start: #8b111e;
+  --win-title-end: #14532d;
+  --win-title-text: #ffffff;
+  --doc-bg: #fffdf9;
+  --doc-surface: #f5f0e4;
+  --doc-code-bg: #0b1912;
+  --doc-code-text: #ecfdf5;
+  --doc-text: #111827;
+  --doc-muted: #334155;
+  --doc-link: #0f5132;
+  --doc-link-visited: #7f1d1d;
+  --doc-heading: #7f1d1d;
+  --doc-border: #7c7669;
+  --doc-highlight: #fef3c7;
+  --doc-badge-bg: #8b111e;
+  --doc-badge-text: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  html.rs-holiday-season:not([data-theme="light"]) {
+    --win-desktop: #05160f;
+    --win-desktop-pattern:
+      radial-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px),
+      radial-gradient(rgba(251, 191, 36, 0.14) 1px, transparent 1px);
+    --win-chrome-bg: #13261d;
+    --win-chrome-alt: #1b3529;
+    --win-chrome-text: #f8fafc;
+    --win-bevel-light: #3d6b54;
+    --win-bevel-mid: #284b3a;
+    --win-bevel-dark: #09150f;
+    --win-bevel-deep: #020805;
+    --win-title-start: #7f1d1d;
+    --win-title-end: #14532d;
+    --win-title-text: #ffffff;
+    --doc-bg: #09140f;
+    --doc-surface: #102219;
+    --doc-code-bg: #050c09;
+    --doc-code-text: #ecfdf5;
+    --doc-text: #f8fafc;
+    --doc-muted: #d1fae5;
+    --doc-link: #6ee7b7;
+    --doc-link-visited: #fde68a;
+    --doc-heading: #fde68a;
+    --doc-border: #3d6b54;
+    --doc-highlight: #163024;
+    --doc-badge-bg: #991b1b;
+    --doc-badge-text: #ffffff;
+  }
+}
+
+html.rs-holiday-season[data-theme="dark"] {
+  --win-desktop: #05160f;
+  --win-desktop-pattern:
+    radial-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px),
+    radial-gradient(rgba(251, 191, 36, 0.14) 1px, transparent 1px);
+  --win-chrome-bg: #13261d;
+  --win-chrome-alt: #1b3529;
+  --win-chrome-text: #f8fafc;
+  --win-bevel-light: #3d6b54;
+  --win-bevel-mid: #284b3a;
+  --win-bevel-dark: #09150f;
+  --win-bevel-deep: #020805;
+  --win-title-start: #7f1d1d;
+  --win-title-end: #14532d;
+  --win-title-text: #ffffff;
+  --doc-bg: #09140f;
+  --doc-surface: #102219;
+  --doc-code-bg: #050c09;
+  --doc-code-text: #ecfdf5;
+  --doc-text: #f8fafc;
+  --doc-muted: #d1fae5;
+  --doc-link: #6ee7b7;
+  --doc-link-visited: #fde68a;
+  --doc-heading: #fde68a;
+  --doc-border: #3d6b54;
+  --doc-highlight: #163024;
+  --doc-badge-bg: #991b1b;
+  --doc-badge-text: #ffffff;
+}
+
 *,
 *::before,
 *::after {
@@ -115,16 +216,29 @@
 
 body {
   margin: 0;
+  padding: 0;
   min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--win-desktop);
+  background-image: var(--win-desktop-pattern);
+  background-size: 44px 44px, 68px 68px;
+  background-position: 0 0, 22px 22px;
   color: var(--doc-text);
   font-family: "Tahoma", "MS Sans Serif", "Segoe UI", Geneva, Verdana, sans-serif;
   font-size: 15px;
   line-height: 1.55;
-  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.win98-desktop-workspace {
+  flex: 1;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 1rem 1rem calc(3.15rem + env(safe-area-inset-bottom, 0px));
 }
 
 .skip-link {
@@ -179,9 +293,16 @@ body {
   max-width: 1220px;
   padding: 3px;
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.45);
+  min-width: 0;
 }
 
-/* Active Win2000 Gradient Title Bar */
+.netscape-footer-card {
+  margin-top: 0.75rem;
+  padding: 0.85rem 1.15rem;
+  font-size: 12.5px;
+}
+
+/* Active Win2000 / Quantum OS 98 Gradient Title Bar */
 .win-titlebar {
   background: linear-gradient(90deg, var(--win-title-start) 0%, var(--win-title-end) 100%);
   color: var(--win-title-text);
@@ -193,18 +314,29 @@ body {
   font-weight: 700;
   font-size: 13px;
   letter-spacing: 0.02em;
+  min-width: 0;
 }
 
 .win-titlebar-left {
   display: flex;
   align-items: center;
   gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.win-titlebar-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .win-titlebar-controls {
   display: flex;
   align-items: center;
   gap: 2px;
+  flex-shrink: 0;
 }
 
 .win-ctrl-box {
@@ -231,6 +363,7 @@ body {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  gap: 6px 12px;
   padding: 3px 8px;
   border-bottom: 1px solid var(--win-bevel-dark);
   font-size: 12.5px;
@@ -239,18 +372,27 @@ body {
 .netscape-menu-items {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 4px 12px;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .netscape-menu-items a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 2px 4px;
   color: var(--win-chrome-text);
   text-decoration: none;
 }
 .netscape-menu-items a:hover {
   text-decoration: underline;
+}
+
+.netscape-era-note {
+  font-size: 11.5px;
+  color: var(--win-chrome-text);
 }
 
 /* Navigation Button Toolbar */
@@ -269,20 +411,24 @@ body {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   list-style: none;
   margin: 0;
   padding: 0;
+  min-width: 0;
 }
 
 .win-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
+  min-height: 32px;
   padding: 4px 10px;
   font-family: inherit;
   font-size: 12.5px;
   font-weight: 700;
+  line-height: 1.25;
   text-decoration: none;
   cursor: pointer;
   background-color: var(--win-chrome-bg);
@@ -308,7 +454,10 @@ body {
 
 .win-btn-primary {
   background-color: var(--doc-badge-bg);
-  color: var(--doc-badge-text);
+  color: var(--doc-badge-text) !important;
+}
+.win-btn-primary:visited {
+  color: var(--doc-badge-text) !important;
 }
 .win-btn-primary:hover {
   filter: brightness(1.12);
@@ -321,6 +470,7 @@ body {
   justify-content: center;
   width: 34px;
   height: 34px;
+  flex-shrink: 0;
   background-color: #000040;
   color: #00ffff;
   font-family: Georgia, "Times New Roman", serif;
@@ -333,61 +483,88 @@ body {
   border-bottom: 2px solid var(--win-bevel-light);
 }
 
+html.rs-holiday-season .netscape-throbber {
+  background-color: #0f3d26;
+  color: #fde68a;
+}
+
 /* Location / URL Bar */
 .netscape-locationbar {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 8px;
   padding: 4px 8px;
   border-top: 1px solid var(--win-bevel-light);
   border-bottom: 2px solid var(--win-bevel-dark);
   font-size: 12.5px;
+  min-width: 0;
 }
 
 .location-input {
   flex: 1;
-  min-width: 220px;
-  padding: 3px 8px;
+  min-width: 0;
+  padding: 4px 8px;
   font-family: "Courier New", Courier, monospace;
   font-size: 13px;
   font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Sunken Document Viewport */
 .netscape-viewport {
   padding: 1.75rem 2rem;
-  min-height: 68vh;
+  min-height: 62vh;
+  min-height: 62dvh;
+  min-width: 0;
 }
 
-@media (max-width: 640px) {
-  body {
-    padding: 0.25rem;
-  }
-  .netscape-viewport {
-    padding: 1rem;
-  }
+/* Quantum OS 98 Seasonal Banner Inside Viewport (auto-shown in Holiday Mode) */
+.quantum-holiday-callout {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding: 0.7rem 1rem;
+  margin-bottom: 1.15rem;
+  background: linear-gradient(90deg, var(--win-title-start) 0%, var(--win-title-end) 100%);
+  color: #ffffff;
+  border-top: 2px solid var(--win-bevel-light);
+  border-left: 2px solid var(--win-bevel-light);
+  border-right: 2px solid var(--win-bevel-deep);
+  border-bottom: 2px solid var(--win-bevel-deep);
+  font-size: 13.5px;
 }
 
-/* Typography & Classic HTML 4.01 Table / Panel Layout */
+html.rs-holiday-season .quantum-holiday-callout {
+  display: flex;
+}
+
+/* Typography & Classic HTML 4.01 Panel Layout */
 h1, h2, h3, h4 {
   color: var(--doc-heading);
   font-family: "Trebuchet MS", "Tahoma", Arial, sans-serif;
   margin-top: 0;
+  text-wrap: balance;
 }
 
 h1 {
-  font-size: 1.85rem;
+  font-size: clamp(1.25rem, 2.2vw + 0.82rem, 1.85rem);
+  line-height: 1.25;
   border-bottom: 2px solid var(--doc-heading);
   padding-bottom: 0.4rem;
   margin-bottom: 0.85rem;
 }
 
 h2 {
-  font-size: 1.35rem;
+  font-size: clamp(1.08rem, 1.4vw + 0.78rem, 1.35rem);
+  line-height: 1.3;
   border-bottom: 1px solid var(--doc-border);
   padding-bottom: 0.3rem;
-  margin-top: 1.75rem;
+  margin-top: 1.65rem;
   margin-bottom: 0.75rem;
 }
 
@@ -398,9 +575,18 @@ a:visited {
   color: var(--doc-link-visited);
 }
 
+.hero-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
 .retro-banner {
   background-color: var(--doc-surface);
-  border: 2px outset var(--win-bevel-light);
+  border-top: 2px solid var(--win-bevel-light);
+  border-left: 2px solid var(--win-bevel-light);
+  border-right: 2px solid var(--win-bevel-deep);
+  border-bottom: 2px solid var(--win-bevel-deep);
   padding: 1.25rem;
   margin-bottom: 1.5rem;
   min-width: 0;
@@ -411,7 +597,7 @@ a:visited {
 
 .retro-grid-2 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
   gap: 1.25rem;
   margin-bottom: 1.5rem;
 }
@@ -434,10 +620,18 @@ a:visited {
   overflow-wrap: break-word;
 }
 
+/* ==========================================================================
+   Container-Queried Responsive Table (`.table-wrapper` + `.retro-table`)
+   ========================================================================== */
+.table-wrapper {
+  container-type: inline-size;
+  width: 100%;
+  margin: 1rem 0 1.5rem;
+}
+
 .retro-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 1rem 0 1.5rem;
   font-size: 14px;
 }
 
@@ -449,10 +643,72 @@ a:visited {
   vertical-align: top;
 }
 
-.retro-table th {
+.retro-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   background-color: var(--win-chrome-bg);
   color: var(--win-chrome-text);
   font-weight: 700;
+}
+
+@container (width < 600px) {
+  .retro-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .retro-table,
+  .retro-table tbody,
+  .retro-table tr,
+  .retro-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .retro-table tr {
+    background-color: var(--doc-surface);
+    border-top: 2px solid var(--win-bevel-light);
+    border-left: 2px solid var(--win-bevel-light);
+    border-right: 2px solid var(--win-bevel-deep);
+    border-bottom: 2px solid var(--win-bevel-deep);
+    padding: 0.75rem 0.85rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .retro-table td {
+    border: 0;
+    padding: 0.25rem 0;
+  }
+
+  .retro-table td:first-child {
+    font-size: 15px;
+    color: var(--doc-heading);
+    border-bottom: 1px solid var(--doc-border);
+    padding-bottom: 0.35rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .retro-table td:nth-child(2)::before {
+    content: var(--label-2, "Supported Releases") ": ";
+    content: var(--label-2, "Supported Releases") ": " / var(--label-2, "Supported Releases");
+    font-weight: 700;
+    color: var(--doc-heading);
+  }
+
+  .retro-table td:nth-child(3)::before {
+    content: var(--label-3, "Notes") ": ";
+    content: var(--label-3, "Notes") ": " / var(--label-3, "Notes");
+    font-weight: 700;
+    color: var(--doc-heading);
+  }
 }
 
 .code-viewer {
@@ -462,12 +718,14 @@ a:visited {
   border-left: 2px solid var(--win-bevel-dark);
   border-right: 2px solid var(--win-bevel-light);
   border-bottom: 2px solid var(--win-bevel-light);
-  padding: 1rem;
+  padding: 0.9rem 1rem;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   font-family: "Consolas", "Courier New", Courier, monospace;
   font-size: 12.5px;
   line-height: 1.45;
   max-height: 520px;
+  max-width: 100%;
 }
 
 /* Status Bar at Bottom of Netscape Window */
@@ -476,7 +734,7 @@ a:visited {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 6px 8px;
   padding: 4px 8px;
   font-size: 12px;
   border-top: 1px solid var(--win-bevel-light);
@@ -490,3 +748,200 @@ a:visited {
   border-bottom: 1px solid var(--win-bevel-light);
 }
 
+/* ==========================================================================
+   Quantum OS 98 / Classic Win98 Bottom Taskbar
+   ========================================================================== */
+.win98-taskbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1040;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 3px 6px calc(3px + env(safe-area-inset-bottom, 0px));
+  font-size: 12px;
+}
+
+.win98-taskbar-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.win98-start-btn {
+  min-height: 28px;
+  padding: 2px 10px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+html.rs-holiday-season .win98-start-btn {
+  background-color: #14532d;
+  color: #ffffff !important;
+}
+
+.win98-task-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 2px 10px;
+  font-weight: 700;
+  background-color: var(--win-chrome-alt);
+  color: var(--win-chrome-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  max-width: 320px;
+}
+
+.win98-systray {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  padding: 2px 10px;
+  background-color: var(--win-chrome-bg);
+  color: var(--win-chrome-text);
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Mobile & Touch Screen Refinements (`<= 767.98px`)
+   ========================================================================== */
+@media (max-width: 767.98px) {
+  .win98-desktop-workspace {
+    padding: 0.45rem 0.4rem calc(3.15rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .netscape-window {
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.38);
+  }
+
+  /* Hide redundant cross-site menubar items on mobile (available in top RaggieSoft Network menu) */
+  .menu-item-crosssite,
+  .netscape-era-note {
+    display: none !important;
+  }
+
+  .netscape-menu-items {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 6px 14px;
+  }
+
+  .netscape-menu-items a {
+    min-height: 34px;
+    font-weight: 700;
+  }
+
+  /* Touch-friendly 2-column toolbar button grid on mobile */
+  .netscape-toolbar {
+    padding: 6px;
+  }
+
+  .netscape-nav-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    width: 100%;
+  }
+
+  .netscape-nav-list > li {
+    min-width: 0;
+  }
+
+  .netscape-nav-list > li.nav-item-primary-download {
+    grid-column: 1 / -1;
+  }
+
+  .netscape-nav-list .win-btn {
+    width: 100%;
+    min-height: 40px;
+    padding: 6px 8px;
+    font-size: 12.5px;
+    text-align: center;
+  }
+
+  .netscape-throbber,
+  .location-hub-btn {
+    display: none !important;
+  }
+
+  .netscape-viewport {
+    padding: 1rem 0.9rem;
+    min-height: auto;
+  }
+
+  .retro-banner,
+  .retro-dialog-card {
+    padding: 0.9rem 0.95rem;
+  }
+
+  .hero-cta-row {
+    flex-direction: column;
+  }
+
+  .hero-cta-row .win-btn {
+    width: 100%;
+    min-height: 42px;
+    text-align: center;
+  }
+
+  .netscape-statusbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .status-cell {
+    width: 100%;
+  }
+
+  .netscape-footer-card {
+    padding: 0.75rem 0.85rem;
+  }
+
+  .win98-task-tab {
+    max-width: 175px;
+  }
+}
+
+@media (max-width: 420px) {
+  .netscape-nav-list {
+    grid-template-columns: 1fr;
+  }
+
+  .win98-holiday-tray-label {
+    display: none;
+  }
+}
+
+/* Forced-Colors (Windows High Contrast) Safety */
+@media (forced-colors: active) {
+  .win-outset,
+  .win-inset,
+  .retro-banner,
+  .retro-dialog-card,
+  .win98-taskbar {
+    border: 1px solid CanvasText;
+    box-shadow: none;
+  }
+  .win-btn {
+    border: 1px solid ButtonText;
+  }
+}
+
+@media print {
+  .win98-taskbar {
+    display: none !important;
+  }
+}
