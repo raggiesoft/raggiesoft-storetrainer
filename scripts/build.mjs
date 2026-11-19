@@ -464,7 +464,7 @@ function renderNetscapeShell({ title, description, canonicalPath, noindex = fals
     })}</script>
     <link rel="icon" type="image/png" href="https://assets.raggiesoft.com/raggiesoft-corporate/images/logos/raggiesoft-logo.png" />
     <link rel="stylesheet" href="https://assets.raggiesoft.com/storetrainer/css/win98-netscape.css?v=20261115h" />
-    <link rel="stylesheet" href="https://assets.raggiesoft.com/common/css/raggiesoft-network.css?v=20261115h" />
+    <link rel="stylesheet" href="https://assets.raggiesoft.com/common/css/raggiesoft-network.css?v=20261118a" />
     <!-- Google Analytics 4 (GA4) Telemetry Integration (G-P9RG9JVYB6) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9RG9JVYB6"></script>
     <script>
@@ -489,7 +489,7 @@ function renderNetscapeShell({ title, description, canonicalPath, noindex = fals
           <li><a href="https://engineroom.raggiesoft.com">⚙️ Engine Room</a></li>
           <li><a href="https://corporate.raggiesoft.com">🏢 Corporate</a></li>
           <li><a href="https://storetrainer.raggiesoft.com" aria-current="page" class="is-active">💾 StoreTrainer</a></li>
-          <li><a href="https://michaelpragsdale.com">👔 Michael P. Ragsdale</a></li>
+          <li><a href="https://michaelpragsdale.com">👔 Portfolio &amp; Resume</a></li>
         </ul>
       </div>
     </nav>
@@ -616,7 +616,7 @@ function renderNetscapeShell({ title, description, canonicalPath, noindex = fals
     </div>
 
     <script src="https://assets.raggiesoft.com/storetrainer/js/netscape-ui.js?v=20261115h" defer></script>
-    <script src="https://assets.raggiesoft.com/common/js/raggiesoft-network.js?v=20261115h" defer></script>
+    <script src="https://assets.raggiesoft.com/common/js/raggiesoft-network.js?v=20261118a" defer></script>
   </body>
 </html>`;
 }
