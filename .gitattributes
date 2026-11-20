@@ -1,0 +1,9 @@
+# ============================================================================
+# .gitattributes — raggiesoft-storetrainer (storetrainer.raggiesoft.com)
+# ============================================================================
+# Marks compiled static portal output (`dist/`) and serialized source archive
+# JSON as generated artifacts so GitHub Linguist reports the true ESM + CSS
+# source breakdown while keeping `dist/` tracked for `sarah-deploy.sh`.
+# ============================================================================
+dist/** linguist-generated=true
+src/data/** linguist-generated=true
