@@ -3,48 +3,139 @@
  * ============================================================================
  * scripts/build.mjs — RaggieSoft StoreTrainer (storetrainer.raggiesoft.com)
  * ============================================================================
- * Architectural Overview:
- * Static Site Generation (SSG) compiler for `storetrainer.raggiesoft.com`.
+ * READ-ALONG TEACHING OVERVIEW (JavaScript 101 — Node.js Static Site Generator):
  *
- * Ground-Truth Verification:
- * - RaggieSoft StoreTrainer (`TStore.exe`, v1.0) is a 100% hand-written
- *   (pre-AI, 2018–2020) Win32 desktop utility authored in Visual Basic 6.0
- *   (`TStore.vbp`) inside a Windows 2000 Professional SP4 VM (with a `.NET`
- *   port `TStore.NET` and NSIS Wizard95 installers `TSSetup.nsi` and
- *   `TSSetup-Patch.nsi`) to store, index, and launch PC games alongside their
- *   associated game trainers (cheat utilities) and command-line arguments
- *   across Windows 95 through Windows 11.
+ * What is this file, and what is a Static Site Generator (SSG)?
+ *   Normally, JavaScript runs inside a visitor's web browser. However, with
+ *   Node.js (`npm run build`, which runs `node scripts/build.mjs`), JavaScript
+ *   can also run directly on your computer at *build time*—reading files from
+ *   disk, transforming data, and writing finished `.html`, `.css`, `.js`, and
+ *   `.xml` files into an output folder (`./dist`).
  *
- * Aesthetic & Accessibility:
- * - Styled after Netscape Communicator 4.78 running on Windows 98 / Windows
- *   2000 Professional SP4 (3D chiseled bevel chrome, classic titlebar gradient,
- *   Netscape navigation bar, and sunken document viewport).
- * - Modern HTML5 / CSS3 under the hood with strict WCAG 2.1 AA / Section 508
- *   compliance, keyboard operability, OpenGraph (`og:*`) + Twitter Card social
- *   metadata (`title <= 60` chars, `description <= 155` chars), and native
- *   `prefers-color-scheme: light | dark` support (Win98 Silver & Teal in Light
- *   Mode, Win2000 High-Contrast Dark Terminal in Dark Mode).
+ *   That pattern is called a **Static Site Generator (SSG)**. Instead of
+ *   running a database or server-side script every time a visitor requests a
+ *   web page, this script pre-builds the entire `storetrainer.raggiesoft.com`
+ *   website once ahead of time into ultra-fast, zero-database static files!
  *
- * Routes Emitted to `./dist`:
- * - `/index.html` (StoreTrainer Portal, `tssetup100.exe` Download, `.sfile` Format & OS Matrix)
- * - `/source/index.html` (Interactive VB6 `TStore.vbp` & `TStore.NET` Source Code Inspector)
- * - `/installer/index.html` (NSIS Wizard95 `TSSetup.nsi` & `TSSetup-Patch.nsi` Architecture)
+ * What is RaggieSoft StoreTrainer (`TStore.exe`, v1.0)?
+ *   - StoreTrainer is a 100% hand-written (pre-AI, 2018–2020) Win32 desktop
+ *     utility authored by Michael P. Ragsdale in Visual Basic 6.0 (`TStore.vbp`)
+ *     inside a Windows 2000 Professional SP4 virtual machine (alongside a
+ *     Visual Basic .NET port `TStore.NET` and Nullsoft NSIS Wizard95 installers
+ *     `TSSetup.nsi` and `TSSetup-Patch.nsi`).
+ *   - It indexes, stores, and launches classic and modern PC games alongside
+ *     their companion game trainers (cheat utilities) and command-line flags
+ *     across Windows 95 through modern Windows PCs.
+ *
+ * How does this compiler turn JSON / VB6 source archives into a retro website?
+ *   1. Data Ingestion (`loadStoreTrainerSourceFiles`):
+ *      Reads the 18 original Visual Basic 6.0 (`.vbp`, `.frm`, `.bas`), VB.NET
+ *      (`.vb`), documentation (`.txt`), and NSIS installer (`.nsi`) source
+ *      files—snapshotting them into `src/data/storetrainer-source.json` so
+ *      production builds succeed anywhere—and loads them into a JavaScript array.
+ *   2. Safe HTML Escaping (`escapeHtml`):
+ *      Converts special HTML characters (`&`, `<`, `>`, `"`, `'`) into safe
+ *      HTML entities (`&amp;`, `&lt;`, `&gt;`, `&quot;`, `&#39;`) so raw VB6/C#
+ *      comparisons (`If x < 10`) or tags (`<GameName>.sfile`) never break HTML
+ *      layout or introduce Cross-Site Scripting (XSS) vulnerabilities.
+ *   3. Shared Retro Window Layout (`renderNetscapeShell`) & Route Renderers:
+ *      Uses JavaScript **template literals** (backtick strings `` `...` ``) to
+ *      wrap each page inside an authentic 1998–2000 **Netscape Communicator
+ *      4.78 / Windows 2000 SP4** application window shell (3D beveled title
+ *      bar, menu bar, toolbar, `"Netsite:"` location bar, sunken document
+ *      viewport, status bar, and fixed bottom Windows 98 taskbar) with full
+ *      WCAG 2.1 AA accessibility, SEO/OpenGraph metadata, and Light/Dark Mode.
+ *   4. Static Bundle Emission & CDN Asset Mirroring (`buildStoreTrainerSite`):
+ *      Writes `/index.html`, `/source/index.html`, `/installer/index.html`,
+ *      `/404.html`, `/sitemap.xml`, and `/robots.txt` into `./dist`, mirrors
+ *      `win98-netscape.css` and `netscape-ui.js` to both `./dist/assets/` and
+ *      `raggiesoft-assets/storetrainer/`, and optionally starts a local HTTP
+ *      preview server when invoked with `--serve` (`npm run dev`).
  * ============================================================================
  */
 
+/*
+ * ============================================================================
+ * SECTION 1: Node.js ES Module (`import`) Statements & Path Setup
+ * ============================================================================
+ * Why does this file have a `.mjs` extension (and `"type": "module"` in `package.json`)?
+ *   Modern JavaScript uses **ES Modules (ESM)**—the standardized `import` and
+ *   `export` syntax shared by both browsers and Node.js (replacing older Node
+ *   `require(...)` calls).
+ *
+ * Why do the module names start with `'node:'`?
+ *   The `'node:'` prefix explicitly tells Node.js: "Load this built-in standard
+ *   library module that ships inside Node itself—do NOT waste time searching
+ *   `node_modules/` on disk."
+ *   - `node:fs` ("File System"): Reads/writes files and creates/deletes folders.
+ *   - `node:path`: Safely joins and resolves file paths across macOS/Linux (`/`)
+ *     and Windows (`\`) without fragile manual string concatenation.
+ *   - `node:http`: Creates a local web server when `--serve` is passed.
+ *   - `{ fileURLToPath }` from `node:url`: Notice the curly braces `{ ... }`!
+ *     That is a **named import**, pulling one specific helper function out of
+ *     the `node:url` module rather than importing the entire module object.
+ */
 import fs from 'node:fs';
 import path from 'node:path';
 import http from 'node:http';
 import { fileURLToPath } from 'node:url';
 
+/*
+ * Computing Project Directory Paths in ES Modules:
+ *   In older Node.js scripts (CommonJS), `__filename` and `__dirname` existed
+ *   automatically. In modern ES Modules, Node instead gives us `import.meta.url`,
+ *   which looks like `'file:///Users/.../storetrainer/scripts/build.mjs'`.
+ *
+ *   Step-by-step path math:
+ *   1. `fileURLToPath(import.meta.url)` converts that `file://` URL into a real
+ *      operating-system file path (`.../subdomains/storetrainer/scripts/build.mjs`).
+ *   2. `path.dirname(__filename)` strips off `/build.mjs` to give the folder
+ *      containing this script (`.../subdomains/storetrainer/scripts`).
+ *   3. `path.resolve(__dirname, '..')` walks up one parent folder (`..`) to
+ *      reach the StoreTrainer project root (`.../subdomains/storetrainer`).
+ *   4. `path.join(...)` builds the exact paths to our output directory (`dist`)
+ *      and our committed JSON source archive (`src/data/storetrainer-source.json`).
+ */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, '..');
 const distDir = path.join(projectRoot, 'dist');
 const sourceSnapshotPath = path.join(projectRoot, 'src', 'data', 'storetrainer-source.json');
 
+/*
+ * ============================================================================
+ * SECTION 2: Safe HTML Escaping & Disk File Helper Functions
+ * ============================================================================
+ */
+
 /**
- * Escapes HTML special characters for safe interpolation.
+ * Escapes HTML special characters for safe interpolation inside HTML elements
+ * and double/single-quoted HTML attributes.
+ *
+ * TEACHING NOTE — Why is `escapeHtml` CRITICAL for security and valid HTML?
+ *   When we inject dynamic text—especially raw Visual Basic 6.0, VB.NET, or C#
+ *   source code—into an HTML string like `<code>${code}</code>`, the browser's
+ *   HTML parser cannot tell the difference between our page's HTML tags and
+ *   angle brackets inside the source code!
+ *   - For example, VB6 code containing `If Version < 2 And Flags > 0` or a
+ *     comment mentioning `<GameName>.sfile` would trick the browser into
+ *     thinking `< 2` or `<GameName>` is a brand-new HTML tag, mangling the rest
+ *     of the page!
+ *   - Worse, if any string ever contained `<script>...</script>` or `" onload="..."`,
+ *     injecting it unescaped would let arbitrary JavaScript execute in visitors'
+ *     browsers—a classic security vulnerability called **Cross-Site Scripting (XSS)**.
+ *
+ * How this function works line by line:
+ *   - `str ?? ''` uses the **nullish coalescing operator (`??`)**: if `str` is
+ *     `null` or `undefined`, substitute an empty string `''`; then `String(...)`
+ *     guarantees we have a string before calling `.replace(...)`.
+ *   - Each `.replace(/pattern/g, replacement)` uses a Regular Expression with
+ *     the `g` ("global") flag so *every* occurrence in the string is replaced,
+ *     not just the first one!
+ *   - ORDER MATTERS: Notice `&` -> `&amp;` MUST happen FIRST! If we replaced
+ *     `<` -> `&lt;` first and `&` -> `&amp;` second, the `&` inside `&lt;`
+ *     would get double-escaped into `&amp;lt;` and show up literally on screen!
+ *
  * @param {string} str
  * @returns {string}
  */
@@ -58,7 +149,25 @@ function escapeHtml(str) {
 }
 
 /**
- * Writes a static file to `./dist`, creating parent directories automatically.
+ * Writes a static text file inside `./dist`, automatically creating any missing
+ * parent folders first.
+ *
+ * TEACHING NOTE — Synchronous File I/O (`Sync` methods) in Build Scripts:
+ *   Node.js offers both asynchronous (`fs.promises.writeFile`) and synchronous
+ *   (`fs.writeFileSync`) file methods. Inside a live web server handling
+ *   thousands of users at once, blocking the main thread is avoided; however,
+ *   inside a short-lived CLI build script like `build.mjs` that runs top-to-bottom
+ *   in a few milliseconds, `*Sync` methods make control flow straightforward
+ *   and deterministic:
+ *   1. `path.join(distDir, relPath)` turns `'source/index.html'` into
+ *      `.../dist/source/index.html`.
+ *   2. `fs.mkdirSync(path.dirname(fullPath), { recursive: true })` ensures the
+ *      parent directory (`.../dist/source`) exists—working just like `mkdir -p`
+ *      on the command line (creating nested directories if missing, and doing
+ *      nothing without error if they already exist).
+ *   3. `fs.writeFileSync(fullPath, content, 'utf-8')` writes the text to disk
+ *      encoded as standard UTF-8 Unicode (supporting emojis like `💾` and `🎄`).
+ *
  * @param {string} relPath
  * @param {string} content
  */
@@ -68,15 +177,47 @@ function writeDistFile(relPath, content) {
   fs.writeFileSync(fullPath, content, 'utf-8');
 }
 
+/*
+ * ============================================================================
+ * SECTION 3: Loading & Snapshotting Original VB6, VB.NET, & NSIS Source Files
+ * ============================================================================
+ */
+
 /**
  * Loads the real VB6, VB.NET, and NSIS source files from `/ai-staging/StoreTrainer`
  * when building in the local workspace and persists a committed snapshot at
  * `src/data/storetrainer-source.json` so builds on the production droplet succeed
  * without needing `/ai-staging` deployed.
+ *
+ * TEACHING NOTE — Dual-Source Build Resilience (Staging Files -> JSON Snapshot):
+ *   Why check two places for the StoreTrainer source code?
+ *   - On the author's local workstation, the raw original `.vbp`, `.frm`,
+ *     `.bas`, `.vb`, `.txt`, and `.nsi` files live in `ai-staging/StoreTrainer`
+ *     (which is local-only and not pushed to the production web server).
+ *   - Whenever a build runs locally and finds `aiStagingDir`, it reads every
+ *     raw source file, normalizes Windows `\r\n` (Carriage Return + Line Feed)
+ *     line endings into Unix `\n` line endings for clean `<pre><code>` display,
+ *     and saves the complete array as formatted JSON (`JSON.stringify(loaded, null, 2)`)
+ *     inside `src/data/storetrainer-source.json` (which IS committed to Git).
+ *   - Later, when the deployment script builds this site on the remote Linux
+ *     production server where `ai-staging/` does not exist, line 232 falls back
+ *     to `JSON.parse(fs.readFileSync(sourceSnapshotPath, 'utf-8'))`, turning
+ *     that JSON text right back into the exact same JavaScript array of objects!
+ *
  * @returns {Array<{id: string, title: string, category: string, path: string, description: string, code: string}>}
  */
 function loadStoreTrainerSourceFiles() {
+  // Resolve up 3 levels from `raggiesoft-servers/raggiesoft.com/subdomains/storetrainer`
+  // to reach `$HOME/Developer/ai-staging/StoreTrainer` on local workstations.
   const aiStagingDir = path.resolve(projectRoot, '../../../ai-staging/StoreTrainer');
+
+  // Manifest catalog of all 18 original StoreTrainer files in display order.
+  // Each object provides:
+  //   - `id`: URL-safe HTML anchor slug (e.g. `<section id="tstore-vbp">`)
+  //   - `title`: Human-readable heading displayed on `/source` or `/installer`
+  //   - `category`: Used by `.filter(...)` to separate VB6/.NET code from NSIS scripts
+  //   - `relPath`: Relative file path inside `ai-staging/StoreTrainer/`
+  //   - `description`: Plain-English summary of what that module/script does
   const fileSpecs = [
     {
       id: 'tstore-vbp',
@@ -206,11 +347,16 @@ function loadStoreTrainerSourceFiles() {
     }
   ];
 
+  // PATH A (Local Workstation): Read live files from `ai-staging/StoreTrainer`
+  // and refresh `src/data/storetrainer-source.json`.
   if (fs.existsSync(aiStagingDir)) {
     const loaded = [];
+    // `for...of` loops cleanly over every object in the `fileSpecs` array.
     for (const spec of fileSpecs) {
       const full = path.join(aiStagingDir, spec.relPath);
       if (fs.existsSync(full)) {
+        // Classic Windows 2000 / VB6 text files end every line with `\r\n` (CRLF).
+        // Replacing `/\r\n/g` with `\n` normalizes line breaks across OSes.
         const raw = fs.readFileSync(full, 'utf-8').replace(/\r\n/g, '\n');
         loaded.push({
           id: spec.id,
@@ -223,31 +369,133 @@ function loadStoreTrainerSourceFiles() {
       }
     }
     if (loaded.length > 0) {
+      // Persist the JSON snapshot (`null, 2` pretty-prints with 2-space indentation
+      // so Git diffs remain clean and human-readable).
       fs.mkdirSync(path.dirname(sourceSnapshotPath), { recursive: true });
       fs.writeFileSync(sourceSnapshotPath, JSON.stringify(loaded, null, 2), 'utf-8');
       return loaded;
     }
   }
 
+  // PATH B (Production / CI Build): Parse the committed JSON snapshot directly.
   if (fs.existsSync(sourceSnapshotPath)) {
     return JSON.parse(fs.readFileSync(sourceSnapshotPath, 'utf-8'));
   }
+
+  // Safety fallback: return an empty array so array methods (`.filter`, `.map`)
+  // in page renderers never crash on `undefined`.
   return [];
 }
 
+/*
+ * ============================================================================
+ * SECTION 4: Client-Side Browser Script Generator (`netscape-ui.js`)
+ * ============================================================================
+ */
+
 /**
- * Builds `/assets/netscape-ui.js` implementing the Modern Web Guidance
- * two-state color-scheme toggle (Win98 Light vs. Win2000 High-Contrast Dark).
+ * Builds the source text of `netscape-ui.js`, implementing the Modern Web
+ * Guidance two-state color-scheme toggle (Win98 Light vs. Win2000 High-Contrast
+ * Dark), seasonal Quantum OS 98 Holiday chrome sync, and live Win98 tray clock.
+ *
+ * TEACHING NOTE — Multi-Line Template Literals & Single-Source Asset Sync:
+ *   Notice that `return \`...\`;` uses backticks (`` ` ``) instead of single or
+ *   double quotes! In JavaScript, backtick strings are called **template
+ *   literals**: they can span hundreds of lines while preserving exact line
+ *   breaks and indentation.
+ *
+ *   Why return `netscape-ui.js` from this function?
+ *   In `buildStoreTrainerSite()` below, the string returned here is written to
+ *   BOTH `./dist/assets/netscape-ui.js` (for local previewing) AND
+ *   `raggiesoft-assets/storetrainer/js/netscape-ui.js` (served in production by
+ *   `https://assets.raggiesoft.com`), guaranteeing both copies stay 100%
+ *   byte-for-byte identical on every `npm run build`.
+ *
  * @returns {string}
  */
 function buildNetscapeClientJs() {
   return `/**
  * @license MIT
- * netscape-ui.js — Client Progressive Enhancement for storetrainer.raggiesoft.com
- * Implements Modern Web Guidance dark-mode-toggle (Win98 Light vs. Win2000 Dark)
- * plus automatic Quantum OS 98 Holiday Desktop Edition chrome & taskbar clock.
+ * ============================================================================
+ * netscape-ui.js — Client-Side Progressive Enhancement (storetrainer.raggiesoft.com)
+ * ============================================================================
+ * READ-ALONG TEACHING OVERVIEW (JavaScript 101 — Browser DOM & Theme State):
+ *
+ * What is this file?
+ *   This is the browser-side JavaScript file loaded at the bottom of every
+ *   page on storetrainer.raggiesoft.com via:
+ *     <script src=".../storetrainer/js/netscape-ui.js" defer></script>
+ *
+ *   (Note on Build Pipeline Sync: This exact file is generated by
+ *   buildNetscapeClientJs() inside scripts/build.mjs and written to both
+ *   ./dist/assets/netscape-ui.js and raggiesoft-assets/storetrainer/js/netscape-ui.js
+ *   so local builds and the production CDN stay 100% identical.)
+ *
+ * What is "Progressive Enhancement"?
+ *   Because scripts/build.mjs pre-compiles all StoreTrainer pages into complete
+ *   static HTML files and win98-netscape.css handles responsive layouts and OS
+ *   Dark Mode automatically via CSS @media (prefers-color-scheme: dark), the
+ *   entire site works even if JavaScript is turned off!
+ *
+ *   When JavaScript IS enabled, this small script layers three interactive
+ *   desktop enhancements on top of the static HTML:
+ *     1. Two-State Desktop Theme Toggle (#theme-toggle): Lets visitors switch
+ *        between "Windows 98 Classic" (Silver & Teal Light Mode) and "Windows
+ *        2000 Dark" (High-Contrast Midnight Terminal), remembering manual
+ *        overrides in localStorage and automatically unpinning when toggled
+ *        back to match the operating system's preference.
+ *     2. Quantum OS 98 Holiday Desktop Sync: Detects when the global network
+ *        script (raggiesoft-network.js) adds the 'rs-holiday-season' class to
+ *        <html> between Black Friday and New Year's Day, updating the Netscape
+ *        window title bar, Start button icon, and Holiday system tray badge.
+ *     3. Live Windows 98 System Tray Clock (#win98-clock): Displays the
+ *        visitor's real local time (e.g., "10:42 PM") in the bottom-right
+ *        taskbar tray and refreshes it every 30 seconds.
+ * ============================================================================
+ */
+
+/*
+ * STEP 1: Immediately Invoked Function Expression (IIFE) — '(function () { ... })();'
+ * ----------------------------------------------------------------------------
+ * Why wrap the entire file inside '(function () { ... })();'?
+ *   In classic browser <script> tags (scripts loaded without type="module"),
+ *   any variable declared at the top level of a file automatically becomes a
+ *   property on the global 'window' object. If two scripts on the same page
+ *   both declared 'var meta = ...' or 'function updateLabel() {}', the second
+ *   script would overwrite the first!
+ *
+ *   Wrapping our code in an anonymous function '(function () { ... })' and
+ *   immediately calling it with the trailing '()' creates a private local
+ *   function scope. None of our variables or helper functions leak onto
+ *   'window', so this script peacefully coexists with raggiesoft-network.js
+ *   and Google Analytics.
  */
 (function () {
+  /*
+   * STEP 2: Caching DOM Element References
+   * --------------------------------------------------------------------------
+   * What is the DOM?
+   *   When a web browser reads an HTML file, it turns every HTML tag (<meta>,
+   *   <button>, <span>, etc.) into a live JavaScript object in memory. Together,
+   *   this tree of objects is called the Document Object Model (DOM), exposed
+   *   through the global 'document' object.
+   *
+   * Why look up these elements once at the top of the function?
+   *   - document.querySelector('meta[name="color-scheme"]') uses a CSS
+   *     attribute selector to find <meta name="color-scheme" content="...">
+   *     inside <head>. Updating this tag tells the browser's built-in UI
+   *     (scrollbars, form controls) whether to paint in light or dark colors.
+   *   - document.getElementById('...') looks up a specific HTML element by its
+   *     unique id="..." attribute (the fastest lookup method in the DOM).
+   *   - Storing these references in local variables ('meta', 'toggleBtn', etc.)
+   *     means our event handlers and 30-second clock timer can reuse them
+   *     directly instead of searching the HTML tree over and over.
+   *   - Notice that because this script is loaded with the 'defer' attribute,
+   *     the browser guarantees the full HTML document has already been parsed
+   *     before line 1 of this function runs! Even so, every helper below
+   *     checks whether an element exists (e.g., 'if (!clockEl) return;') so
+   *     the script never crashes if a future page omits an optional widget.
+   */
   var meta = document.querySelector('meta[name="color-scheme"]');
   var toggleBtn = document.getElementById('theme-toggle');
   var toggleLabel = document.getElementById('theme-toggle-label');
@@ -256,16 +504,53 @@ function buildNetscapeClientJs() {
   var holidayTray = document.getElementById('win98-holiday-tray');
   var clockEl = document.getElementById('win98-clock');
 
+  /*
+   * STEP 3: Detecting Seasonal Holiday Mode ('isHolidayActive')
+   * --------------------------------------------------------------------------
+   * - 'document.documentElement' always points to the root <html> element.
+   * - '.classList.contains(...)' returns true if <html> currently has the CSS
+   *   class 'rs-holiday-season' (which raggiesoft-network.js adds automatically
+   *   during the annual Black Friday -> Jan 1 holiday window).
+   */
   function isHolidayActive() {
     return document.documentElement.classList.contains('rs-holiday-season');
   }
 
+  /*
+   * STEP 4: Reading the Operating System's Color Scheme ('getSystemScheme')
+   * --------------------------------------------------------------------------
+   * How does JavaScript know whether macOS, Windows, iOS, Android, or Linux is
+   * currently set to Dark Mode or Light Mode?
+   *   - 'window.matchMedia(query)' is the JavaScript twin of a CSS @media rule!
+   *   - Passing '(prefers-color-scheme: dark)' returns a MediaQueryList object
+   *     whose boolean '.matches' property is true when the OS prefers dark UI.
+   *   - Checking 'window.matchMedia && ...' first is called "feature detection":
+   *     if a very old or minimal browser does not support matchMedia, the '&&'
+   *     short-circuits cleanly and our ternary operator ('? :') safely falls
+   *     back to 'light' instead of throwing a TypeError.
+   */
   function getSystemScheme() {
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
       ? 'dark'
       : 'light';
   }
 
+  /*
+   * STEP 5: Resolving the Active Theme ('getRenderedScheme')
+   * --------------------------------------------------------------------------
+   * Theme Priority Cascade (User Override > System Default):
+   *   1. First, check 'localStorage.getItem("color-scheme")'.
+   *      What is localStorage? It is a small key-value dictionary built into
+   *      the browser that persists across page reloads and browser restarts
+   *      for this domain (storetrainer.raggiesoft.com).
+   *   2. Why wrap localStorage inside 'try { ... } catch (e) {}'?
+   *      In strict privacy modes (or when a user disables site storage/cookies
+   *      in browser settings), merely reading 'localStorage' can throw a
+   *      SecurityError exception! Wrapping it in try/catch ensures the site
+   *      keeps working smoothly using the OS default instead of halting.
+   *   3. If the visitor previously pinned 'light' or 'dark', return that choice;
+   *      otherwise, fall back to getSystemScheme() so the site follows the OS.
+   */
   function getRenderedScheme() {
     var stored = null;
     try {
@@ -277,6 +562,25 @@ function buildNetscapeClientJs() {
     return getSystemScheme();
   }
 
+  /*
+   * STEP 6: Synchronizing Window Chrome for Holiday Mode ('syncQuantumHolidayChrome')
+   * --------------------------------------------------------------------------
+   * Updates three pieces of nostalgic desktop UI whenever Holiday Mode turns
+   * on or off:
+   *   1. Window Title Bar (#win-titlebar-caption):
+   *      Reads the page's clean title from the custom HTML attribute
+   *      'data-base-title' via .getAttribute() (falling back to 'RaggieSoft
+   *      StoreTrainer' via '||'), then appends either the festive "[Quantum OS
+   *      98 — Holiday Desktop]" suffix or "[Windows 2000 Professional SP4]".
+   *      SECURITY NOTE: We assign to '.textContent' (plain text), NEVER
+   *      '.innerHTML', so characters like '&' or '<' are never parsed as HTML.
+   *   2. Start Button Icon (#win98-start-icon):
+   *      Swaps the decorative icon between a holiday tree and a classic window.
+   *   3. Taskbar Tray Indicator (#win98-holiday-tray):
+   *      Sets the standard DOM boolean '.hidden' property ('hidden = !holiday'),
+   *      which adds or removes the HTML 'hidden' attribute so both visual
+   *      browsers and assistive screen readers hide the badge outside holidays.
+   */
   function syncQuantumHolidayChrome() {
     var holiday = isHolidayActive();
     if (titleCaption) {
@@ -293,6 +597,22 @@ function buildNetscapeClientJs() {
     }
   }
 
+  /*
+   * STEP 7: Applying the Theme Attribute & Updating the Button Label ('updateLabel')
+   * --------------------------------------------------------------------------
+   * This function bridges JavaScript state and CSS styling:
+   *   - 'document.documentElement.setAttribute("data-theme", current)' sets
+   *     either data-theme="light" or data-theme="dark" on the root <html> tag.
+   *     In win98-netscape.css, selectors like [data-theme="light"] and
+   *     [data-theme="dark"] immediately swap every CSS custom property
+   *     (--win-desktop, --win-chrome-bg, --doc-bg, bevel colors, etc.)!
+   *   - Next, it calls syncQuantumHolidayChrome() and updates the visible text
+   *     inside #theme-toggle-label so the user always sees:
+   *       (a) Which theme is currently active (Win98 Classic vs. Win2000 Dark,
+   *           or Holiday Pine vs. Holiday Dark), AND
+   *       (b) Whether it is "(Pinned)" manually in localStorage or following
+   *           "System (...)" automatically.
+   */
   function updateLabel() {
     var current = getRenderedScheme();
     var holiday = isHolidayActive();
@@ -318,6 +638,15 @@ function buildNetscapeClientJs() {
     }
   }
 
+  /*
+   * STEP 8: Live Windows 98 Taskbar System Tray Clock ('updateTaskbarClock')
+   * --------------------------------------------------------------------------
+   *   - 'new Date()' captures the current instant from the user's device clock.
+   *   - '.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })' uses
+   *     the browser's built-in Internationalization API: passing an empty array
+   *     '[]' tells the browser to respect the visitor's own regional locale
+   *     (12-hour "10:42 PM" vs. 24-hour "22:42") without showing seconds.
+   */
   function updateTaskbarClock() {
     if (!clockEl) return;
     try {
@@ -326,13 +655,58 @@ function buildNetscapeClientJs() {
     } catch (e) {}
   }
 
+  /*
+   * STEP 9: Initial Startup Synchronization & Periodic Timer
+   * --------------------------------------------------------------------------
+   *   - Run updateLabel() and updateTaskbarClock() immediately so the toolbar
+   *     button and bottom-right tray clock reflect live state on page load
+   *     instead of waiting for the first timer tick.
+   *   - 'setInterval(updateTaskbarClock, 30000)' schedules updateTaskbarClock
+   *     to run every 30,000 milliseconds (30 seconds)—frequent enough that the
+   *     minute counter stays accurate while using virtually zero CPU/battery.
+   */
   updateLabel();
   updateTaskbarClock();
   setInterval(updateTaskbarClock, 30000);
 
+  /*
+   * STEP 10: Cross-Script & Window Lifecycle Event Listeners
+   * --------------------------------------------------------------------------
+   *   - 'raggiesoft:holidaychange' is a CustomEvent dispatched on 'window' by
+   *     the shared raggiesoft-network.js script if Holiday Mode changes state.
+   *   - 'load' fires once all stylesheets and deferred scripts have finished
+   *     loading, guaranteeing a final check in case raggiesoft-network.js
+   *     mutated <html class="rs-holiday-season"> right after our initial run.
+   */
   window.addEventListener('raggiesoft:holidaychange', updateLabel);
   window.addEventListener('load', updateLabel);
 
+  /*
+   * STEP 11: Accessible Two-State Theme Toggle Handler ('click' Event)
+   * --------------------------------------------------------------------------
+   * Keyboard & Assistive Technology Accessibility Note:
+   *   In HTML, '#theme-toggle' is a native <button type="button"> element with
+   *   an explicit aria-label. Because it is a real <button> (not a <div> or
+   *   <span>), browsers give us full WCAG 2.1 AA keyboard accessibility for
+   *   free: pressing Tab focuses the button, and pressing Enter OR Space
+   *   automatically triggers this exact 'click' event listener!
+   *
+   * Smart "Auto-Unpin" Toggle Logic (Modern Web Guidance Pattern):
+   *   1. Determine the currently displayed scheme ('light' or 'dark') and flip
+   *      to the opposite scheme ('target').
+   *   2. Compare 'target' against the operating system's own preference ('sys'):
+   *      - If 'target === sys' (for example, your OS is in Dark Mode, you had
+   *        temporarily pinned Light Mode, and now you click back to Dark Mode),
+   *        we call localStorage.removeItem('color-scheme') and restore
+   *        meta.content = 'light dark'. That "unpins" the manual override so
+   *        your browser goes back to following automatic OS day/night changes!
+   *      - If 'target !== sys' (you are choosing the opposite of your OS), we
+   *        save localStorage.setItem('color-scheme', target) and set
+   *        meta.content = target so both our CSS and native browser scrollbars
+   *        lock onto your chosen theme across all StoreTrainer pages.
+   *   3. Finally, call updateLabel() to apply data-theme="..." on <html> and
+   *      refresh the button text immediately with zero page reload.
+   */
   if (toggleBtn && meta) {
     toggleBtn.addEventListener('click', function () {
       var current = getRenderedScheme();
@@ -356,18 +730,41 @@ function buildNetscapeClientJs() {
 `;
 }
 
+/*
+ * ============================================================================
+ * SECTION 5: Reusable HTML Document Shell (`renderNetscapeShell`)
+ * ============================================================================
+ */
+
 /**
- * Wraps route content inside the Netscape Communicator 4.78 / Windows 2000 SP4 window shell.
+ * Wraps route-specific HTML content inside the shared Netscape Communicator 4.78
+ * / Windows 2000 Professional SP4 application window shell.
+ *
+ * TEACHING NOTE — Object Parameter Destructuring (`{ title, description, ... }`):
+ *   Instead of passing 5 positional arguments (`renderNetscapeShell(a, b, c, d, e)`)
+ *   where callers have to remember argument order, this function accepts a
+ *   single configuration object and **destructures** its named properties right
+ *   in the parameter list! Notice `noindex = false`: if a caller omits `noindex`,
+ *   JavaScript automatically defaults it to `false` (only `/404` passes `true`).
+ *
  * @param {Object} opts
  * @param {string} opts.title
  * @param {string} opts.description
  * @param {string} opts.canonicalPath
+ * @param {boolean} [opts.noindex=false]
  * @param {string} opts.bodyHtml
  * @returns {string}
  */
 function renderNetscapeShell({ title, description, canonicalPath, noindex = false, bodyHtml }) {
+  // Enforce strict SEO & social-card length limits (`<= 60` chars for titles,
+  // `<= 155` chars for descriptions) via `.slice(start, end)`, then HTML-escape
+  // so `&` or quotes never corrupt `<meta content="...">` attributes.
   const safeTitle = escapeHtml(title.slice(0, 60));
   const safeDesc = escapeHtml(description.slice(0, 155));
+
+  // Error pages (`/404`) must NOT declare a `<link rel="canonical">` and should
+  // emit `<meta name="robots" content="noindex, follow" />` so search engines
+  // follow outbound links back to the site without indexing the 404 error page.
   const isErrorPage = canonicalPath === '/404';
   const canonicalUrl = `https://storetrainer.raggiesoft.com${canonicalPath === '/' ? '' : canonicalPath}`;
   const robotsMetaHtml = noindex
@@ -378,12 +775,18 @@ function renderNetscapeShell({ title, description, canonicalPath, noindex = fals
     : `\n    <link rel="canonical" href="${escapeHtml(canonicalUrl)}" />`;
   const ogImage = 'https://assets.raggiesoft.com/raggiesoft-corporate/images/og/raggiesoft-corporate-og.jpg';
 
+  // Primary Netscape toolbar navigation routes.
   const navItems = [
     { href: '/', label: '🏠 Home & Download' },
     { href: '/source', label: '💾 VB6 & .NET Source' },
     { href: '/installer', label: '📦 NSIS Wizard95 Installer' }
   ];
 
+  // Transform the `navItems` array into HTML `<li>` items using `.map(...)` + `.join(...)`.
+  // When `item.href === canonicalPath`, we add `aria-current="page"`:
+  //   1. Accessibility: Screen readers announce "current page" to blind/low-vision users.
+  //   2. Visual UI: `win98-netscape.css` styles `.win-btn[aria-current="page"]` with
+  //      inverted 3D bevels so the active page button looks physically pressed down!
   const navHtml = navItems
     .map((item) => {
       const isCurrent = item.href === canonicalPath;
@@ -391,6 +794,32 @@ function renderNetscapeShell({ title, description, canonicalPath, noindex = fals
     })
     .join('\n            ');
 
+  /*
+   * READ-ALONG GUIDE TO THE HTML DOCUMENT TEMPLATE BELOW:
+   *   1. Synchronous FOUC-Prevention Script in `<head>`:
+   *      Before the browser paints `<body>`, a tiny inline `<script>` checks
+   *      `localStorage.getItem('color-scheme')` and `matchMedia` to set
+   *      `data-theme="light|dark"` on `<html>` immediately. That prevents a
+   *       jarring white flash ("Flash of Unstyled Content" / FOUC) when loading
+   *      a page in Dark Mode!
+   *   2. OpenGraph (`og:*`), Twitter Cards, & Schema.org JSON-LD (`@graph`):
+   *      Provides rich link previews on chat/social platforms and machine-readable
+   *      `SoftwareApplication` / `WebSite` / `WebPage` structured data serialized
+   *      safely via `JSON.stringify(...)`.
+   *   3. Accessibility Landmarks & Keyboard Navigation:
+   *      - `<a href="#content" class="skip-link">` lets keyboard users press
+   *        `Tab` + `Enter` to jump straight to `<main id="content">`.
+   *      - `<main id="content" ... tabindex="-1">`: Setting `tabindex="-1"`
+   *        allows the `#content` anchor jump to move keyboard focus directly
+   *        onto `<main>` without placing `<main>` into normal `Tab` stops.
+   *      - Decorative Win32 window chrome (`🖳`, `[_] [□] [×]`, Netscape `N`
+   *        throbber) uses `aria-hidden="true"` so screen readers skip visual
+   *        noise and read meaningful headings and links cleanly.
+   *   4. Deferred Scripts (`defer` at bottom of `<body>`):
+   *      `defer` downloads `netscape-ui.js` and `raggiesoft-network.js` in
+   *      parallel without blocking HTML rendering, executing them in order once
+   *      the DOM is ready.
+   */
   return `<!doctype html>
 <html lang="en">
   <head>
@@ -621,6 +1050,27 @@ function renderNetscapeShell({ title, description, canonicalPath, noindex = fals
 </html>`;
 }
 
+/*
+ * ============================================================================
+ * SECTION 6: Individual Route Page Renderers (`/`, `/source`, `/installer`)
+ * ============================================================================
+ */
+
+/**
+ * Compiles `/index.html` — The main StoreTrainer portal, `tssetup100.exe`
+ * download CTA, `.sfile` game-profile specification, and Supported PC Systems
+ * compatibility matrix.
+ *
+ * TEACHING NOTE — Inline CSS Custom Properties for Responsive Tables:
+ *   Look closely at `<div class="table-wrapper" style="--label-2: 'Supported Releases'; --label-3: 'Notes';">`
+ *   inside `bodyHtml` below! That passes custom column labels directly to
+ *   `win98-netscape.css`, which uses CSS `@container (width < 600px)` to
+ *   reflow table rows into stacked mobile Win32 cards with bold inline prefixes
+ *   (`Supported Releases: ...`, `Notes: ...`)—all with zero JavaScript!
+ *
+ * @param {Array<{id: string, title: string, category: string, path: string, description: string, code: string}>} sourceFiles
+ * @returns {string}
+ */
 function renderHomePage(sourceFiles) {
   const bodyHtml = `
     <div class="retro-banner">
@@ -700,6 +1150,7 @@ Line 7: TrainerPath  (Trainer working directory passed to ShellExecuteA)</pre>
     </section>
   `;
 
+  // Wrap the home page body inside the Netscape Communicator 4.78 window frame.
   return renderNetscapeShell({
     title: 'RaggieSoft StoreTrainer | PC Game & Trainer Manager',
     description: 'Official portal for RaggieSoft StoreTrainer (TStore.exe)—a hand-written utility to store and launch PC games and game trainers on classic and modern PCs.',
@@ -708,8 +1159,30 @@ Line 7: TrainerPath  (Trainer working directory passed to ShellExecuteA)</pre>
   });
 }
 
+/**
+ * Compiles `/source/index.html` — The interactive Visual Basic 6.0 (`TStore.vbp`),
+ * Win32 API module, documentation, and VB.NET (`TStore.NET`) source code museum.
+ *
+ * TEACHING NOTE — Functional Array Pipeline (`.filter` -> `.map` -> `.join`):
+ *   1. `sourceFiles.filter((f) => f.category !== 'NSIS Installer')` creates a
+ *      new array keeping ONLY application code and docs (16 of the 18 files),
+ *      leaving `sourceFiles` itself unmutated.
+ *   2. `tocHtml` maps each file into an in-page jump link (`<a href="#tstore-vbp">`)
+ *      that scrolls directly to `<section id="tstore-vbp">` below.
+ *   3. `filesHtml` renders each module inside an accessible `<section>` paired
+ *      with its `<h2>` via `aria-labelledby="heading-..."`, and wraps the raw
+ *      source code inside `<pre class="code-viewer"><code>${escapeHtml(f.code)}</code></pre>`.
+ *      Because `escapeHtml(f.code)` converts every `<`, `>`, and `&` into HTML
+ *      entities, `<pre>` preserves exact VB6 indentation and comments verbatim!
+ *
+ * @param {Array<{id: string, title: string, category: string, path: string, description: string, code: string}>} sourceFiles
+ * @returns {string}
+ */
 function renderSourcePage(sourceFiles) {
+  // Keep everything except NSIS installer scripts (which live on `/installer`).
   const vbFiles = sourceFiles.filter((f) => f.category !== 'NSIS Installer');
+
+  // Build the bulleted Table of Contents index at the top of `/source`.
   const tocHtml = vbFiles
     .map(
       (f) =>
@@ -717,6 +1190,7 @@ function renderSourcePage(sourceFiles) {
     )
     .join('\n          ');
 
+  // Build one raised Win32 dialog card (`retro-dialog-card`) per source module.
   const filesHtml = vbFiles
     .map(
       (f) => `
@@ -753,8 +1227,19 @@ function renderSourcePage(sourceFiles) {
   });
 }
 
+/**
+ * Compiles `/installer/index.html` — Showcasing the Nullsoft Scriptable Install
+ * System (NSIS) Wizard95 scripts (`TSSetup.nsi` & `TSSetup-Patch.nsi`) and
+ * Visual Basic 6.0 SP6 runtime DLL deployment logic.
+ *
+ * @param {Array<{id: string, title: string, category: string, path: string, description: string, code: string}>} sourceFiles
+ * @returns {string}
+ */
 function renderInstallerPage(sourceFiles) {
+  // Filter strictly to the two `'NSIS Installer'` scripts (`TSSetup.nsi` and `TSSetup-Patch.nsi`).
   const nsisFiles = sourceFiles.filter((f) => f.category === 'NSIS Installer');
+
+  // Render each `.nsi` installer script safely escaped inside `<pre class="code-viewer"><code>`.
   const filesHtml = nsisFiles
     .map(
       (f) => `
@@ -791,12 +1276,34 @@ function renderInstallerPage(sourceFiles) {
   });
 }
 
+/*
+ * ============================================================================
+ * SECTION 7: Master Build Orchestrator & Local Preview Server
+ * ============================================================================
+ */
+
+/**
+ * Executes the complete static site build pipeline from start to finish:
+ *   1. Loads the 18 VB6 / VB.NET / NSIS source files.
+ *   2. Cleans `./dist` so deleted or renamed files from older builds never linger.
+ *   3. Copies `src/styles/win98-netscape.css` and generated `netscape-ui.js` to
+ *      both `./dist/assets/` AND the shared CDN repo (`raggiesoft-assets/storetrainer/`).
+ *   4. Compiles `/index.html`, `/source/index.html`, `/installer/index.html`,
+ *      and `/404.html`.
+ *   5. Generates `/sitemap.xml`, `/robots.txt`, and the IndexNow verification file.
+ */
 function buildStoreTrainerSite() {
+  // Step 1: Load source archive objects into memory.
   const sourceFiles = loadStoreTrainerSourceFiles();
 
+  // Step 2: Wipe `./dist` cleanly (`force: true` ignores errors if `dist/` doesn't
+  // exist yet, like `rm -rf dist`) and recreate a fresh empty `./dist` directory.
   fs.rmSync(distDir, { recursive: true, force: true });
   fs.mkdirSync(distDir, { recursive: true });
 
+  // Step 3A: Read the canonical stylesheet (`src/styles/win98-netscape.css`) and
+  // generate the progressive-enhancement script (`netscape-ui.js`), emitting
+  // local copies into `./dist/assets/`.
   const cssContent = fs.readFileSync(
     path.join(projectRoot, 'src', 'styles', 'win98-netscape.css'),
     'utf-8'
@@ -805,6 +1312,9 @@ function buildStoreTrainerSite() {
   writeDistFile('assets/win98-netscape.css', cssContent);
   writeDistFile('assets/netscape-ui.js', clientJsContent);
 
+  // Step 3B: Mirror those exact CSS and JS files into `raggiesoft-assets/storetrainer/`
+  // (`https://assets.raggiesoft.com/storetrainer/...`) so the shared RaggieSoft CDN
+  // never drifts out of sync with `subdomains/storetrainer`!
   const workspaceRoot = path.resolve(projectRoot, '..', '..', '..');
   const sharedCdnCssDir = path.join(workspaceRoot, 'raggiesoft-assets', 'storetrainer', 'css');
   const sharedCdnJsDir = path.join(workspaceRoot, 'raggiesoft-assets', 'storetrainer', 'js');
@@ -813,6 +1323,9 @@ function buildStoreTrainerSite() {
   fs.writeFileSync(path.join(sharedCdnCssDir, 'win98-netscape.css'), cssContent, 'utf-8');
   fs.writeFileSync(path.join(sharedCdnJsDir, 'netscape-ui.js'), clientJsContent, 'utf-8');
 
+  // Step 4: Compile and write all static HTML pages (notice `/source` and
+  // `/installer` write `index.html` inside subdirectories so clean extensionless
+  // URLs like `https://storetrainer.raggiesoft.com/source` work natively on Nginx!).
   writeDistFile('index.html', renderHomePage(sourceFiles));
   writeDistFile('source/index.html', renderSourcePage(sourceFiles));
   writeDistFile('installer/index.html', renderInstallerPage(sourceFiles));
@@ -838,6 +1351,10 @@ function buildStoreTrainerSite() {
     })
   );
 
+  // Step 5: Build search-engine discovery files (`sitemap.xml`, `robots.txt`,
+  // and Bing/IndexNow domain key).
+  // `new Date().toISOString()` returns `'2026-11-20T05:33:11.000Z'`; `.split('T')[0]`
+  // slices off just the `'YYYY-MM-DD'` calendar date expected by XML sitemaps.
   const todayIso = new Date().toISOString().split('T')[0];
   const canonicalRoutes = ['/', '/installer', '/source'];
   const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${canonicalRoutes
@@ -858,8 +1375,19 @@ function buildStoreTrainerSite() {
   );
 }
 
+// Run the static build immediately whenever `node scripts/build.mjs` executes.
 buildStoreTrainerSite();
 
+/*
+ * Optional Local Preview HTTP Server (`npm run dev` -> `node scripts/build.mjs --serve`):
+ *   - `process.argv` is an array of command-line strings (e.g., `['node', 'scripts/build.mjs', '--serve']`).
+ *   - If `--serve` was passed, we spin up a lightweight zero-dependency HTTP server
+ *     on `process.env.PORT` (defaulting to port `4323`) using `http.createServer(...)`.
+ *   - For each incoming browser request (`req`), we strip any `?query` cache-buster,
+ *     map directory URLs like `/source` to `dist/source/index.html`, set the matching
+ *     `Content-Type` MIME header (`.css`, `.js`, or `.html`), and stream the built
+ *     file back to the browser (`res.end(...)`).
+ */
 if (process.argv.includes('--serve')) {
   const port = Number(process.env.PORT || 4323);
   const server = http.createServer((req, res) => {

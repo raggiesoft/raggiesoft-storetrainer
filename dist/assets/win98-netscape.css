@@ -1,47 +1,99 @@
 /**
  * @license MIT
  * ============================================================================
- * src/styles/win98-netscape.css — RaggieSoft StoreTrainer (storetrainer.raggiesoft.com)
+ * win98-netscape.css — RaggieSoft StoreTrainer (storetrainer.raggiesoft.com)
  * ============================================================================
- * Architectural Overview:
- * Recreates the authentic 1998–2000 "Windows 98 / Windows 2000 Professional SP4
- * + Netscape Communicator 4.78" visual interface using modern CSS3 & HTML5,
- * mobile-first fluid layouts, container-queried responsive tables, and an
- * automatic annual "Quantum OS 98 — Holiday Desktop Edition" seasonal theme.
+ * READ-ALONG TEACHING OVERVIEW (CSS 101 — Retro Win32 Bevels & Modern A11y):
  *
- * Dual Color Scheme Support (`prefers-color-scheme: light | dark`):
- * 1. Light Mode (Win98 / Win2000 Classic Silver & Teal Desktop):
- *    - Desktop Canvas: `#006666` (Classic Teal; Evergreen Pine `#0d3b26` in Holiday Mode)
- *    - 3D Chrome Surface: `#d4d0c8` / `#c0c0c0` with `#ffffff` top/left bevel
- *      highlights and `#202020` / `#808080` bottom/right bevel shadows.
- *    - Document Viewport: `#ffffff` paper with `#000000` ink (21:1 contrast).
- * 2. Dark Mode (Win2000 High-Contrast Dark / Midnight Terminal):
- *    - Desktop Canvas: `#070b10` (Midnight Spruce `#05160f` in Holiday Mode)
- *    - 3D Chrome Surface: `#1e2530` with `#475569` top/left bevel highlights
- *      and `#020617` bottom/right bevel shadows.
- *    - Document Viewport: `#0f141c` with `#f8fafc` ink (17.8:1 contrast).
+ * What does this stylesheet do?
+ *   This file recreates the classic 1998–2000 "Windows 98 / Windows 2000
+ *   Professional SP4 + Netscape Communicator 4.78" desktop browser look—raised
+ *   silver 3D window frames, navy-to-cerulean titlebar gradients, pressed-in
+ *   toolbar buttons, a sunken "Netsite:" URL bar, and a fixed bottom Start
+ *   taskbar—while using modern CSS3 architecture underneath so it works
+ *   accessibly on phones, tablets, screen readers, Dark Mode, and High Contrast!
+ *
+ *   (Build Pipeline Sync Note: `scripts/build.mjs` reads the canonical source
+ *   at `subdomains/storetrainer/src/styles/win98-netscape.css` and mirrors it
+ *   byte-for-byte to `./dist/assets/win98-netscape.css` and the shared CDN copy
+ *   at `raggiesoft-assets/storetrainer/css/win98-netscape.css`.)
+ *
+ * Five Core CSS Concepts Taught in This File:
+ *   1. CSS Custom Properties (`--*` Design Tokens) & Dual Color Schemes:
+ *      All colors are defined once as variables (`--win-chrome-bg`, `--doc-bg`,
+ *      etc.) and swapped automatically for Light Mode (Win98 Silver & Teal),
+ *      Dark Mode (`@media (prefers-color-scheme: dark)` / `[data-theme="dark"]`
+ *      Win2000 High-Contrast Midnight Terminal), and seasonal Holiday Mode
+ *      (`html.rs-holiday-season`). Every text/surface pair exceeds WCAG 2.1 AA
+ *      contrast (`21:1` in Light Mode, `17.8:1` in Dark Mode).
+ *   2. Classic Win32 3D Chiseled Bevels (`.win-outset` & `.win-inset`):
+ *      Uses asymmetric top/left light borders paired with bottom/right dark
+ *      shadow borders (and `inset` box-shadows) to simulate a virtual top-left
+ *      light source—flipping those borders upside down when a button is pressed!
+ *   3. Fluid Typography & Intrinsic Responsive Grids (`clamp()`, `auto-fit`):
+ *      Headings scale smoothly across screen widths without abrupt jumps, and
+ *      card grids wrap automatically without horizontal scrollbars.
+ *   4. CSS Container Queries (`@container (width < 600px)`):
+ *      Transforms wide desktop data tables (`.retro-table`) into stacked,
+ *      self-labeled Win32 cards whenever their wrapper grows narrow, while
+ *      preserving table semantics for screen readers.
+ *   5. Inclusive Accessibility (`:focus-visible`, `forced-colors`, Zero Motion):
+ *      Supports keyboard-only Tab navigation, Windows High Contrast Mode
+ *      (`@media (forced-colors: active)`), mobile touch-target minimums, and
+ *      inherent `prefers-reduced-motion` safety (zero continuous animations).
  * ============================================================================
  */
 
+/* ==========================================================================
+   SECTION 1: Design Tokens (CSS Custom Properties) & Light/Dark Theme Cascade
+   --------------------------------------------------------------------------
+   TEACHING NOTE — What are CSS Custom Properties (`--name` & `var(--name)`)?
+     Think of `--win-desktop: #006666;` just like `const winDesktop = "#006666"`
+     in JavaScript! Declaring `--*` variables on `:root` (which represents the
+     top-level `<html>` element) makes them inheritable by every element on the
+     page via `var(--win-desktop)`.
+
+   How the 3-Block Light/Dark Cascade Works:
+     1. `:root, [data-theme="light"]`: Sets the default **Light Mode** palette
+        (Windows 98 `#006666` Teal desktop + Windows 2000 `#d4d0c8` 3D silver
+        chrome + `#ffffff` paper viewport), and also applies whenever the user
+        explicitly pins Light Mode (`<html data-theme="light">`).
+        - `color-scheme: light dark;` tells the browser engine itself to adapt
+          built-in OS scrollbars and form controls to the active scheme.
+     2. `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) }`:
+        Automatically switches to **Dark Mode** when the visitor's OS is set to
+        Dark Mode—*unless* `:not([data-theme="light"])` sees that the user
+        explicitly pinned Light Mode! Because this is pure CSS, OS Dark Mode
+        works even if JavaScript is completely disabled.
+     3. `[data-theme="dark"]`: Applies that exact **Dark Mode** palette whenever
+        the user clicks `#theme-toggle` to force Dark Mode on a Light-Mode OS.
+   ========================================================================== */
 :root,
 [data-theme="light"] {
   color-scheme: light dark;
+  /* Desktop wallpaper color behind the Netscape window (Classic Win98 Teal) */
   --win-desktop: #006666;
   --win-desktop-pattern: none;
+  /* Win32 window & toolbar surface grays (Win2000 warm gray + Win98 silver) */
   --win-chrome-bg: #d4d0c8;
   --win-chrome-alt: #c0c0c0;
   --win-chrome-text: #000000;
+  /* 4-tier highlight-to-shadow palette used to chisel 3D outset/inset bevels */
   --win-bevel-light: #ffffff;
   --win-bevel-mid: #dfdfdf;
   --win-bevel-dark: #808080;
   --win-bevel-deep: #202020;
+  /* Classic Windows 98 / 2000 active window titlebar gradient (Navy -> Cerulean) */
   --win-title-start: #000080;
   --win-title-end: #1084d0;
   --win-title-text: #ffffff;
+  /* Sunken Netscape HTML document viewport & raised dialog-card colors */
   --doc-bg: #ffffff;
   --doc-surface: #f4f3ee;
+  /* High-contrast dark terminal well for `<pre class="code-viewer">` blocks */
   --doc-code-bg: #11161f;
   --doc-code-text: #e2e8f0;
+  /* Document ink, classic HTML 4.01 unvisited blue / visited purple links, & badges */
   --doc-text: #000000;
   --doc-muted: #333333;
   --doc-link: #0000ee;
@@ -53,6 +105,7 @@
   --doc-badge-text: #ffffff;
 }
 
+/* Automatic OS Dark Mode (applies unless the user manually pinned `data-theme="light"`) */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --win-desktop: #070b10;
@@ -83,6 +136,7 @@
   }
 }
 
+/* Manual Dark Mode Override (triggered when `netscape-ui.js` sets `<html data-theme="dark">`) */
 [data-theme="dark"] {
   --win-desktop: #070b10;
   --win-desktop-pattern: none;
@@ -112,8 +166,16 @@
 }
 
 /* ==========================================================================
-   Quantum OS 98 — Holiday Desktop Edition (`html.rs-holiday-season`)
+   SECTION 2: Quantum OS 98 — Holiday Desktop Edition (`html.rs-holiday-season`)
    Automatically active from Black Friday (Nov 29 in 2026) through Jan 1 EST
+   --------------------------------------------------------------------------
+   TEACHING NOTE — Token-Driven Seasonal Themes & CSS Wallpaper Patterns:
+     Notice how adding ONE class (`rs-holiday-season`) to `<html>` transforms the
+     entire desktop into Evergreen Pine (`#0d3b26` / `#05160f`) & Holly Crimson
+     (`#8b111e`) without duplicating a single layout or component rule below!
+     - `--win-desktop-pattern` stacks two tiny `1px` `radial-gradient(...)` dots
+       (soft snow white + warm gold). When `body` tiles them at `44px` and `68px`
+       grid sizes, they create a subtle zero-image retro desktop snowfall pattern!
    ========================================================================== */
 html.rs-holiday-season,
 html.rs-holiday-season[data-theme="light"] {
@@ -146,6 +208,7 @@ html.rs-holiday-season[data-theme="light"] {
   --doc-badge-text: #ffffff;
 }
 
+/* Seasonal Holiday Dark Mode (automatic when OS prefers dark and Light isn't pinned) */
 @media (prefers-color-scheme: dark) {
   html.rs-holiday-season:not([data-theme="light"]) {
     --win-desktop: #05160f;
@@ -178,6 +241,7 @@ html.rs-holiday-season[data-theme="light"] {
   }
 }
 
+/* Seasonal Holiday Dark Mode (pinned manually via `data-theme="dark"`) */
 html.rs-holiday-season[data-theme="dark"] {
   --win-desktop: #05160f;
   --win-desktop-pattern:
@@ -208,12 +272,32 @@ html.rs-holiday-season[data-theme="dark"] {
   --doc-badge-text: #ffffff;
 }
 
+/* ==========================================================================
+   SECTION 3: Global Box Model, Desktop Surface, & Keyboard Focus Accessibility
+   ========================================================================== */
+
+/*
+ * Universal `border-box` Reset:
+ *   By default in CSS (`content-box`), setting `width: 100%; padding: 20px; border: 2px;`
+ *   makes an element `100% + 44px` wide—causing surprise horizontal scrollbars!
+ *   `box-sizing: border-box` tells the browser to include `padding` and `border`
+ *   INSIDE the declared `width`, making responsive layouts predictable.
+ */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
+/*
+ * Desktop Canvas (`body`):
+ *   - `min-height: 100vh` followed by `min-height: 100dvh` uses CSS progressive
+ *     enhancement: `100dvh` ("Dynamic Viewport Height") adapts smoothly as
+ *     mobile browser URL bars expand/collapse, while older browsers fall back
+ *     to `100vh`.
+ *   - `font-family` prioritizes classic Windows 98 / 2000 UI fonts (`Tahoma`,
+ *     `MS Sans Serif`) before crisp modern system sans-serif fallbacks.
+ */
 body {
   margin: 0;
   padding: 0;
@@ -232,6 +316,12 @@ body {
   overflow-x: hidden;
 }
 
+/*
+ * Desktop Workspace Area (`.win98-desktop-workspace`):
+ *   Centers the Netscape window horizontally (`align-items: center`) and reserves
+ *   `calc(3.15rem + env(safe-area-inset-bottom, 0px))` of bottom clearance so
+ *   neither the fixed `.win98-taskbar` nor mobile gesture bars overlap content.
+ */
 .win98-desktop-workspace {
   flex: 1;
   width: 100%;
@@ -241,6 +331,12 @@ body {
   padding: 1rem 1rem calc(3.15rem + env(safe-area-inset-bottom, 0px));
 }
 
+/*
+ * WCAG 2.4.1 "Bypass Blocks" Skip Link (`.skip-link`):
+ *   Positioned off-screen (`top: -100px`) for mouse users, but slides immediately
+ *   into the top-left corner (`top: 1rem`) as soon as a keyboard user presses
+ *   `Tab`, allowing one-keystroke navigation past toolbars to `<main id="content">`.
+ */
 .skip-link {
   position: absolute;
   top: -100px;
@@ -257,13 +353,39 @@ body {
   top: 1rem;
 }
 
+/*
+ * Classic Win32 Dotted Focus Ring (`:focus-visible`):
+ *   Unlike `:focus`, `:focus-visible` shows an outline ONLY when navigating via
+ *   keyboard (`Tab` / arrow keys), honoring classic Windows 98 dotted button
+ *   focus rectangles while keeping mouse clicks visually clean.
+ */
 :focus-visible {
   outline: 2px dotted var(--doc-text);
   outline-offset: 2px;
 }
 
 /* ==========================================================================
-   Win32 3D Chiseled Bevel Primitives
+   SECTION 4: Win32 3D Chiseled Bevel Primitives (`.win-outset` & `.win-inset`)
+   --------------------------------------------------------------------------
+   TEACHING NOTE — How Classic Windows 95/98/2000 3D Borders Actually Work:
+     Before flat UI design, operating systems created a tactile 3D illusion
+     without gradients or blur by pretending a lamp is shining from the
+     **top-left corner** of the monitor:
+
+     1. `.win-outset` (Raised Surfaces — Windows, Buttons, Taskbars):
+        - Top & Left outer borders are bright (`--win-bevel-light`) because they
+          face toward the top-left lamp.
+        - Right & Bottom outer borders are dark (`--win-bevel-deep`) because they
+          sit in shadow on the far side of the raised block.
+        - Two `inset` 1px `box-shadow` layers paint an inner secondary bevel
+          (`--win-bevel-mid` top-left, `--win-bevel-dark` bottom-right),
+          recreating authentic 2-pixel stepped Win32 GDI `DrawEdge` borders!
+
+     2. `.win-inset` (Sunken Wells — URL Input, Document Viewport, System Tray):
+        - Flips the colors! Top & Left outer borders become dark shadow
+          (`--win-bevel-dark` + `inset 1px 1px 0 var(--win-bevel-deep)`), while
+          Right & Bottom edges catch the light (`--win-bevel-light`), making the
+          panel look recessed into the window frame.
    ========================================================================== */
 .win-outset {
   background-color: var(--win-chrome-bg);
@@ -286,8 +408,17 @@ body {
 }
 
 /* ==========================================================================
-   Netscape Communicator 4.78 Outer Application Window
+   SECTION 5: Netscape Communicator 4.78 Outer Window, Title Bar, & Toolbars
    ========================================================================== */
+
+/*
+ * Outer Window Frame (`.netscape-window`):
+ *   - Caps desktop width at `1220px` with a crisp, zero-blur `4px 4px 0` drop
+ *     shadow floating above the teal desktop wallpaper.
+ *   - `min-width: 0` is an essential Flexbox safeguard: without it, wide `<pre>`
+ *     source code blocks inside `<main>` could force the flex item wider than
+ *     the mobile screen!
+ */
 .netscape-window {
   width: 100%;
   max-width: 1220px;
@@ -296,13 +427,19 @@ body {
   min-width: 0;
 }
 
+/* Secondary raised Win32 panel below the main window for Ecosystem Links & Disclaimer */
 .netscape-footer-card {
   margin-top: 0.75rem;
   padding: 0.85rem 1.15rem;
   font-size: 12.5px;
 }
 
-/* Active Win2000 / Quantum OS 98 Gradient Title Bar */
+/*
+ * Active Win2000 / Win98 Gradient Title Bar (`.win-titlebar`):
+ *   Windows 98 and Windows 2000 introduced two-color horizontal (`90deg`)
+ *   titlebar gradients (`#000080` Navy on the left blending into `#1084d0`
+ *   Cerulean on the right).
+ */
 .win-titlebar {
   background: linear-gradient(90deg, var(--win-title-start) 0%, var(--win-title-end) 100%);
   color: var(--win-title-text);
@@ -325,6 +462,11 @@ body {
   flex: 1;
 }
 
+/*
+ * Single-Line Ellipsis Truncation Trio (`overflow` + `text-overflow` + `white-space`):
+ *   Ensures long window titles gracefully end with `...` on narrow phones
+ *   instead of wrapping onto multiple lines or pushing `[_] [□] [×]` off-screen.
+ */
 .win-titlebar-text {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -339,6 +481,7 @@ body {
   flex-shrink: 0;
 }
 
+/* Decorative Win32 Minimize / Maximize / Close caption boxes (`user-select: none` prevents accidental text highlighting) */
 .win-ctrl-box {
   display: inline-flex;
   align-items: center;
@@ -357,7 +500,7 @@ body {
   user-select: none;
 }
 
-/* Menu Bar */
+/* Classic Win32 Application Menu Bar (`File`, `Edit / Source`, `View Installer`, ...) */
 .netscape-menubar {
   display: flex;
   flex-wrap: wrap;
@@ -395,7 +538,12 @@ body {
   color: var(--win-chrome-text);
 }
 
-/* Navigation Button Toolbar */
+/*
+ * Netscape Navigation Button Toolbar (`.netscape-toolbar`):
+ *   Notice the `1px` top highlight (`--win-bevel-light`) and `1px` bottom shadow
+ *   (`--win-bevel-dark`) separating each stacked toolbar strip—the signature
+ *   "etched groove" divider between Netscape Communicator 4's toolbars!
+ */
 .netscape-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -418,6 +566,15 @@ body {
   min-width: 0;
 }
 
+/*
+ * Tactile 3D Push Buttons (`.win-btn`):
+ *   Shared by both `<a class="win-btn">` links and `<button class="win-btn">`.
+ *   - Default state: Raised 3D outset bevels (`--win-bevel-light` top/left,
+ *     `--win-bevel-deep` right/bottom).
+ *   - `:active` (being clicked) AND `[aria-current="page"]` (current route):
+ *     Swaps `--win-bevel-deep` onto top/left and `--win-bevel-light` onto
+ *     right/bottom so the button physically depresses into the toolbar!
+ */
 .win-btn {
   display: inline-flex;
   align-items: center;
@@ -452,6 +609,7 @@ body {
   background-color: var(--win-chrome-alt);
 }
 
+/* High-emphasis primary action button (used for `tssetup100.exe` downloads) */
 .win-btn-primary {
   background-color: var(--doc-badge-bg);
   color: var(--doc-badge-text) !important;
@@ -464,6 +622,16 @@ body {
   background-color: var(--doc-badge-bg);
 }
 
+/*
+ * Netscape Communicator "N" Emblem Box (`.netscape-throbber`):
+ *   Recreation of Netscape 4.78's top-right italic serif "N" crest inside a
+ *   sunken dark-indigo well.
+ *   REDUCED-MOTION DESIGN NOTE: Classic 1990s browsers looped meteor animations
+ *   while loading over dial-up; because our static pages finish loading
+ *   instantaneously, keeping this emblem completely static gives users with
+ *   vestibular sensitivities (`prefers-reduced-motion`) zero distracting motion
+ *   by default throughout the entire stylesheet!
+ */
 .netscape-throbber {
   display: inline-flex;
   align-items: center;
@@ -488,7 +656,7 @@ html.rs-holiday-season .netscape-throbber {
   color: #fde68a;
 }
 
-/* Location / URL Bar */
+/* Netscape 4.78 "Netsite:" Location / URL Address Bar */
 .netscape-locationbar {
   display: flex;
   flex-wrap: nowrap;
@@ -513,7 +681,11 @@ html.rs-holiday-season .netscape-throbber {
   white-space: nowrap;
 }
 
-/* Sunken Document Viewport */
+/* ==========================================================================
+   SECTION 6: Sunken Document Viewport, Fluid Typography, & Dialog Cards
+   ========================================================================== */
+
+/* Main white/midnight paper canvas inside the Netscape browser frame */
 .netscape-viewport {
   padding: 1.75rem 2rem;
   min-height: 62vh;
@@ -521,7 +693,7 @@ html.rs-holiday-season .netscape-throbber {
   min-width: 0;
 }
 
-/* Quantum OS 98 Seasonal Banner Inside Viewport (auto-shown in Holiday Mode) */
+/* Quantum OS 98 Seasonal Banner Inside Viewport (hidden outside Holiday Mode; revealed when `html.rs-holiday-season` is present) */
 .quantum-holiday-callout {
   display: none;
   align-items: center;
@@ -543,7 +715,14 @@ html.rs-holiday-season .quantum-holiday-callout {
   display: flex;
 }
 
-/* Typography & Classic HTML 4.01 Panel Layout */
+/*
+ * Typography & Fluid Heading Scale (`clamp()` + `text-wrap: balance`):
+ *   - `text-wrap: balance` asks the browser to equalize line lengths on
+ *     multi-line headings so a single trailing word isn't stranded alone.
+ *   - `clamp(minimum, preferred-fluid, maximum)` scales `h1` and `h2` smoothly
+ *     with viewport width (`vw`) while guaranteeing readable minimum sizes on
+ *     phones and sensible maximum sizes on wide monitors.
+ */
 h1, h2, h3, h4 {
   color: var(--doc-heading);
   font-family: "Trebuchet MS", "Tahoma", Arial, sans-serif;
@@ -581,6 +760,7 @@ a:visited {
   gap: 0.65rem;
 }
 
+/* Raised 3D callout banner used for hero intros and source-index summaries */
 .retro-banner {
   background-color: var(--doc-surface);
   border-top: 2px solid var(--win-bevel-light);
@@ -595,6 +775,15 @@ a:visited {
   overflow-wrap: break-word;
 }
 
+/*
+ * Intrinsic Responsive 2-Column Grid (`.retro-grid-2`):
+ *   TEACHING NOTE: `repeat(auto-fit, minmax(min(100%, 300px), 1fr))` is one of
+ *   the cleanest modern CSS Grid patterns:
+ *     - When space allows, columns sit side-by-side sharing equal `1fr` widths.
+ *     - When a column would shrink below `300px`, it automatically wraps into a
+ *       stacked single column—and `min(100%, 300px)` ensures even ultra-narrow
+ *       `< 300px` split-screen windows never overflow horizontally!
+ */
 .retro-grid-2 {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
@@ -607,6 +796,7 @@ a:visited {
   max-width: 100%;
 }
 
+/* Raised Win32 dialog card used for feature panels and per-file source code sections */
 .retro-dialog-card {
   background-color: var(--doc-surface);
   border-top: 2px solid var(--win-bevel-light);
@@ -621,7 +811,20 @@ a:visited {
 }
 
 /* ==========================================================================
-   Container-Queried Responsive Table (`.table-wrapper` + `.retro-table`)
+   SECTION 7: Container-Queried Responsive Table (`.table-wrapper` + `.retro-table`)
+   --------------------------------------------------------------------------
+   TEACHING NOTE — CSS Container Queries (`@container`) vs. Media Queries (`@media`):
+     - `@media (max-width: ...)` only checks the width of the *entire browser window*.
+     - Declaring `container-type: inline-size` on `.table-wrapper` lets
+       `@container (width < 600px)` measure the actual available width of the
+       *table wrapper itself*!
+     - Above `600px`: Renders a classic bordered grid table with sticky column
+       headers (`position: sticky; top: 0`).
+     - Below `600px`: Visually clips `<thead>` (using `clip-path: inset(50%)`
+       rather than `display: none` so screen readers still keep table-header
+       associations!) and turns each `<tr>` row into a raised 3D Win32 card
+       whose `<td>::before` pseudo-elements print bold field labels read from
+       `var(--label-2)` and `var(--label-3)`.
    ========================================================================== */
 .table-wrapper {
   container-type: inline-size;
@@ -653,6 +856,7 @@ a:visited {
 }
 
 @container (width < 600px) {
+  /* Visually hide `<thead>` on narrow containers while keeping it in the accessibility tree */
   .retro-table thead {
     position: absolute;
     width: 1px;
@@ -696,6 +900,7 @@ a:visited {
     margin-bottom: 0.35rem;
   }
 
+  /* Prepend bold column labels (`content: visualText / altText` progressive fallback) */
   .retro-table td:nth-child(2)::before {
     content: var(--label-2, "Supported Releases") ": ";
     content: var(--label-2, "Supported Releases") ": " / var(--label-2, "Supported Releases");
@@ -711,6 +916,12 @@ a:visited {
   }
 }
 
+/*
+ * Sunken Source Code Inspector Well (`.code-viewer`):
+ *   Renders VB6, VB.NET, and NSIS `<pre><code>` blocks inside a recessed dark
+ *   terminal box with independent horizontal and vertical scrolling (`max-height: 520px`)
+ *   so 1,000-line modules stay easy to browse without endless page scrolling.
+ */
 .code-viewer {
   background-color: var(--doc-code-bg);
   color: var(--doc-code-text);
@@ -728,7 +939,11 @@ a:visited {
   max-width: 100%;
 }
 
-/* Status Bar at Bottom of Netscape Window */
+/* ==========================================================================
+   SECTION 8: Netscape Status Bar & Fixed Windows 98 Bottom Taskbar
+   ========================================================================== */
+
+/* Status Bar at Bottom of Netscape Window ("Document: Done" + MIT / CC BY-SA 4.0 Licenses) */
 .netscape-statusbar {
   display: flex;
   flex-wrap: wrap;
@@ -740,6 +955,7 @@ a:visited {
   border-top: 1px solid var(--win-bevel-light);
 }
 
+/* Sunken 1px status indicator compartments inside the status bar */
 .status-cell {
   padding: 2px 8px;
   border-top: 1px solid var(--win-bevel-dark);
@@ -748,9 +964,13 @@ a:visited {
   border-bottom: 1px solid var(--win-bevel-light);
 }
 
-/* ==========================================================================
-   Quantum OS 98 / Classic Win98 Bottom Taskbar
-   ========================================================================== */
+/*
+ * Fixed Bottom Windows 98 / Quantum OS 98 Taskbar (`.win98-taskbar`):
+ *   `position: fixed; bottom: 0; left: 0; right: 0;` anchors the Start bar
+ *   permanently along the bottom edge of the viewport (`z-index: 1040`),
+ *   housing the Start button, depressed active application tab, and sunken
+ *   right-hand System Tray clock (`#win98-clock`).
+ */
 .win98-taskbar {
   position: fixed;
   left: 0;
@@ -816,8 +1036,18 @@ html.rs-holiday-season .win98-start-btn {
 }
 
 /* ==========================================================================
-   Mobile & Touch Screen Refinements (`<= 767.98px`)
+   SECTION 9: Mobile Touch Ergonomics, Forced-Colors High Contrast, & Print
    ========================================================================== */
+
+/*
+ * Mobile & Tablet Portrait Refinements (`<= 767.98px`):
+ *   Adapts the desktop Netscape window for thumb-friendly touch interaction:
+ *   - Hides duplicate cross-site menubar links (already reachable in the top
+ *     RaggieSoft Network bar) and decorative toolbar chrome.
+ *   - Reflows `.netscape-nav-list` into a clean 2-column CSS Grid with `40px+`
+ *     minimum touch-target heights, spanning the primary `tssetup100.exe`
+ *     download button across the full row (`grid-column: 1 / -1`).
+ */
 @media (max-width: 767.98px) {
   .win98-desktop-workspace {
     padding: 0.45rem 0.4rem calc(3.15rem + env(safe-area-inset-bottom, 0px));
@@ -915,6 +1145,7 @@ html.rs-holiday-season .win98-start-btn {
   }
 }
 
+/* Compact Phone Breakpoint (`<= 420px`): Stack toolbar buttons into a single full-width column */
 @media (max-width: 420px) {
   .netscape-nav-list {
     grid-template-columns: 1fr;
@@ -925,7 +1156,18 @@ html.rs-holiday-season .win98-start-btn {
   }
 }
 
-/* Forced-Colors (Windows High Contrast) Safety */
+/*
+ * Forced-Colors (Windows High Contrast / Contrast Themes) Accessibility:
+ *   TEACHING NOTE: When a low-vision user enables Windows Contrast Themes, the
+ *   browser activates `@media (forced-colors: active)` and overrides custom
+ *   colors and `box-shadow`s with the user's chosen OS system palette.
+ *   Using official CSS system color keywords (`CanvasText` for panels/windows
+ *   and `ButtonText` for interactive buttons) guarantees crisp, unmistakable
+ *   component boundaries even when custom 3D bevel grays are stripped away!
+ *   (Note on Reduced Motion: Because this stylesheet uses zero `@keyframes`
+ *   animations or `transition` timers anywhere, `prefers-reduced-motion` is
+ *   honored 100% natively with zero motion-sickness triggers.)
+ */
 @media (forced-colors: active) {
   .win-outset,
   .win-inset,
@@ -940,6 +1182,7 @@ html.rs-holiday-season .win98-start-btn {
   }
 }
 
+/* Print Stylesheet: Hide the `position: fixed` taskbar so it never overlaps printed pages */
 @media print {
   .win98-taskbar {
     display: none !important;
