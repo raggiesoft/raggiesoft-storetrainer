@@ -207,156 +207,163 @@ function writeDistFile(relPath, content) {
  * @returns {Array<{id: string, title: string, category: string, path: string, description: string, code: string}>}
  */
 function loadStoreTrainerSourceFiles() {
-  // Resolve up 3 levels from `raggiesoft-servers/raggiesoft.com/subdomains/storetrainer`
-  // to reach `$HOME/Developer/ai-staging/StoreTrainer` on local workstations.
-  const aiStagingDir = path.resolve(projectRoot, '../../../ai-staging/StoreTrainer');
+  // Resolve up 4 levels from `raggiesoft-servers/raggiesoft.com/subdomains/storetrainer`
+  // to reach `$HOME/Developer/desktop-apps/storetrainer` (our multi-generation repo).
+  const multiEraRepoDir = path.resolve(projectRoot, '../../../../desktop-apps/storetrainer');
 
-  // Manifest catalog of all 18 original StoreTrainer files in display order.
-  // Each object provides:
-  //   - `id`: URL-safe HTML anchor slug (e.g. `<section id="tstore-vbp">`)
-  //   - `title`: Human-readable heading displayed on `/source` or `/installer`
-  //   - `category`: Used by `.filter(...)` to separate VB6/.NET code from NSIS scripts
-  //   - `relPath`: Relative file path inside `ai-staging/StoreTrainer/`
-  //   - `description`: Plain-English summary of what that module/script does
-  const fileSpecs = [
+  // Manifest catalog spanning all three StoreTrainer generations:
+  //   1. StoreTrainer 2.0 (Modern Desktop Edition)
+  //   2. StoreTrainer 1.1 (Classic Retro Edition for Vintage 1995–2000 PCs)
+  //   3. StoreTrainer 1.0 (Frozen Pre-AI Historical Record, 2018–2022)
+  const multiEraSpecs = [
+    {
+      id: 'v2-profile-cs',
+      title: 'StoreFileProfile.cs (StoreTrainer 2.0 — Backward-Compatible .stf Profile Model)',
+      category: 'StoreTrainer 2.0 (Modern)',
+      relPath: 'dotnet-v2.0/StoreTrainer/Models/StoreFileProfile.cs',
+      description: 'Modern C# game and trainer profile model preserving 100% file compatibility with classic 1.0 and 1.1 .stf profiles.'
+    },
+    {
+      id: 'v2-service-cs',
+      title: 'StoreTrainerService.cs (StoreTrainer 2.0 — Library Scanner, Sequencer & File Verification)',
+      category: 'StoreTrainer 2.0 (Modern)',
+      relPath: 'dotnet-v2.0/StoreTrainer/Services/StoreTrainerService.cs',
+      description: 'Zero-dependency INI reader/writer, My StoreFiles library scanner, window-ready launch sequencer, and trusted trainer file verification.'
+    },
+    {
+      id: 'v2-mainwindow-xaml',
+      title: 'MainWindow.xaml (StoreTrainer 2.0 — Two-Column Library & Profile Editor Layout)',
+      category: 'StoreTrainer 2.0 (Modern)',
+      relPath: 'dotnet-v2.0/StoreTrainer/MainWindow.xaml',
+      description: 'Accessible desktop layout with live search, Favorites pinning, drag-and-drop game/trainer cards, and Light/Dark theme support.'
+    },
+    {
+      id: 'v2-mainwindow-cs',
+      title: 'MainWindow.xaml.cs (StoreTrainer 2.0 — Interactive Library & Editor Controller)',
+      category: 'StoreTrainer 2.0 (Modern)',
+      relPath: 'dotnet-v2.0/StoreTrainer/MainWindow.xaml.cs',
+      description: 'Handles instant library filtering, drag-and-drop .stf/.exe files, unsaved-change guards, and one-click game + trainer launching.'
+    },
+    {
+      id: 'v2-app-cs',
+      title: 'App.xaml.cs (StoreTrainer 2.0 — /l & /e Command-Line Switches & Shared Mutex)',
+      category: 'StoreTrainer 2.0 (Modern)',
+      relPath: 'dotnet-v2.0/StoreTrainer/App.xaml.cs',
+      description: 'Startup router supporting silent /l StoreFile launches from File Explorer, /e editor handoff, and shared running-instance detection.'
+    },
+    {
+      id: 'v11-tstore-bas',
+      title: 'vb6-v1.1/TStore.bas (StoreTrainer 1.1 — Completed CLI Parser & Win95 Mutex)',
+      category: 'Classic v1.1 (Retro)',
+      relPath: 'vb6-v1.1/TStore.bas',
+      description: 'Updated Visual Basic 6.0 startup module completing /l and /e command-line parsing and Explorer .stf double-click launches back to Windows 95.'
+    },
+    {
+      id: 'v11-sfile-bas',
+      title: 'vb6-v1.1/SFile.bas (StoreTrainer 1.1 — Parent Folder Working Dir, Launch Delay & Recent Files)',
+      category: 'Classic v1.1 (Retro)',
+      relPath: 'vb6-v1.1/SFile.bas',
+      description: 'Fixes parent-folder working directory resolution and multi-flag launch switches while adding 0–30s launch delays and Recent StoreFiles.'
+    },
+    {
+      id: 'v11-frmmain-frm',
+      title: 'vb6-v1.1/frmMain.frm (StoreTrainer 1.1 — Mutually Exclusive Launch Modes & Recent Menu)',
+      category: 'Classic v1.1 (Retro)',
+      relPath: 'vb6-v1.1/frmMain.frm',
+      description: 'Updated Visual Basic 6.0 main form enforcing mutually-exclusive launch checkboxes and adding the File -> Recent StoreFiles menu.'
+    },
     {
       id: 'tstore-vbp',
-      title: 'TStore.vbp (Visual Basic 6.0 Project Manifest)',
-      category: 'VB6 Core',
-      relPath: 'TStore.vbp',
-      description: 'Master Visual Basic 6.0 project file defining forms, Win32 API modules, version metadata (v1.0.0), and compilation flags.'
+      title: 'archive/pre-ai-vb6/TStore.vbp (Frozen Pre-AI v1.0 Project Manifest, 2018–2020)',
+      category: 'Pre-AI v1.0 Archive',
+      relPath: 'archive/pre-ai-vb6/TStore.vbp',
+      description: 'Untouched original Visual Basic 6.0 project file authored inside a Windows 2000 Professional SP4 virtual machine.'
     },
     {
       id: 'frmmain-frm',
-      title: 'frmMain.frm (Primary StoreTrainer Win32 Form UI)',
-      category: 'VB6 Forms',
-      relPath: 'frmMain.frm',
-      description: 'Main application form managing the PC game & trainer profile selector, command-line switch fields, and process launch triggers.'
+      title: 'archive/pre-ai-vb6/frmMain.frm (Frozen Pre-AI v1.0 Form UI)',
+      category: 'Pre-AI v1.0 Archive',
+      relPath: 'archive/pre-ai-vb6/frmMain.frm',
+      description: 'Untouched pre-AI application form managing PC game & trainer paths and launch triggers.'
     },
     {
       id: 'tstore-bas',
-      title: 'TStore.bas (Core Application Logic & Entrypoint)',
-      category: 'VB6 Core',
-      relPath: 'TStore.bas',
-      description: 'Core Visual Basic 6.0 module orchestrating initialization, profile loading, and Win32 execution flow.'
+      title: 'archive/pre-ai-vb6/TStore.bas (Frozen Pre-AI v1.0 Entrypoint)',
+      category: 'Pre-AI v1.0 Archive',
+      relPath: 'archive/pre-ai-vb6/TStore.bas',
+      description: 'Untouched pre-AI Visual Basic 6.0 startup module.'
     },
     {
       id: 'sfile-bas',
-      title: 'SFile.bas (Game Profile & File Operations)',
-      category: 'VB6 Win32 API',
-      relPath: 'SFile.bas',
-      description: 'File management and shell operations module for locating, copying, and launching game and trainer programs.'
-    },
-    {
-      id: 'inifile-bas',
-      title: 'INIFile.bas (INI Configuration Parser)',
-      category: 'VB6 Win32 API',
-      relPath: 'INIFile.bas',
-      description: 'Configuration reader and writer for saving local INI settings.'
-    },
-    {
-      id: 'registry-bas',
-      title: 'Registry.bas (System Paths Helper Module)',
-      category: 'VB6 Win32 API',
-      relPath: 'Registry.bas',
-      description: 'Helper module for locating installed game folders across classic and modern PCs.'
-    },
-    {
-      id: 'specialfolder-bas',
-      title: 'SpecialFolder.bas (Special Folders Helper)',
-      category: 'VB6 Win32 API',
-      relPath: 'SpecialFolder.bas',
-      description: 'Resolves application data, program folders, and user profile directories across classic and modern Windows.'
-    },
-    {
-      id: 'osversioninfo-bas',
-      title: 'OSVersionInfo.bas (Win32 GetVersionEx OS Detector)',
-      category: 'VB6 Win32 API',
-      relPath: 'OSVersionInfo.bas',
-      description: 'Queries `GetVersionExA` (`OSVERSIONINFO`) to detect Windows 9x vs. Windows NT kernels at runtime.'
+      title: 'archive/pre-ai-vb6/SFile.bas (Frozen Pre-AI v1.0 StoreFile Module)',
+      category: 'Pre-AI v1.0 Archive',
+      relPath: 'archive/pre-ai-vb6/SFile.bas',
+      description: 'Untouched pre-AI StoreFile INI persistence and process launcher module.'
     },
     {
       id: 'detectosbits-bas',
-      title: 'DetectOSBits.bas (32-Bit vs. 64-Bit WOW64 Detection)',
-      category: 'VB6 Win32 API',
-      relPath: 'DetectOSBits.bas',
-      description: 'Dynamically probes `IsWow64Process` in `kernel32.dll` so 32-bit `TStore.exe` knows whether it is running on a 64-bit Windows OS.'
+      title: 'archive/pre-ai-vb6/DetectOSBits.bas (Frozen Pre-AI Dynamic OS Detector)',
+      category: 'Pre-AI v1.0 Archive',
+      relPath: 'archive/pre-ai-vb6/DetectOSBits.bas',
+      description: 'Dynamically probes kernel32.dll so TStore.exe runs safely on vintage Windows 95/98 without missing-export crashes.'
     },
     {
-      id: 'versioncompare-bas',
-      title: 'VersionCompare.bas (Binary File Version Comparator)',
-      category: 'VB6 Win32 API',
-      relPath: 'VersionCompare.bas',
-      description: 'Uses `version.dll` (`GetFileVersionInfoA`) to inspect and compare executable version headers.'
+      id: 'osversioninfo-bas',
+      title: 'archive/pre-ai-vb6/OSVersionInfo.bas (Frozen Pre-AI Windows Version Inspector)',
+      category: 'Pre-AI v1.0 Archive',
+      relPath: 'archive/pre-ai-vb6/OSVersionInfo.bas',
+      description: 'Identifies Windows 95/98/ME vs. Windows NT 4.0, 2000, XP, 7, and 10 releases.'
     },
     {
-      id: 'whwnd-bas',
-      title: 'wHwnd.bas (Win32 Window Handle & Process Monitor)',
-      category: 'VB6 Win32 API',
-      relPath: 'wHwnd.bas',
-      description: 'Win32 `user32.dll` window handle (`HWND`) enumeration and process state tracking for launched games and trainers.'
+      id: 'inifile-bas',
+      title: 'archive/pre-ai-vb6/INIFile.bas (Frozen Pre-AI INI Configuration Reader/Writer)',
+      category: 'Pre-AI v1.0 Archive',
+      relPath: 'archive/pre-ai-vb6/INIFile.bas',
+      description: 'Classic INI profile helper module.'
     },
     {
-      id: 'readme-txt',
-      title: 'README.txt (Original User Documentation)',
-      category: 'Documentation',
-      relPath: 'README.txt',
-      description: 'Original plaintext user documentation bundled with StoreTrainer.'
+      id: 'specialfolder-bas',
+      title: 'archive/pre-ai-vb6/SpecialFolder.bas (Frozen Pre-AI My StoreFiles Folder Resolver)',
+      category: 'Pre-AI v1.0 Archive',
+      relPath: 'archive/pre-ai-vb6/SpecialFolder.bas',
+      description: 'Resolves My Documents\\My StoreFiles and user settings paths across classic and modern PCs.'
     },
     {
-      id: 'readme-dev-txt',
-      title: 'README-dev.txt (Developer Build & VM Notes)',
-      category: 'Documentation',
-      relPath: 'README-dev.txt',
-      description: 'Original developer notes documenting the Windows 2000 SP4 build environment and runtime packaging.'
+      id: 'v2-storetrainer-iss',
+      title: 'StoreTrainer.iss (StoreTrainer 2.0 — Modern Setup & Seamless v1.0/v1.1 Upgrade Script)',
+      category: 'NSIS Installer',
+      relPath: 'dotnet-v2.0/StoreTrainer/StoreTrainer.iss',
+      description: 'Modern StoreTrainer 2.0 setup script that cleanly upgrades classic StoreTrainer 1.0 & 1.1 installations in place while keeping shared classic system files and saved My StoreFiles untouched.'
     },
     {
-      id: 'tstore-net-frmmain',
-      title: 'TStore.NET/frmMain.vb (VB.NET Main Form Port)',
-      category: '.NET Port',
-      relPath: 'TStore.NET/frmMain.vb',
-      description: 'Visual Basic .NET upgraded form (`frmMain.vb`) preserving StoreTrainer functionality on modern .NET runtimes.'
+      id: 'v11-tssetup-nsi',
+      title: 'vb6-v1.1/Installer/TSSetup.nsi (Classic v1.1 Full Retro Setup — Windows 95 Compatible)',
+      category: 'NSIS Installer',
+      relPath: 'vb6-v1.1/Installer/TSSetup.nsi',
+      description: 'ANSI-mode NSIS setup script for vintage Windows 95 through modern PCs, registering .stf file associations and RaggieSoft Launcher discovery.'
     },
     {
-      id: 'tstore-net-core',
-      title: 'TStore.NET/TStore.vb (VB.NET Core Module)',
-      category: '.NET Port',
-      relPath: 'TStore.NET/TStore.vb',
-      description: 'Visual Basic .NET core module ported from `TStore.bas`.'
-    },
-    {
-      id: 'tstore-net-sfile',
-      title: 'TStore.NET/SFile.vb (VB.NET File Operations Module)',
-      category: '.NET Port',
-      relPath: 'TStore.NET/SFile.vb',
-      description: 'Visual Basic .NET file system module ported from `SFile.bas`.'
+      id: 'v11-tssetup-patch-nsi',
+      title: 'vb6-v1.1/Installer/TSSetup-Patch.nsi (Classic v1.1 Lightweight Update Patcher)',
+      category: 'NSIS Installer',
+      relPath: 'vb6-v1.1/Installer/TSSetup-Patch.nsi',
+      description: 'Compact ANSI update utility patching StoreTrainer v1.0 to v1.1 (with support for future v1.1.x updates).'
     },
     {
       id: 'tssetup-nsi',
-      title: 'Installer/TSSetup.nsi (Full Wizard95 Setup Script)',
+      title: 'archive/pre-ai-vb6/Installer/TSSetup.nsi (Frozen Pre-AI v1.0 Wizard95 Setup Script)',
       category: 'NSIS Installer',
-      relPath: 'Installer/TSSetup.nsi',
-      description: 'Full Nullsoft Scriptable Install System (NSIS) script featuring the classic Wizard95 bitmap, system compatibility check, and VB6 runtime library setup.'
-    },
-    {
-      id: 'tssetup-patch-nsi',
-      title: 'Installer/TSSetup-Patch.nsi (Lightweight Patch Installer)',
-      category: 'NSIS Installer',
-      relPath: 'Installer/TSSetup-Patch.nsi',
-      description: 'Compact update installer script updating `TStore.exe` and linking directly to `https://storetrainer.raggiesoft.com/`.'
+      relPath: 'archive/pre-ai-vb6/Installer/TSSetup.nsi',
+      description: 'Untouched pre-AI NSIS Wizard95 installer script preserved for historical reference.'
     }
   ];
 
-  // PATH A (Local Workstation): Read live files from `ai-staging/StoreTrainer`
-  // and refresh `src/data/storetrainer-source.json`.
-  if (fs.existsSync(aiStagingDir)) {
+  // PATH A (Local Workstation): Read from `desktop-apps/storetrainer`
+  if (fs.existsSync(multiEraRepoDir)) {
     const loaded = [];
-    // `for...of` loops cleanly over every object in the `fileSpecs` array.
-    for (const spec of fileSpecs) {
-      const full = path.join(aiStagingDir, spec.relPath);
+    for (const spec of multiEraSpecs) {
+      const full = path.join(multiEraRepoDir, spec.relPath);
       if (fs.existsSync(full)) {
-        // Classic Windows 2000 / VB6 text files end every line with `\r\n` (CRLF).
-        // Replacing `/\r\n/g` with `\n` normalizes line breaks across OSes.
         const raw = fs.readFileSync(full, 'utf-8').replace(/\r\n/g, '\n');
         loaded.push({
           id: spec.id,
@@ -369,8 +376,6 @@ function loadStoreTrainerSourceFiles() {
       }
     }
     if (loaded.length > 0) {
-      // Persist the JSON snapshot (`null, 2` pretty-prints with 2-space indentation
-      // so Git diffs remain clean and human-readable).
       fs.mkdirSync(path.dirname(sourceSnapshotPath), { recursive: true });
       fs.writeFileSync(sourceSnapshotPath, JSON.stringify(loaded, null, 2), 'utf-8');
       return loaded;
@@ -382,8 +387,6 @@ function loadStoreTrainerSourceFiles() {
     return JSON.parse(fs.readFileSync(sourceSnapshotPath, 'utf-8'));
   }
 
-  // Safety fallback: return an empty array so array methods (`.filter`, `.map`)
-  // in page renderers never crash on `undefined`.
   return [];
 }
 
@@ -777,9 +780,9 @@ function renderNetscapeShell({ title, description, canonicalPath, noindex = fals
 
   // Primary Netscape toolbar navigation routes.
   const navItems = [
-    { href: '/', label: '🏠 Home & Download' },
-    { href: '/source', label: '💾 VB6 & .NET Source' },
-    { href: '/installer', label: '📦 NSIS Wizard95 Installer' }
+    { href: '/', label: '🏠 Home & Editions' },
+    { href: '/source', label: '💾 Source Archive (v1.0 • v1.1 • v2.0)' },
+    { href: '/installer', label: '📦 Setup & Upgrade Scripts' }
   ];
 
   // Transform the `navItems` array into HTML `<li>` items using `.map(...)` + `.join(...)`.
@@ -953,7 +956,7 @@ function renderNetscapeShell({ title, description, canonicalPath, noindex = fals
             <li class="menu-item-crosssite"><a href="https://michaelpragsdale.com"><u>A</u>rchitect</a></li>
             <li class="menu-item-crosssite"><a href="https://nebulae.raggiesoft.com"><u>N</u>ebulae Sitemap</a></li>
           </ul>
-          <span class="netscape-era-note">Pre-AI Hand-Written Desktop Freeware (2018–2020)</span>
+          <span class="netscape-era-note">v1.0 Pre-AI Archive • v1.1 Retro PC • v2.0 Modern Desktop</span>
         </div>
 
         <!-- Navigation Toolbar -->
@@ -971,8 +974,8 @@ function renderNetscapeShell({ title, description, canonicalPath, noindex = fals
               </button>
             </li>
             <li class="nav-item-primary-download">
-              <a href="https://assets.raggiesoft.com/storetrainer/tssetup100.exe" class="win-btn win-btn-primary">
-                ⬇️ Download tssetup100.exe (v1.0)
+              <a href="https://github.com/raggiesoft/storetrainer" target="_blank" rel="noopener noreferrer" class="win-btn win-btn-primary">
+                🗂️ GitHub Repository (v1.0 • v1.1 • v2.0)
               </a>
             </li>
           </ul>
@@ -1035,7 +1038,7 @@ function renderNetscapeShell({ title, description, canonicalPath, noindex = fals
         </a>
         <span class="win98-task-tab win-inset">
           <span aria-hidden="true">💾</span>
-          <span>RaggieSoft StoreTrainer v1.0</span>
+          <span>RaggieSoft StoreTrainer (v1.0 • v1.1 • v2.0)</span>
         </span>
       </div>
       <div class="win98-systray win-inset" aria-label="Desktop Status Tray">
@@ -1074,75 +1077,87 @@ function renderNetscapeShell({ title, description, canonicalPath, noindex = fals
 function renderHomePage(sourceFiles) {
   const bodyHtml = `
     <div class="retro-banner">
-      <h1>RaggieSoft StoreTrainer v1.0 (Retro PC Game &amp; Trainer Manager)</h1>
+      <h1>RaggieSoft StoreTrainer — PC Game &amp; Trainer Organizer (v1.0 • v1.1 • v2.0)</h1>
       <p style="margin: 0 0 0.85rem; font-size: 1.02rem;">
-        <strong>RaggieSoft StoreTrainer (<code>TStore.exe</code>)</strong> is a <strong>100% hand-written (pre-AI, 2018–2020)</strong> desktop utility authored by <strong>Michael P. Ragsdale</strong> in <strong>Visual Basic 6.0 (<code>TStore.vbp</code>)</strong> inside a <strong>Windows 2000 Professional SP4 virtual machine</strong>. It indexes, stores, and launches classic and modern PC games alongside their associated <strong>game trainers (cheat utilities)</strong> and custom launch options across classic and modern PCs.
+        <strong>RaggieSoft StoreTrainer</strong> is a free desktop organizer created by <strong>Michael P. Ragsdale</strong> for keeping your classic and modern PC games paired with their companion <strong>game trainers (cheat utilities)</strong>, launch options, and personal hotkey notes. Originally hand-written between 2018 and 2020 inside a <strong>Windows 2000 Professional SP4</strong> setup before AI tools existed, StoreTrainer now spans <strong>three preserved generations</strong> that all share the same simple <code>My StoreFiles</code> (<code>.stf</code>) profile library!
       </p>
       <div class="hero-cta-row">
-        <a href="https://assets.raggiesoft.com/storetrainer/tssetup100.exe" class="win-btn win-btn-primary">
-          💾 Download Official Installer: tssetup100.exe
+        <a href="https://github.com/raggiesoft/storetrainer" target="_blank" rel="noopener noreferrer" class="win-btn win-btn-primary">
+          🗂️ Browse Official GitHub Repository (v1.0 Archive, v1.1 Retro &amp; v2.0) →
+        </a>
+        <a href="https://assets.raggiesoft.com/storetrainer/tssetup100.exe" class="win-btn">
+          💾 Download Classic Pre-AI Installer: tssetup100.exe (v1.0)
         </a>
         <a href="/source" class="win-btn">
-          🔍 Inspect VB6 &amp; .NET Source Code (${sourceFiles.length} Files) →
+          🔍 Inspect Source Code (${sourceFiles.length} Files) →
         </a>
         <a href="/installer" class="win-btn">
-          📦 Inspect NSIS Wizard95 Installer Scripts →
+          📦 Inspect Setup &amp; Upgrade Scripts →
         </a>
       </div>
     </div>
 
     <div class="retro-grid-2">
-      <section class="retro-dialog-card" aria-labelledby="why-built-heading">
-        <h2 id="why-built-heading" style="margin-top: 0;">Why StoreTrainer Was Built (2018–2020)</h2>
+      <section class="retro-dialog-card" aria-labelledby="editions-heading">
+        <h2 id="editions-heading" style="margin-top: 0;">Three Generations, One Shared Library</h2>
         <p>
-          Many classic 1990s and 2000s PC games require either specific launch switches (such as resolution overrides, windowed mode, or mod directory flags) or companion <strong>game trainers</strong> that must be launched in the proper working directory before or alongside the game.
+          <strong>StoreTrainer 2.0 (Modern Desktop &amp; RaggieSoft Launcher Edition):</strong> Features a live searchable <code>My StoreFiles</code> sidebar, Favorites pinning, drag-and-drop game and trainer setup, automatic window-ready launch timing, personal hotkey notes, and trusted trainer file safety checks — while smoothly upgrading classic v1.0 and v1.1 installations in place.
         </p>
         <p style="margin-bottom: 0;">
-          Built inside a <strong>Windows 2000 Professional SP4</strong> environment without heavy third-party dependencies, StoreTrainer runs just as cleanly on a classic 1990s retro gaming PC as it does on a modern desktop.
+          <strong>StoreTrainer 1.1 (Classic Retro Edition) &amp; Frozen 1.0 Archive:</strong> Keeps full support alive for vintage <strong>Windows 95, Windows 98, and Windows 2000</strong> gaming PCs with File Explorer double-click <code>.stf</code> launching, launch delays, a Recent Files menu, and RaggieSoft Launcher discovery — right alongside the untouched 2018–2022 pre-AI historical archive.
         </p>
       </section>
 
       <section class="retro-dialog-card" aria-labelledby="sfile-spec-heading">
-        <h2 id="sfile-spec-heading" style="margin-top: 0;">Saved Game Profile (<code>.sfile</code>) Format</h2>
+        <h2 id="sfile-spec-heading" style="margin-top: 0;">Saved Game Profile (<code>.stf</code>) Format</h2>
         <p>
-          StoreTrainer saves each game profile as a simple, human-readable 6-line text file (<code>&lt;GameName&gt;.sfile</code>) alongside <code>StoreTrainer.cfg</code>:
+          Every StoreTrainer edition saves each game profile in <code>Documents\\My StoreFiles</code> as a clean, human-readable text file (<code>MyGame.stf</code>) that works interchangeably across retro and modern PCs:
         </p>
-        <pre class="code-viewer" style="max-height: 200px; margin: 0;">Line 1: GameName     (Display title in the StoreTrainer list)
-Line 2: GameFile     (Full path to the game .exe binary)
-Line 3: GameArgs     (Optional command-line switches for the game)
-Line 4: TrainerFile  (Full path to the companion trainer .exe, or empty)
-Line 5: TrainerArgs  (Optional command-line switches for the trainer)
-Line 6: GamePath     (Working directory passed to ShellExecuteA)
-Line 7: TrainerPath  (Trainer working directory passed to ShellExecuteA)</pre>
+        <pre class="code-viewer" style="max-height: 200px; margin: 0;">[General]
+STF.Version=1.1
+DisplayName=Command &amp; Conquer: Red Alert 2
+Category=Strategy &amp; Simulation
+Favorite=true
+LaunchDelay=3
+
+[Game]
+LaunchGameFirst=true
+Path=C:\\Games\\RA2\\ra2.exe
+Switch=-win
+
+[Trainer]
+TrainerLaunchesGame=false
+Path=C:\\Games\\Trainers\\ra2_trainer.exe
+Switch=</pre>
       </section>
     </div>
 
     <section aria-labelledby="os-matrix-heading">
-      <h2 id="os-matrix-heading">Supported PC Systems</h2>
-      <div class="table-wrapper" style="--label-2: 'Supported Releases'; --label-3: 'Notes';">
+      <h2 id="os-matrix-heading">Choose the Right Edition for Your PC</h2>
+      <div class="table-wrapper" style="--label-2: 'Supported PCs'; --label-3: 'Highlights';">
         <table class="retro-table">
           <thead>
             <tr>
-              <th scope="col">System Era</th>
-              <th scope="col">Supported Releases</th>
-              <th scope="col">Notes</th>
+              <th scope="col">StoreTrainer Edition</th>
+              <th scope="col">Supported PCs</th>
+              <th scope="col">Highlights</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Classic 1990s PCs</strong></td>
-              <td>Windows 95, Windows 98, Windows 98 SE, Windows ME</td>
-              <td>Includes the Visual Basic 6.0 runtime library if not already installed.</td>
+              <td><strong>StoreTrainer 2.0 (Modern Edition)</strong></td>
+              <td>Modern Windows Desktops &amp; Laptops (via <strong>RaggieSoft Launcher</strong> or Standalone Setup)</td>
+              <td>Live searchable library sidebar, drag-and-drop, hotkey notes, trainer file change warnings, Light &amp; Dark themes, and automatic in-place upgrade from v1.0 or v1.1.</td>
             </tr>
             <tr>
-              <td><strong>Classic 2000s PCs</strong></td>
-              <td>Windows NT 4.0, Windows 2000 Professional SP4, Windows XP</td>
-              <td><strong>Original Design Era:</strong> Created and tested inside Windows 2000 Professional SP4.</td>
+              <td><strong>StoreTrainer 1.1 (Classic Retro Edition)</strong></td>
+              <td>Windows 95, 98, ME, NT 4.0 SP3+, Windows 2000 SP4, XP, Vista, 7, 8.1, and newer</td>
+              <td>Double-click <code>.stf</code> launching, <code>/l</code> &amp; <code>/e</code> switches, launch delay timer, Recent StoreFiles menu, in-place patcher from v1.0, and RaggieSoft Launcher discovery.</td>
             </tr>
             <tr>
-              <td><strong>Modern PCs</strong></td>
-              <td>Windows Vista, Windows 7, Windows 8.1, Windows 10, and newer</td>
-              <td>Works out of the box with both the classic edition and the included <code>TStore.NET</code> edition.</td>
+              <td><strong>StoreTrainer 1.0 (Pre-AI Historical Archive)</strong></td>
+              <td>Preserved byte-for-byte in <a href="https://github.com/raggiesoft/storetrainer" target="_blank" rel="noopener noreferrer">github.com/raggiesoft/storetrainer</a></td>
+              <td>100% untouched 2018–2022 historical snapshot (tag <code>v1.0.0-pre-ai</code>) documenting Michael P. Ragsdale&rsquo;s pre-AI desktop craftsmanship.</td>
             </tr>
           </tbody>
         </table>
@@ -1206,12 +1221,12 @@ function renderSourcePage(sourceFiles) {
     .join('\n');
 
   const bodyHtml = `
-    <h1>Visual Basic 6.0 (<code>TStore.vbp</code>) &amp; VB.NET Source Code Inspector</h1>
+    <h1>StoreTrainer Source Code Inspector (v2.0 Modern • v1.1 Retro • v1.0 Pre-AI Archive)</h1>
     <p>
-      Browse the complete, unmodified source code of <strong>RaggieSoft StoreTrainer</strong> authored between 2018 and 2020 inside a Windows 2000 Professional SP4 virtual machine. All source code is released under the <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT License</a>.
+      Explore the open-source evolution of <strong>RaggieSoft StoreTrainer</strong> — from the untouched 2018–2020 pre-AI code built in a Windows 2000 Professional SP4 setup, to Classic Retro Edition v1.1, to StoreTrainer 2.0. View the full repository and release tags on <a href="https://github.com/raggiesoft/storetrainer" target="_blank" rel="noopener noreferrer">GitHub (raggiesoft/storetrainer)</a> under the <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT License</a>.
     </p>
     <div class="retro-banner">
-      <h2 style="margin-top: 0;">Source File Index (${vbFiles.length} Modules &amp; Forms)</h2>
+      <h2 style="margin-top: 0;">Source File Index (${vbFiles.length} Modules &amp; Views)</h2>
       <ul style="margin: 0; padding-left: 1.25rem;">
         ${tocHtml}
       </ul>
@@ -1252,18 +1267,23 @@ function renderInstallerPage(sourceFiles) {
     .join('\n');
 
   const bodyHtml = `
-    <h1>NSIS Wizard95 Installer Architecture (<code>TSSetup.nsi</code> &amp; <code>TSSetup-Patch.nsi</code>)</h1>
+    <h1>Setup &amp; Seamless In-Place Upgrade Scripts (v2.0 • v1.1 Retro • v1.0 Archive)</h1>
     <p>
-      <strong>RaggieSoft StoreTrainer</strong> is packaged using the <strong>Nullsoft Scriptable Install System (NSIS)</strong> with the classic 1990s <code>win.bmp</code> Wizard95 sidebar graphic, <code>WinVer.nsh</code> OS verification (checking for Windows 95 or Windows NT 4.0 and newer), and safe <code>UpgradeDLL</code> registration for the Visual Basic 6.0 SP6 runtime libraries (<code>msvbvm60.dll</code>, <code>oleaut32.dll</code>, <code>olepro32.dll</code>, <code>asycfilt.dll</code>, <code>stdole2.tlb</code>, and <code>comcat.dll</code>).
+      Inspect how <strong>RaggieSoft StoreTrainer</strong> packages both its vintage Windows 95–compatible setup and in-place patcher (v1.1) and its modern StoreTrainer 2.0 setup wizard — including automatic in-place migration from classic v1.0 and v1.1 installations that keeps your saved <code>My StoreFiles</code> library and shared classic system files safe.
     </p>
     <div class="retro-banner">
-      <h2 style="margin-top: 0;">Finish-Page Redirect Canon (<code>storetrainer.raggiesoft.com</code>)</h2>
+      <h2 style="margin-top: 0;">Repository &amp; Classic Download Archive</h2>
       <p style="margin-bottom: 0.75rem;">
-        Original 2020 builds of <code>tssetup100.exe</code> pointed their finish-page link to <code>https://raggiesoft.com/products/storetrainer</code>, which now permanently <code>301</code> redirects to <code>https://storetrainer.raggiesoft.com/</code>. Both active NSIS scripts below define <code>MUI_FINISHPAGE_LINK_LOCATION "https://storetrainer.raggiesoft.com/"</code> for all future builds.
+        Both StoreTrainer 1.1 and StoreTrainer 2.0 integrate directly into <strong>RaggieSoft Launcher</strong>, while the original pre-AI 2020 Wizard95 setup (<code>tssetup100.exe</code>) remains available below for historical preservation.
       </p>
-      <a href="https://assets.raggiesoft.com/storetrainer/tssetup100.exe" class="win-btn win-btn-primary">
-        ⬇️ Download Compiled Installer: tssetup100.exe
-      </a>
+      <div style="display: flex; flex-wrap: wrap; gap: 0.65rem;">
+        <a href="https://github.com/raggiesoft/storetrainer" target="_blank" rel="noopener noreferrer" class="win-btn win-btn-primary">
+          🗂️ Open GitHub Repository: raggiesoft/storetrainer
+        </a>
+        <a href="https://assets.raggiesoft.com/storetrainer/tssetup100.exe" class="win-btn">
+          ⬇️ Download Frozen Pre-AI Setup: tssetup100.exe (v1.0)
+        </a>
+      </div>
     </div>
     ${filesHtml}
   `;
