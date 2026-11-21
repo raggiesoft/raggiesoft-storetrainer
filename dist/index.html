@@ -29,8 +29,8 @@
     <meta name="twitter:image" content="https://assets.raggiesoft.com/raggiesoft-corporate/images/og/raggiesoft-corporate-og.jpg" />
     <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"SoftwareApplication","@id":"https://storetrainer.raggiesoft.com/#software","name":"RaggieSoft StoreTrainer","alternateName":"TStore.exe","url":"https://storetrainer.raggiesoft.com","downloadUrl":"https://assets.raggiesoft.com/storetrainer/tssetup100.exe","softwareVersion":"1.0","applicationCategory":"UtilitiesApplication, GameApplication","operatingSystem":"Windows","license":"https://opensource.org/licenses/MIT","author":{"@type":"Person","@id":"https://michaelpragsdale.com/#michael-ragsdale","name":"Michael P. Ragsdale","url":"https://michaelpragsdale.com"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}},{"@type":"WebSite","@id":"https://storetrainer.raggiesoft.com/#website","url":"https://storetrainer.raggiesoft.com","name":"RaggieSoft StoreTrainer Portal"},{"@type":"WebPage","@id":"https://storetrainer.raggiesoft.com#webpage","url":"https://storetrainer.raggiesoft.com","name":"RaggieSoft StoreTrainer | PC Game & Trainer Manager","description":"Official portal for RaggieSoft StoreTrainer (TStore.exe)—a hand-written utility to store and launch PC games and game trainers on classic and modern PCs.","isPartOf":{"@id":"https://storetrainer.raggiesoft.com/#website"},"about":{"@id":"https://storetrainer.raggiesoft.com/#software"}}]}</script>
     <link rel="icon" type="image/png" href="https://assets.raggiesoft.com/raggiesoft-corporate/images/logos/raggiesoft-logo.png" />
-    <link rel="stylesheet" href="https://assets.raggiesoft.com/storetrainer/css/win98-netscape.css?v=20261115h" />
-    <link rel="stylesheet" href="https://assets.raggiesoft.com/common/css/raggiesoft-network.css?v=20261121d" />
+    <link rel="stylesheet" href="https://assets.raggiesoft.com/storetrainer/css/win98-netscape.css?v=20261121e" />
+    <link rel="stylesheet" href="https://assets.raggiesoft.com/common/css/raggiesoft-network.css?v=20261121e" />
     <!-- Google Analytics 4 (GA4) Telemetry Integration (G-P9RG9JVYB6) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9RG9JVYB6"></script>
     <script>
@@ -68,6 +68,19 @@
             <span aria-hidden="true">🖳</span>
             <span id="win-titlebar-caption" class="win-titlebar-text" data-base-title="RaggieSoft StoreTrainer | PC Game &amp; Trainer Manager">RaggieSoft StoreTrainer | PC Game &amp; Trainer Manager - Netscape Communicator 4.78 [Windows 2000 Professional SP4]</span>
           </div>
+          <button
+            type="button"
+            class="win-btn win-mobile-menu-btn"
+            data-rs-mobile-toggle
+            data-open-label="Open StoreTrainer menu"
+            data-close-label="Close StoreTrainer menu"
+            aria-expanded="false"
+            aria-controls="header-navigation-panel"
+            aria-label="Open StoreTrainer menu"
+          >
+            <span aria-hidden="true">☰</span>
+            <span>Menu</span>
+          </button>
           <div class="win-titlebar-controls" aria-hidden="true">
             <span class="win-ctrl-box">_</span>
             <span class="win-ctrl-box">□</span>
@@ -75,54 +88,56 @@
           </div>
         </header>
 
-        <!-- Menu Bar -->
-        <div class="netscape-menubar" role="navigation" aria-label="Application Menu Bar">
-          <ul class="netscape-menu-items">
-            <li><a href="/"><u>F</u>ile</a></li>
-            <li><a href="/source"><u>E</u>dit / Source</a></li>
-            <li><a href="/installer"><u>V</u>iew Installer</a></li>
-            <li class="menu-item-crosssite"><a href="https://raggiesoft.com"><u>H</u>ub</a></li>
-            <li class="menu-item-crosssite"><a href="https://music.raggiesoft.com"><u>M</u>usic</a></li>
-            <li class="menu-item-crosssite"><a href="https://books.raggiesoft.com"><u>B</u>ooks</a></li>
-            <li class="menu-item-crosssite"><a href="https://stardust.raggiesoft.com"><u>S</u>tardust</a></li>
-            <li class="menu-item-crosssite"><a href="https://engineroom.raggiesoft.com"><u>L</u>abel</a></li>
-            <li class="menu-item-crosssite"><a href="https://corporate.raggiesoft.com/projects/storetrainer"><u>C</u>orporate</a></li>
-            <li class="menu-item-crosssite"><a href="https://michaelpragsdale.com"><u>A</u>rchitect</a></li>
-            <li class="menu-item-crosssite"><a href="https://nebulae.raggiesoft.com"><u>N</u>ebulae Sitemap</a></li>
-          </ul>
-          <span class="netscape-era-note">v1.0 Pre-AI Archive • v1.1 Retro PC • v2.0 Modern Desktop</span>
-        </div>
+        <div id="header-navigation-panel" data-rs-collapsible="true" class="netscape-chrome-drawer">
+          <!-- Menu Bar -->
+          <div class="netscape-menubar" role="navigation" aria-label="Application Menu Bar">
+            <ul class="netscape-menu-items">
+              <li><a href="/"><u>F</u>ile</a></li>
+              <li><a href="/source"><u>E</u>dit / Source</a></li>
+              <li><a href="/installer"><u>V</u>iew Installer</a></li>
+              <li class="menu-item-crosssite"><a href="https://raggiesoft.com"><u>H</u>ub</a></li>
+              <li class="menu-item-crosssite"><a href="https://music.raggiesoft.com"><u>M</u>usic</a></li>
+              <li class="menu-item-crosssite"><a href="https://books.raggiesoft.com"><u>B</u>ooks</a></li>
+              <li class="menu-item-crosssite"><a href="https://stardust.raggiesoft.com"><u>S</u>tardust</a></li>
+              <li class="menu-item-crosssite"><a href="https://engineroom.raggiesoft.com"><u>L</u>abel</a></li>
+              <li class="menu-item-crosssite"><a href="https://corporate.raggiesoft.com/projects/storetrainer"><u>C</u>orporate</a></li>
+              <li class="menu-item-crosssite"><a href="https://michaelpragsdale.com"><u>A</u>rchitect</a></li>
+              <li class="menu-item-crosssite"><a href="https://nebulae.raggiesoft.com"><u>N</u>ebulae Sitemap</a></li>
+            </ul>
+            <span class="netscape-era-note">v1.0 Pre-AI Archive • v1.1 Retro PC • v2.0 Modern Desktop</span>
+          </div>
 
-        <!-- Navigation Toolbar -->
-        <nav class="netscape-toolbar" aria-label="Primary StoreTrainer Navigation">
-          <ul class="netscape-nav-list">
-            <li><a href="/" class="win-btn" aria-current="page">🏠 Home &amp; Editions</a></li>
+          <!-- Navigation Toolbar -->
+          <nav class="netscape-toolbar" aria-label="Primary StoreTrainer Navigation">
+            <ul class="netscape-nav-list">
+              <li><a href="/" class="win-btn" aria-current="page">🏠 Home &amp; Editions</a></li>
             <li><a href="/source" class="win-btn">💾 Source Archive (v1.0 • v1.1 • v2.0)</a></li>
             <li><a href="/installer" class="win-btn">📦 Setup &amp; Upgrade Scripts</a></li>
-            <li>
-              <button
-                type="button"
-                id="theme-toggle"
-                class="win-btn"
-                aria-label="Toggle between classic light desktop theme and dark desktop theme"
-              >
-                <span id="theme-toggle-label">🖥️ Theme</span>
-              </button>
-            </li>
-            <li class="nav-item-primary-download">
-              <a href="https://github.com/raggiesoft/storetrainer" target="_blank" rel="noopener noreferrer" class="win-btn win-btn-primary">
-                🗂️ GitHub Repository (v1.0 • v1.1 • v2.0)
-              </a>
-            </li>
-          </ul>
-          <div class="netscape-throbber" aria-hidden="true" title="Netscape Communicator">N</div>
-        </nav>
+              <li>
+                <button
+                  type="button"
+                  id="theme-toggle"
+                  class="win-btn"
+                  aria-label="Toggle between classic light desktop theme and dark desktop theme"
+                >
+                  <span id="theme-toggle-label">🖥️ Theme</span>
+                </button>
+              </li>
+              <li class="nav-item-primary-download">
+                <a href="https://github.com/raggiesoft/storetrainer" target="_blank" rel="noopener noreferrer" class="win-btn win-btn-primary">
+                  🗂️ GitHub Repository (v1.0 • v1.1 • v2.0)
+                </a>
+              </li>
+            </ul>
+            <div class="netscape-throbber" aria-hidden="true" title="Netscape Communicator">N</div>
+          </nav>
 
-        <!-- Location / Address Bar -->
-        <div class="netscape-locationbar">
-          <strong>Netsite:</strong>
-          <div class="location-input win-inset" aria-label="Current URL">https://storetrainer.raggiesoft.com</div>
-          <a href="https://raggiesoft.com" class="win-btn location-hub-btn">🌐 RaggieSoft Hub</a>
+          <!-- Location / Address Bar -->
+          <div class="netscape-locationbar">
+            <strong>Netsite:</strong>
+            <div class="location-input win-inset" aria-label="Current URL">https://storetrainer.raggiesoft.com</div>
+            <a href="https://raggiesoft.com" class="win-btn location-hub-btn">🌐 RaggieSoft Hub</a>
+          </div>
         </div>
 
         <!-- Sunken Document Viewport -->
@@ -270,6 +285,6 @@
     </div>
 
     <script src="https://assets.raggiesoft.com/storetrainer/js/netscape-ui.js?v=20261115h" defer></script>
-    <script src="https://assets.raggiesoft.com/common/js/raggiesoft-network.js?v=20261121d" defer></script>
+    <script src="https://assets.raggiesoft.com/common/js/raggiesoft-network.js?v=20261121e" defer></script>
   </body>
 </html>

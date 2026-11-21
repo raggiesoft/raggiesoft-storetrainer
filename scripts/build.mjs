@@ -923,8 +923,8 @@ function renderNetscapeShell({ title, description, canonicalPath, noindex = fals
       ]
     })}</script>
     <link rel="icon" type="image/png" href="https://assets.raggiesoft.com/raggiesoft-corporate/images/logos/raggiesoft-logo.png" />
-    <link rel="stylesheet" href="https://assets.raggiesoft.com/storetrainer/css/win98-netscape.css?v=20261115h" />
-    <link rel="stylesheet" href="https://assets.raggiesoft.com/common/css/raggiesoft-network.css?v=20261121d" />
+    <link rel="stylesheet" href="https://assets.raggiesoft.com/storetrainer/css/win98-netscape.css?v=20261121e" />
+    <link rel="stylesheet" href="https://assets.raggiesoft.com/common/css/raggiesoft-network.css?v=20261121e" />
     <!-- Google Analytics 4 (GA4) Telemetry Integration (G-P9RG9JVYB6) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9RG9JVYB6"></script>
     <script>
@@ -962,6 +962,19 @@ function renderNetscapeShell({ title, description, canonicalPath, noindex = fals
             <span aria-hidden="true">🖳</span>
             <span id="win-titlebar-caption" class="win-titlebar-text" data-base-title="${safeTitle}">${safeTitle} - Netscape Communicator 4.78 [Windows 2000 Professional SP4]</span>
           </div>
+          <button
+            type="button"
+            class="win-btn win-mobile-menu-btn"
+            data-rs-mobile-toggle
+            data-open-label="Open StoreTrainer menu"
+            data-close-label="Close StoreTrainer menu"
+            aria-expanded="false"
+            aria-controls="header-navigation-panel"
+            aria-label="Open StoreTrainer menu"
+          >
+            <span aria-hidden="true">☰</span>
+            <span>Menu</span>
+          </button>
           <div class="win-titlebar-controls" aria-hidden="true">
             <span class="win-ctrl-box">_</span>
             <span class="win-ctrl-box">□</span>
@@ -969,52 +982,54 @@ function renderNetscapeShell({ title, description, canonicalPath, noindex = fals
           </div>
         </header>
 
-        <!-- Menu Bar -->
-        <div class="netscape-menubar" role="navigation" aria-label="Application Menu Bar">
-          <ul class="netscape-menu-items">
-            <li><a href="/"><u>F</u>ile</a></li>
-            <li><a href="/source"><u>E</u>dit / Source</a></li>
-            <li><a href="/installer"><u>V</u>iew Installer</a></li>
-            <li class="menu-item-crosssite"><a href="https://raggiesoft.com"><u>H</u>ub</a></li>
-            <li class="menu-item-crosssite"><a href="https://music.raggiesoft.com"><u>M</u>usic</a></li>
-            <li class="menu-item-crosssite"><a href="https://books.raggiesoft.com"><u>B</u>ooks</a></li>
-            <li class="menu-item-crosssite"><a href="https://stardust.raggiesoft.com"><u>S</u>tardust</a></li>
-            <li class="menu-item-crosssite"><a href="https://engineroom.raggiesoft.com"><u>L</u>abel</a></li>
-            <li class="menu-item-crosssite"><a href="https://corporate.raggiesoft.com/projects/storetrainer"><u>C</u>orporate</a></li>
-            <li class="menu-item-crosssite"><a href="https://michaelpragsdale.com"><u>A</u>rchitect</a></li>
-            <li class="menu-item-crosssite"><a href="https://nebulae.raggiesoft.com"><u>N</u>ebulae Sitemap</a></li>
-          </ul>
-          <span class="netscape-era-note">v1.0 Pre-AI Archive • v1.1 Retro PC • v2.0 Modern Desktop</span>
-        </div>
+        <div id="header-navigation-panel" data-rs-collapsible="true" class="netscape-chrome-drawer">
+          <!-- Menu Bar -->
+          <div class="netscape-menubar" role="navigation" aria-label="Application Menu Bar">
+            <ul class="netscape-menu-items">
+              <li><a href="/"><u>F</u>ile</a></li>
+              <li><a href="/source"><u>E</u>dit / Source</a></li>
+              <li><a href="/installer"><u>V</u>iew Installer</a></li>
+              <li class="menu-item-crosssite"><a href="https://raggiesoft.com"><u>H</u>ub</a></li>
+              <li class="menu-item-crosssite"><a href="https://music.raggiesoft.com"><u>M</u>usic</a></li>
+              <li class="menu-item-crosssite"><a href="https://books.raggiesoft.com"><u>B</u>ooks</a></li>
+              <li class="menu-item-crosssite"><a href="https://stardust.raggiesoft.com"><u>S</u>tardust</a></li>
+              <li class="menu-item-crosssite"><a href="https://engineroom.raggiesoft.com"><u>L</u>abel</a></li>
+              <li class="menu-item-crosssite"><a href="https://corporate.raggiesoft.com/projects/storetrainer"><u>C</u>orporate</a></li>
+              <li class="menu-item-crosssite"><a href="https://michaelpragsdale.com"><u>A</u>rchitect</a></li>
+              <li class="menu-item-crosssite"><a href="https://nebulae.raggiesoft.com"><u>N</u>ebulae Sitemap</a></li>
+            </ul>
+            <span class="netscape-era-note">v1.0 Pre-AI Archive • v1.1 Retro PC • v2.0 Modern Desktop</span>
+          </div>
 
-        <!-- Navigation Toolbar -->
-        <nav class="netscape-toolbar" aria-label="Primary StoreTrainer Navigation">
-          <ul class="netscape-nav-list">
-            ${navHtml}
-            <li>
-              <button
-                type="button"
-                id="theme-toggle"
-                class="win-btn"
-                aria-label="Toggle between classic light desktop theme and dark desktop theme"
-              >
-                <span id="theme-toggle-label">🖥️ Theme</span>
-              </button>
-            </li>
-            <li class="nav-item-primary-download">
-              <a href="https://github.com/raggiesoft/storetrainer" target="_blank" rel="noopener noreferrer" class="win-btn win-btn-primary">
-                🗂️ GitHub Repository (v1.0 • v1.1 • v2.0)
-              </a>
-            </li>
-          </ul>
-          <div class="netscape-throbber" aria-hidden="true" title="Netscape Communicator">N</div>
-        </nav>
+          <!-- Navigation Toolbar -->
+          <nav class="netscape-toolbar" aria-label="Primary StoreTrainer Navigation">
+            <ul class="netscape-nav-list">
+              ${navHtml}
+              <li>
+                <button
+                  type="button"
+                  id="theme-toggle"
+                  class="win-btn"
+                  aria-label="Toggle between classic light desktop theme and dark desktop theme"
+                >
+                  <span id="theme-toggle-label">🖥️ Theme</span>
+                </button>
+              </li>
+              <li class="nav-item-primary-download">
+                <a href="https://github.com/raggiesoft/storetrainer" target="_blank" rel="noopener noreferrer" class="win-btn win-btn-primary">
+                  🗂️ GitHub Repository (v1.0 • v1.1 • v2.0)
+                </a>
+              </li>
+            </ul>
+            <div class="netscape-throbber" aria-hidden="true" title="Netscape Communicator">N</div>
+          </nav>
 
-        <!-- Location / Address Bar -->
-        <div class="netscape-locationbar">
-          <strong>Netsite:</strong>
-          <div class="location-input win-inset" aria-label="Current URL">${escapeHtml(canonicalUrl)}</div>
-          <a href="https://raggiesoft.com" class="win-btn location-hub-btn">🌐 RaggieSoft Hub</a>
+          <!-- Location / Address Bar -->
+          <div class="netscape-locationbar">
+            <strong>Netsite:</strong>
+            <div class="location-input win-inset" aria-label="Current URL">${escapeHtml(canonicalUrl)}</div>
+            <a href="https://raggiesoft.com" class="win-btn location-hub-btn">🌐 RaggieSoft Hub</a>
+          </div>
         </div>
 
         <!-- Sunken Document Viewport -->
@@ -1076,7 +1091,7 @@ function renderNetscapeShell({ title, description, canonicalPath, noindex = fals
     </div>
 
     <script src="https://assets.raggiesoft.com/storetrainer/js/netscape-ui.js?v=20261115h" defer></script>
-    <script src="https://assets.raggiesoft.com/common/js/raggiesoft-network.js?v=20261121d" defer></script>
+    <script src="https://assets.raggiesoft.com/common/js/raggiesoft-network.js?v=20261121e" defer></script>
   </body>
 </html>`;
 }
