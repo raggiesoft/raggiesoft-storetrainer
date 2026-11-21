@@ -218,38 +218,59 @@ function loadStoreTrainerSourceFiles() {
   const multiEraSpecs = [
     {
       id: 'v2-profile-cs',
-      title: 'StoreFileProfile.cs (StoreTrainer 2.0 — Backward-Compatible .stf Profile Model)',
+      title: 'StoreFileProfile.cs (StoreTrainer 2.0 — Modern .stfx Game & Multi-Trainer Profile Model)',
       category: 'StoreTrainer 2.0 (Modern)',
       relPath: 'dotnet-v2.0/StoreTrainer/Models/StoreFileProfile.cs',
-      description: 'Modern C# game and trainer profile model preserving 100% file compatibility with classic 1.0 and 1.1 .stf profiles.'
+      description: 'Modern StoreTrainer 2.0 (.stfx) profile model supporting multiple trainers per game, structured shortcut cheat tables, save-game backups, and playtime tracking.'
     },
     {
       id: 'v2-service-cs',
-      title: 'StoreTrainerService.cs (StoreTrainer 2.0 — Library Scanner, Sequencer & File Verification)',
+      title: 'StoreTrainerService.cs (StoreTrainer 2.0 — ZIP Extractor, Save Backups & Launch Engine)',
       category: 'StoreTrainer 2.0 (Modern)',
       relPath: 'dotnet-v2.0/StoreTrainer/Services/StoreTrainerService.cs',
-      description: 'Zero-dependency INI reader/writer, My StoreFiles library scanner, window-ready launch sequencer, and trusted trainer file verification.'
+      description: 'Handles .stfx profiles, non-destructive classic .stf upgrades, trainer .zip archive extraction into game folders, save-game backups, and auto-closing trainers on game exit.'
+    },
+    {
+      id: 'v2-popups-cs',
+      title: 'StoreTrainerPopups.cs (StoreTrainer 2.0 — Upgrade Wizard, ZIP Dialog, .NFO Viewer & Cheat Card)',
+      category: 'StoreTrainer 2.0 (Modern)',
+      relPath: 'dotnet-v2.0/StoreTrainer/Windows/StoreTrainerPopups.cs',
+      description: 'Three-step classic .stf Upgrade Wizard, Trainer ZIP extractor dialog, classic .nfo ASCII art viewer, floating Always-On-Top Cheat Card, and Save Backup manager.'
+    },
+    {
+      id: 'v2-cp437-cs',
+      title: 'Cp437NfoHelper.cs (StoreTrainer 2.0 — Classic Trainer .NFO Reader & Shortcut Importer)',
+      category: 'StoreTrainer 2.0 (Modern)',
+      relPath: 'dotnet-v2.0/StoreTrainer/Services/Cp437NfoHelper.cs',
+      description: 'Renders classic trainer .nfo and file_id.diz ASCII art cleanly and detects shortcut key rows automatically.'
     },
     {
       id: 'v2-mainwindow-xaml',
-      title: 'MainWindow.xaml (StoreTrainer 2.0 — Two-Column Library & Profile Editor Layout)',
+      title: 'MainWindow.xaml (StoreTrainer 2.0 — Two-Column Library & Dual-Launch Editor Layout)',
       category: 'StoreTrainer 2.0 (Modern)',
       relPath: 'dotnet-v2.0/StoreTrainer/MainWindow.xaml',
-      description: 'Accessible desktop layout with live search, Favorites pinning, drag-and-drop game/trainer cards, and Light/Dark theme support.'
+      description: 'Accessible desktop layout with real game icons, Launch with Trainer vs. Launch Clean buttons, multi-trainer slots, and Light/Dark theme support.'
     },
     {
       id: 'v2-mainwindow-cs',
       title: 'MainWindow.xaml.cs (StoreTrainer 2.0 — Interactive Library & Editor Controller)',
       category: 'StoreTrainer 2.0 (Modern)',
       relPath: 'dotnet-v2.0/StoreTrainer/MainWindow.xaml.cs',
-      description: 'Handles instant library filtering, drag-and-drop .stf/.exe files, unsaved-change guards, and one-click game + trainer launching.'
+      description: 'Coordinates instant search, drag-and-drop (.stfx, .stf, .zip, .exe, .nfo), desktop game shortcuts, and software update checks.'
     },
     {
       id: 'v2-app-cs',
-      title: 'App.xaml.cs (StoreTrainer 2.0 — /l & /e Command-Line Switches & Shared Mutex)',
+      title: 'App.xaml.cs (StoreTrainer 2.0 — /l, /e, Classic .stf Wizard Handoff & Shared Mutex)',
       category: 'StoreTrainer 2.0 (Modern)',
       relPath: 'dotnet-v2.0/StoreTrainer/App.xaml.cs',
-      description: 'Startup router supporting silent /l StoreFile launches from File Explorer, /e editor handoff, and shared running-instance detection.'
+      description: 'Startup router supporting fast /l .stfx game launches, /e editor handoff, classic .stf Upgrade Wizard handoff, and protected game-folder copy support.'
+    },
+    {
+      id: 'cpp-updater-core',
+      title: 'UpdaterCore.hpp (RaggieSoftUpdate.exe — Standalone Zero-Runtime Software Update Engine)',
+      category: 'StoreTrainer 2.0 (Modern)',
+      relPath: 'dotnet-v2.0/RaggieSoftUpdate/src/UpdaterCore.hpp',
+      description: 'Self-contained native C++20 software update core shared across RaggieSoft Launcher, StoreTrainer 2.0, Classic StoreTrainer 1.1, Book Reader, Listening Room, and Backstage.'
     },
     {
       id: 'v11-tstore-bas',
@@ -329,11 +350,18 @@ function loadStoreTrainerSourceFiles() {
       description: 'Resolves My Documents\\My StoreFiles and user settings paths across classic and modern PCs.'
     },
     {
+      id: 'v2-wizard-common-iss',
+      title: 'RaggieSoftWizardCommon.iss (Express vs. Custom Setup Mode & Shared Update Packaging)',
+      category: 'NSIS Installer',
+      relPath: 'dotnet-v2.0/SharedInno/RaggieSoftWizardCommon.iss',
+      description: 'Shared setup customization module offering Express vs. Custom installation modes, RaggieSoftUpdate.exe bundling, and multi-user association cleanup.'
+    },
+    {
       id: 'v2-storetrainer-iss',
-      title: 'StoreTrainer.iss (StoreTrainer 2.0 — Modern Setup & Seamless v1.0/v1.1 Upgrade Script)',
+      title: 'StoreTrainer.iss (StoreTrainer 2.0 — Express/Custom Setup & Classic Upgrade Script)',
       category: 'NSIS Installer',
       relPath: 'dotnet-v2.0/StoreTrainer/StoreTrainer.iss',
-      description: 'Modern StoreTrainer 2.0 setup script that cleanly upgrades classic StoreTrainer 1.0 & 1.1 installations in place while keeping shared classic system files and saved My StoreFiles untouched.'
+      description: 'Modern StoreTrainer 2.0 setup script with Express/Custom modes, Launch vs. Edit double-click selection, and in-place upgrade from classic StoreTrainer 1.0 & 1.1.'
     },
     {
       id: 'v11-tssetup-nsi',
@@ -1079,7 +1107,7 @@ function renderHomePage(sourceFiles) {
     <div class="retro-banner">
       <h1>RaggieSoft StoreTrainer — PC Game &amp; Trainer Organizer (v1.0 • v1.1 • v2.0)</h1>
       <p style="margin: 0 0 0.85rem; font-size: 1.02rem;">
-        <strong>RaggieSoft StoreTrainer</strong> is a free desktop organizer created by <strong>Michael P. Ragsdale</strong> for keeping your classic and modern PC games paired with their companion <strong>game trainers (cheat utilities)</strong>, launch options, and personal hotkey notes. Originally hand-written between 2018 and 2020 inside a <strong>Windows 2000 Professional SP4</strong> setup before AI tools existed, StoreTrainer now spans <strong>three preserved generations</strong> that all share the same simple <code>My StoreFiles</code> (<code>.stf</code>) profile library!
+        <strong>RaggieSoft StoreTrainer</strong> is a free desktop organizer created by <strong>Michael P. Ragsdale</strong> for keeping your classic and modern PC games paired with their companion <strong>game trainers (cheat utilities)</strong>, downloaded <code>.zip</code> trainer archives, save-game backups, and floating shortcut cheat cards. Originally hand-written between 2018 and 2020 inside a <strong>Windows 2000 Professional SP4</strong> setup before AI tools existed, StoreTrainer now spans <strong>three preserved generations</strong> — evolving classic <code>My StoreFiles</code> (<code>.stf</code>) into modern <code>Documents\\StoreFiles</code> (<code>.stfx</code>) with a built-in <strong>StoreFile Upgrade Wizard</strong> that keeps your original files untouched!
       </p>
       <div class="hero-cta-row">
         <a href="https://github.com/raggiesoft/storetrainer" target="_blank" rel="noopener noreferrer" class="win-btn win-btn-primary">
@@ -1099,36 +1127,34 @@ function renderHomePage(sourceFiles) {
 
     <div class="retro-grid-2">
       <section class="retro-dialog-card" aria-labelledby="editions-heading">
-        <h2 id="editions-heading" style="margin-top: 0;">Three Generations, One Shared Library</h2>
+        <h2 id="editions-heading" style="margin-top: 0;">Three Generations, Seamless Upgrade Path</h2>
         <p>
-          <strong>StoreTrainer 2.0 (Modern Desktop &amp; RaggieSoft Launcher Edition):</strong> Features a live searchable <code>My StoreFiles</code> sidebar, Favorites pinning, drag-and-drop game and trainer setup, automatic window-ready launch timing, personal hotkey notes, and trusted trainer file safety checks — while smoothly upgrading classic v1.0 and v1.1 installations in place.
+          <strong>StoreTrainer 2.0 (Modern Desktop &amp; RaggieSoft Launcher Edition):</strong> Introduces modern <code>.stfx</code> profiles in <code>Documents\\StoreFiles</code>, a 3-step <strong>StoreFile Upgrade Wizard</strong>, built-in <strong>Trainer ZIP Archive Extraction</strong> (including directly into your game&rsquo;s folder!), multiple trainers per game, <em>Launch with Trainer</em> vs. <em>Launch Clean</em> buttons, pre-launch <strong>Save-Game Backups</strong>, a classic <code>.NFO</code> ASCII art viewer, a floating Always-On-Top <strong>Cheat Card</strong>, and automatic trainer cleanup when you exit your game.
         </p>
         <p style="margin-bottom: 0;">
-          <strong>StoreTrainer 1.1 (Classic Retro Edition) &amp; Frozen 1.0 Archive:</strong> Keeps full support alive for vintage <strong>Windows 95, Windows 98, and Windows 2000</strong> gaming PCs with File Explorer double-click <code>.stf</code> launching, launch delays, a Recent Files menu, and RaggieSoft Launcher discovery — right alongside the untouched 2018–2022 pre-AI historical archive.
+          <strong>StoreTrainer 1.1 (Classic Retro Edition) &amp; Frozen 1.0 Archive:</strong> Keeps full support alive for vintage <strong>Windows 95, Windows 98, NT 4.0, and Windows 2000</strong> gaming PCs (bundling classic system redistributables for bare-metal retro installs) with full forward/backward <code>.stf</code> compatibility between v1.0 and v1.1, plus built-in software update checks on modern PCs.
         </p>
       </section>
 
       <section class="retro-dialog-card" aria-labelledby="sfile-spec-heading">
-        <h2 id="sfile-spec-heading" style="margin-top: 0;">Saved Game Profile (<code>.stf</code>) Format</h2>
+        <h2 id="sfile-spec-heading" style="margin-top: 0;">Modern <code>.stfx</code> &amp; Classic <code>.stf</code> Profiles</h2>
         <p>
-          Every StoreTrainer edition saves each game profile in <code>Documents\\My StoreFiles</code> as a clean, human-readable text file (<code>MyGame.stf</code>) that works interchangeably across retro and modern PCs:
+          Just like <code>.doc</code> evolved into <code>.docx</code>, StoreTrainer 2.0 upgrades classic <code>My StoreFiles\\*.stf</code> profiles into rich <code>Documents\\StoreFiles\\*.stfx</code> files while keeping your classic <code>.stf</code> files 100% intact:
         </p>
-        <pre class="code-viewer" style="max-height: 200px; margin: 0;">[General]
-STF.Version=1.1
-DisplayName=Command &amp; Conquer: Red Alert 2
-Category=Strategy &amp; Simulation
-Favorite=true
-LaunchDelay=3
-
-[Game]
-LaunchGameFirst=true
-Path=C:\\Games\\RA2\\ra2.exe
-Switch=-win
-
-[Trainer]
-TrainerLaunchesGame=false
-Path=C:\\Games\\Trainers\\ra2_trainer.exe
-Switch=</pre>
+        <pre class="code-viewer" style="max-height: 200px; margin: 0;">{
+  "schemaVersion": "2.0",
+  "displayName": "Command &amp; Conquer: Red Alert 2",
+  "category": "Strategy &amp; Simulation",
+  "autoCloseTrainerOnGameExit": true,
+  "backupSavesBeforeLaunch": true,
+  "gamePath": "C:\\\\Games\\\\RA2\\\\ra2.exe",
+  "trainers": [
+    { "label": "+12 Campaign Trainer", "path": "C:\\\\Games\\\\RA2\\\\trn.exe" }
+  ],
+  "hotkeys": [
+    { "keys": "Numpad 1", "effect": "Unlimited Credits" }
+  ]
+}</pre>
       </section>
     </div>
 

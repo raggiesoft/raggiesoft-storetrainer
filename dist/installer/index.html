@@ -151,9 +151,232 @@
       </div>
     </div>
     
+      <section id="v2-wizard-common-iss" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-v2-wizard-common-iss">
+        <h2 id="heading-v2-wizard-common-iss" style="margin-top: 0;">RaggieSoftWizardCommon.iss (Express vs. Custom Setup Mode &amp; Shared Update Packaging)</h2>
+        <p>Shared setup customization module offering Express vs. Custom installation modes, RaggieSoftUpdate.exe bundling, and multi-user association cleanup.</p>
+        <pre class="code-viewer"><code>; ================================================================================
+; FILE: RaggieSoftWizardCommon.iss
+; LOCATION: SharedInno\RaggieSoftWizardCommon.iss
+; INCLUDED BY: StoreTrainer.iss, BookReader.iss, ListeningRoom.iss,
+;              Backstage.iss, and RaggieSoftLauncher.iss
+; LICENSE: MIT License (Code)
+;
+; PLAIN-ENGLISH OVERVIEW (FOR A 100-LEVEL BEGINNER):
+;   What is this shared &#39;.iss&#39; include file?
+;     Instead of copy-pasting the same setup customization logic into five separate
+;     Inno Setup scripts, every RaggieSoft &#39;.iss&#39; script pulls this file in with:
+;       #include &quot;..\SharedInno\RaggieSoftWizardCommon.iss&quot;
+;
+;   What four suite-wide capabilities live here?
+;     1. Automatic Packaging of &#39;RaggieSoftUpdate.exe&#39; (Zero-Runtime C++20 Updater):
+;        If &#39;RaggieSoftUpdate.exe&#39; has been compiled in &#39;..\RaggieSoftUpdate\bin\...\Release\&#39;,
+;        every RaggieSoft installer bundles it into &#39;{autopf}\RaggieSoft\Update\&#39; and
+;        registers &#39;HKA\Software\RaggieSoft\Update\ExecutablePath&#39; so &#39;Check for Updates&#39;
+;        works immediately whether the user installed one app or the whole suite!
+;
+;     2. Express vs. Custom Installation Mode Wizard Page:
+;        Right after the License screen, offers a clean 2-option radio choice:
+;          (*) Express Setup (Recommended) — One-click setup using sensible defaults
+;              (automatically skips Destination Folder, Start Menu Folder, and Tasks!).
+;          ( ) Custom Setup — Choose your installation folder, Start Menu &amp; Desktop
+;              shortcuts, and file/protocol preferences step by step.
+;        Also honors CLI flags &#39;/SETUPTYPE=EXPRESS&#39; or &#39;/SETUPTYPE=CUSTOM&#39;.
+;
+;     3. Custom Ready-to-Install Summary Builder (&#39;FormatRaggieSoftReadyMemo&#39;):
+;        Displays a crisp human-readable summary on &#39;wpReady&#39; showing Setup Mode,
+;        Destination, Shortcuts, Associations, and whether Microsoft .NET 10 Desktop
+;        Runtime is already installed on this PC!
+;
+;     4. Multi-User HKCU Classes Cleanup via Windows &#39;Active Setup&#39;:
+;        When an Administrator uninstalls an app on a shared family/work PC, other
+;        user accounts on that PC cannot have their &#39;HKCU\Software\Classes\...&#39; hives
+;        edited while they are signed out. Writing a tiny one-shot &#39;reg.exe delete&#39;
+;        entry under &#39;HKLM\SOFTWARE\Microsoft\Active Setup\Installed Components&#39; tells
+;        Windows Explorer to clean up any stale per-user association automatically the
+;        next time each other user signs in — zero separate &quot;Removal Tool&quot; needed!
+; ================================================================================
+
+; --------------------------------------------------------------------------------
+; [Files] &amp; [Registry]: Bundle RaggieSoftUpdate.exe automatically whenever compiled
+; --------------------------------------------------------------------------------
+#define SharedUpdaterX64 &quot;..\RaggieSoftUpdate\bin\x64\Release\RaggieSoftUpdate.exe&quot;
+#define SharedUpdaterArm64 &quot;..\RaggieSoftUpdate\bin\ARM64\Release\RaggieSoftUpdate.exe&quot;
+
+[Files]
+#if FileExists(SharedUpdaterX64)
+Source: &quot;{#SharedUpdaterX64}&quot;; DestDir: &quot;{autopf}\RaggieSoft\Update&quot;; Flags: ignoreversion uninsneveruninstall; Check: not IsArm64
+#endif
+#if FileExists(SharedUpdaterArm64)
+Source: &quot;{#SharedUpdaterArm64}&quot;; DestDir: &quot;{autopf}\RaggieSoft\Update&quot;; Flags: ignoreversion uninsneveruninstall; Check: IsArm64
+#endif
+
+[Registry]
+#if FileExists(SharedUpdaterX64) || FileExists(SharedUpdaterArm64)
+Root: HKA; Subkey: &quot;Software\RaggieSoft\Update&quot;; ValueType: string; ValueName: &quot;ExecutablePath&quot;; ValueData: &quot;{autopf}\RaggieSoft\Update\RaggieSoftUpdate.exe&quot;
+#endif
+
+; --------------------------------------------------------------------------------
+; [Code]: Express vs. Custom Wizard Page, Ready Memo &amp; Multi-User Active Setup Stub
+; --------------------------------------------------------------------------------
+[Code]
+var
+  RaggieSoftInstallModePage: TWizardPage;
+  ExpressModeRadio: TNewRadioButton;
+  CustomModeRadio: TNewRadioButton;
+
+// Checks CLI for &#39;/SETUPTYPE=CUSTOM&#39; so power users can pre-select Custom mode
+function HasCustomSetupTypeCliFlag(): Boolean;
+var
+  I: Integer;
+  UpperArg: String;
+begin
+  Result := False;
+  for I := 1 to ParamCount do
+  begin
+    UpperArg := Uppercase(Trim(ParamStr(I)));
+    if (UpperArg = &#39;/SETUPTYPE=CUSTOM&#39;) or (UpperArg = &#39;/CUSTOM&#39;) then
+    begin
+      Result := True;
+      Exit;
+    end;
+  end;
+end;
+
+// Creates the Express vs. Custom Installation Mode radio page right after wpLicense
+procedure InitRaggieSoftExpressCustomPage(const ExpressSummaryLine, CustomSummaryLine: String);
+var
+  IntroText, ExpressDesc, CustomDesc: TNewStaticText;
+  DefaultCustom: Boolean;
+begin
+  DefaultCustom := HasCustomSetupTypeCliFlag();
+
+  RaggieSoftInstallModePage := CreateCustomPage(
+    wpLicense,
+    &#39;Choose Installation Type&#39;,
+    &#39;Select Express Setup for recommended defaults, or Custom Setup to tailor folders and shortcuts.&#39;);
+
+  IntroText := TNewStaticText.Create(RaggieSoftInstallModePage);
+  IntroText.Parent := RaggieSoftInstallModePage.Surface;
+  IntroText.Left := ScaleX(0);
+  IntroText.Top := ScaleY(0);
+  IntroText.Width := RaggieSoftInstallModePage.SurfaceWidth;
+  IntroText.WordWrap := True;
+  IntroText.AutoSize := True;
+  IntroText.Caption := &#39;How would you like to install {#MyAppName}?&#39;;
+
+  ExpressModeRadio := TNewRadioButton.Create(RaggieSoftInstallModePage);
+  ExpressModeRadio.Parent := RaggieSoftInstallModePage.Surface;
+  ExpressModeRadio.Left := ScaleX(0);
+  ExpressModeRadio.Top := IntroText.Top + IntroText.Height + ScaleY(14);
+  ExpressModeRadio.Width := RaggieSoftInstallModePage.SurfaceWidth;
+  ExpressModeRadio.Height := ScaleY(22);
+  ExpressModeRadio.Font.Style := [fsBold];
+  ExpressModeRadio.Caption := &#39;Express Setup (Recommended)&#39;;
+  ExpressModeRadio.Checked := not DefaultCustom;
+
+  ExpressDesc := TNewStaticText.Create(RaggieSoftInstallModePage);
+  ExpressDesc.Parent := RaggieSoftInstallModePage.Surface;
+  ExpressDesc.Left := ScaleX(22);
+  ExpressDesc.Top := ExpressModeRadio.Top + ExpressModeRadio.Height + ScaleY(2);
+  ExpressDesc.Width := RaggieSoftInstallModePage.SurfaceWidth - ScaleX(22);
+  ExpressDesc.WordWrap := True;
+  ExpressDesc.AutoSize := True;
+  ExpressDesc.Caption := ExpressSummaryLine;
+
+  CustomModeRadio := TNewRadioButton.Create(RaggieSoftInstallModePage);
+  CustomModeRadio.Parent := RaggieSoftInstallModePage.Surface;
+  CustomModeRadio.Left := ScaleX(0);
+  CustomModeRadio.Top := ExpressDesc.Top + ExpressDesc.Height + ScaleY(18);
+  CustomModeRadio.Width := RaggieSoftInstallModePage.SurfaceWidth;
+  CustomModeRadio.Height := ScaleY(22);
+  CustomModeRadio.Font.Style := [fsBold];
+  CustomModeRadio.Caption := &#39;Custom Setup&#39;;
+  CustomModeRadio.Checked := DefaultCustom;
+
+  CustomDesc := TNewStaticText.Create(RaggieSoftInstallModePage);
+  CustomDesc.Parent := RaggieSoftInstallModePage.Surface;
+  CustomDesc.Left := ScaleX(22);
+  CustomDesc.Top := CustomModeRadio.Top + CustomModeRadio.Height + ScaleY(2);
+  CustomDesc.Width := RaggieSoftInstallModePage.SurfaceWidth - ScaleX(22);
+  CustomDesc.WordWrap := True;
+  CustomDesc.AutoSize := True;
+  CustomDesc.Caption := CustomSummaryLine;
+end;
+
+function IsRaggieSoftExpressMode(): Boolean;
+begin
+  Result := (ExpressModeRadio &lt;&gt; nil) and ExpressModeRadio.Checked;
+end;
+
+// Skips folder/group/tasks pages automatically when Express Setup is chosen
+function ShouldSkipStandardPagesInExpressMode(const PageID: Integer): Boolean;
+begin
+  Result := False;
+  if IsRaggieSoftExpressMode() then
+  begin
+    if (PageID = wpSelectDir) or (PageID = wpSelectProgramGroup) or (PageID = wpSelectTasks) then
+      Result := True;
+  end;
+end;
+
+// Formats a clean Ready-to-Install overview memo (including .NET 10 runtime status!)
+function FormatRaggieSoftReadyMemo(
+  const Space, NewLine, MemoUserInfoInfo, MemoDirInfo, MemoTypeInfo,
+  MemoComponentsInfo, MemoGroupInfo, MemoTasksInfo, ExtraCustomLines: String;
+  const DotNetAlreadyPresent: Boolean): String;
+var
+  S: String;
+begin
+  S := &#39;Installation Mode:&#39; + NewLine + Space;
+  if IsRaggieSoftExpressMode() then
+    S := S + &#39;Express Setup (Recommended defaults)&#39; + NewLine + NewLine
+  else
+    S := S + &#39;Custom Setup&#39; + NewLine + NewLine;
+
+  if MemoDirInfo &lt;&gt; &#39;&#39; then
+    S := S + MemoDirInfo + NewLine + NewLine;
+
+  if MemoGroupInfo &lt;&gt; &#39;&#39; then
+    S := S + MemoGroupInfo + NewLine + NewLine;
+
+  if MemoTasksInfo &lt;&gt; &#39;&#39; then
+    S := S + MemoTasksInfo + NewLine + NewLine;
+
+  if ExtraCustomLines &lt;&gt; &#39;&#39; then
+    S := S + ExtraCustomLines + NewLine + NewLine;
+
+  S := S + &#39;Runtime Status:&#39; + NewLine + Space;
+  if DotNetAlreadyPresent then
+    S := S + &#39;Microsoft .NET 10 Desktop Runtime is already installed (no extra download needed).&#39;
+  else
+    S := S + &#39;Microsoft .NET 10 Desktop Runtime will be downloaded and installed automatically.&#39;;
+
+  Result := S;
+end;
+
+// Registers a lightweight Windows Active Setup stub on Admin Uninstall so any OTHER
+// user accounts on the same PC automatically clean up stale per-user HKCU\Software\Classes
+// entries the next time they sign into Windows (zero external removal tool required!).
+procedure RegisterMultiUserHkcuClassesCleanupStub(const ComponentGuid, ClassSubKeyName: String);
+var
+  ActiveSetupKey, CmdLine: String;
+begin
+  if not IsAdminInstallMode then
+    Exit;
+
+  ActiveSetupKey := &#39;SOFTWARE\Microsoft\Active Setup\Installed Components\&#39; + ComponentGuid;
+  CmdLine := ExpandConstant(&#39;{sys}\reg.exe&#39;) + &#39; delete &quot;HKCU\Software\Classes\&#39; + ClassSubKeyName + &#39;&quot; /f&#39;;
+
+  RegWriteStringValue(HKLM64, ActiveSetupKey, &#39;&#39;, &#39;{#MyAppName} Per-User Cleanup&#39;);
+  RegWriteStringValue(HKLM64, ActiveSetupKey, &#39;StubPath&#39;, CmdLine);
+  RegWriteStringValue(HKLM64, ActiveSetupKey, &#39;Version&#39;, &#39;2,0,&#39; + GetDateTimeString(&#39;yyyymmdd,hhnnss&#39;, &#39;&#39;, &#39;&#39;));
+end;
+</code></pre>
+      </section>
+
       <section id="v2-storetrainer-iss" class="retro-dialog-card" style="margin-bottom: 1.5rem;" aria-labelledby="heading-v2-storetrainer-iss">
-        <h2 id="heading-v2-storetrainer-iss" style="margin-top: 0;">StoreTrainer.iss (StoreTrainer 2.0 — Modern Setup &amp; Seamless v1.0/v1.1 Upgrade Script)</h2>
-        <p>Modern StoreTrainer 2.0 setup script that cleanly upgrades classic StoreTrainer 1.0 &amp; 1.1 installations in place while keeping shared classic system files and saved My StoreFiles untouched.</p>
+        <h2 id="heading-v2-storetrainer-iss" style="margin-top: 0;">StoreTrainer.iss (StoreTrainer 2.0 — Express/Custom Setup &amp; Classic Upgrade Script)</h2>
+        <p>Modern StoreTrainer 2.0 setup script with Express/Custom modes, Launch vs. Edit double-click selection, and in-place upgrade from classic StoreTrainer 1.0 &amp; 1.1.</p>
         <pre class="code-viewer"><code>; ================================================================================
 ; FILE: StoreTrainer.iss
 ; APPLICATION: RaggieSoft StoreTrainer 2.0
@@ -163,30 +386,20 @@
 ;
 ; PLAIN-ENGLISH OVERVIEW (FOR A 100-LEVEL BEGINNER):
 ;   What is this file?
-;     This &#39;.iss&#39; file is the Inno Setup 7 installer script that compiles
-;     &#39;RaggieSoft-StoreTrainer-Setup.exe&#39; inside &#39;..\Installers\&#39;.
-;
-;   How does the Surgical NSIS-to-Inno Setup Upgrade (v1.0 / v1.1 -&gt; v2.0) work?
-;     Like Microsoft Office 97 (ACME Setup) upgrading cleanly to Office 2000 (MSI),
-;     classic StoreTrainer v1.0 &amp; v1.1 used a 32-bit Nullsoft NSIS installer
-;     (&#39;TSSetup.nsi&#39;) that installed &#39;TStore.exe&#39; into:
-;       C:\Program Files (x86)\RaggieSoft\StoreTrainer
-;     and registered 32-bit Visual Basic 6.0 runtime files in &#39;C:\Windows\SysWOW64\&#39;.
-;
-;     When a user upgrades from StoreTrainer v1.0 or v1.1 to StoreTrainer 2.0,
-;     this script performs a zero-race-condition SURGICAL TAKEOVER during &#39;ssInstall&#39;:
-;       1. NEVER touches &#39;C:\Windows\SysWOW64\&#39; (&#39;msvbvm60.dll&#39;, &#39;comdlg32.ocx&#39;,
-;          &#39;comctl32.ocx&#39;, &#39;comct232.ocx&#39;, &#39;wshom.ocx&#39;) so other classic VB6 apps
-;          on the user&#39;s PC continue working forever!
-;       2. NEVER touches the user&#39;s saved game profiles (&#39;Documents\My StoreFiles\*.stf&#39;)
-;          or settings (&#39;%APPDATA%\RaggieSoft\StoreTrainer\TStore.ini&#39;) during an upgrade!
-;       3. Reads the exact legacy 32-bit NSIS installation path from
-;          &#39;HKLM32\Software\RaggieSoft\StoreTrainer&#39; (&#39;Installation Folder&#39;), deletes
-;          ONLY StoreTrainer&#39;s own legacy files (&#39;TStore.exe&#39;, &#39;TStore.exe.manifest&#39;,
-;          &#39;README.txt&#39;, &#39;LICENSE.rtf&#39;, &#39;TStore.ini&#39;, &#39;uninstall.exe&#39;, and &#39;Source\&#39;),
-;          removes the old folder ONLY if empty, removes &#39;{commonprograms}\StoreTrainer.lnk&#39;,
-;          and deletes the old 32-bit NSIS Uninstall key so Windows &quot;Installed Apps&quot;
-;          shows ONE clean entry owned 100% by Inno Setup&#39;s &#39;unins000.exe&#39;!
+;     This &#39;.iss&#39; file compiles &#39;RaggieSoft-StoreTrainer-Setup.exe&#39; inside &#39;..\Installers\&#39;.
+;     It brings together:
+;       1. Express vs. Custom Installation Mode (via &#39;SharedInno\RaggieSoftWizardCommon.iss&#39;),
+;          plus a Custom Setup page choosing whether double-clicking a &#39;.stfx&#39; file
+;          launches your game &amp; trainer immediately (&#39;/l&#39;) or opens the editor (&#39;/e&#39;)!
+;       2. Modern &#39;.stfx&#39; (&#39;Documents\StoreFiles\&#39;) and optional classic &#39;.stf&#39; file
+;          associations, plus &#39;raggiesoft-storetrainer://&#39; deep links and automatic
+;          deployment of our zero-runtime C++20 updater (&#39;RaggieSoftUpdate.exe&#39;).
+;       3. Surgical NSIS-to-Inno Setup Upgrade (v1.0 / v1.1 -&gt; v2.0):
+;          Never touches &#39;C:\Windows\SysWOW64\&#39; VB6 runtime files or &#39;Documents\My StoreFiles\*.stf&#39;;
+;          surgically removes only StoreTrainer&#39;s legacy 32-bit files and Uninstall key.
+;       4. Multi-User &#39;HKCU\Software\Classes&#39; Cleanup via Windows &#39;Active Setup&#39; on
+;          Admin uninstall so other user accounts on a shared PC never need an external
+;          &quot;File Associations Removal Tool&quot;!
 ; ================================================================================
 
 #ifndef BuildDirX64
@@ -196,26 +409,19 @@
   #define BuildDirArm64 &quot;bin\Release\net10.0-windows\win-arm64\publish&quot;
 #endif
 
-; Core application identity constants
 #define MyAppName &quot;RaggieSoft StoreTrainer&quot;
 #define MyAppVersion &quot;2.0.0&quot;
 #define MyAppPublisher &quot;RaggieSoft (Michael P. Ragsdale)&quot;
 #define MyAppURL &quot;https://storetrainer.raggiesoft.com&quot;
 #define MyAppExeName &quot;StoreTrainer.exe&quot;
-; Shared Mutex name used by BOTH VB6 v1.1 (&#39;TStore.exe&#39;) and C# v2.0 (&#39;StoreTrainer.exe&#39;)
 #define MyAppMutex &quot;RaggieSoft_StoreTrainer_Mutex&quot;
 
-; Official Microsoft .NET 10.0 Windows Desktop Runtime bootstrapper URLs (downloaded ONLY if missing)
 #define DotNet10DesktopX64Url &quot;https://aka.ms/dotnet/10.0/windowsdesktop-runtime-win-x64.exe&quot;
 #define DotNet10DesktopX64File &quot;windowsdesktop-runtime-10.0-win-x64.exe&quot;
 #define DotNet10DesktopArm64Url &quot;https://aka.ms/dotnet/10.0/windowsdesktop-runtime-win-arm64.exe&quot;
 #define DotNet10DesktopArm64File &quot;windowsdesktop-runtime-10.0-win-arm64.exe&quot;
 
-; --------------------------------------------------------------------------------
-; [Setup] SECTION: Global installer metadata, 64-bit mode &amp; RaggieSoft Launcher ID
-; --------------------------------------------------------------------------------
 [Setup]
-; Matches RaggieSoftSuiteManager.StoreTrainerInnoAppId in RaggieSoft.Core
 AppId={{8E92D4A1-63F0-4C8B-9B7A-10164500B004}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
@@ -259,54 +465,47 @@ Name: &quot;english&quot;; MessagesFile: &quot;compiler:Default.isl&quot;
 
 [Tasks]
 Name: &quot;desktopicon&quot;; Description: &quot;{cm:CreateDesktopIcon}&quot;; GroupDescription: &quot;{cm:AdditionalIcons}&quot;
-Name: &quot;associate_stf&quot;; Description: &quot;Associate .stf StoreFile profiles with {#MyAppName} (double-click to launch, right-click to edit)&quot;; GroupDescription: &quot;File Associations:&quot;
+Name: &quot;associate_stfx&quot;; Description: &quot;Register .stfx StoreTrainer 2.0 game profiles in File Explorer&quot;; GroupDescription: &quot;File Associations:&quot;
+Name: &quot;associate_stf&quot;; Description: &quot;Open classic .stf StoreFiles (v1.0 / v1.1) in the StoreTrainer 2.0 Upgrade Wizard&quot;; GroupDescription: &quot;File Associations:&quot;
 
 [Dirs]
-Name: &quot;{userappdata}\RaggieSoft\StoreTrainer&quot;
-Name: &quot;{userdocs}\My StoreFiles&quot;
+Name: &quot;{userappdata}\RaggieSoft&quot;
+Name: &quot;{userdocs}\StoreFiles&quot;
 
-; --------------------------------------------------------------------------------
-; [InstallDelete] SECTION: Clean up legacy All-Users NSIS Start Menu shortcut
-; --------------------------------------------------------------------------------
 [InstallDelete]
-; Classic NSIS &#39;TSSetup.nsi&#39; placed &#39;StoreTrainer.lnk&#39; at the root of All Users Programs
+; Remove legacy All-Users NSIS Start Menu shortcut from v1.0 / v1.1
 Type: files; Name: &quot;{commonprograms}\StoreTrainer.lnk&quot;
 
-; --------------------------------------------------------------------------------
-; [Files] SECTION: Install CPU-matched native x64 or ARM64 binaries into &#39;{app}&#39;
-; --------------------------------------------------------------------------------
 [Files]
 Source: &quot;{#BuildDirX64}\*&quot;; DestDir: &quot;{app}&quot;; Flags: ignoreversion recursesubdirs createallsubdirs; Check: not IsArm64
 Source: &quot;{#BuildDirArm64}\*&quot;; DestDir: &quot;{app}&quot;; Flags: ignoreversion recursesubdirs createallsubdirs; Check: IsArm64
 
-; --------------------------------------------------------------------------------
-; [Icons] SECTION: Start Menu and optional Desktop shortcuts
-; --------------------------------------------------------------------------------
 [Icons]
 Name: &quot;{group}\{#MyAppName}&quot;; Filename: &quot;{app}\{#MyAppExeName}&quot;; Comment: &quot;Organize and launch PC games alongside their companion trainers&quot;
 Name: &quot;{autodesktop}\{#MyAppName}&quot;; Filename: &quot;{app}\{#MyAppExeName}&quot;; Comment: &quot;Organize and launch PC games alongside their companion trainers&quot;; Tasks: desktopicon
 
-; --------------------------------------------------------------------------------
-; [Registry] SECTION:
-;   1. Declaratively remove legacy 32-bit NSIS Uninstall &amp; App keys (if Admin install)
-;      so Windows &quot;Installed Apps&quot; has ONE entry owned by Inno Setup&#39;s unins000.exe!
-;   2. Register &#39;.stf&#39; StoreFile association (&#39;open&#39; -&gt; &#39;/l &quot;%1&quot;&#39;, &#39;edit&#39; -&gt; &#39;/e &quot;%1&quot;&#39;).
-;   3. Register &#39;raggiesoft-storetrainer://&#39; custom URL protocol.
-; --------------------------------------------------------------------------------
 [Registry]
-; Remove legacy 32-bit NSIS Programs &amp; Features entry (plus v1.0&#39;s historical &#39;Microsoft Windows&#39; typo key)
+; Clean up legacy 32-bit NSIS Uninstall &amp; App keys when installing in Admin mode
 Root: HKLM32; Subkey: &quot;Software\Microsoft\Windows\CurrentVersion\Uninstall\RaggieSoft StoreTrainer&quot;; Flags: deletekey noerror; Check: IsAdminInstallMode
 Root: HKLM32; Subkey: &quot;Software\Microsoft Windows\CurrentVersion\Uninstall\RaggieSoft StoreTrainer&quot;; Flags: deletekey noerror; Check: IsAdminInstallMode
 Root: HKLM32; Subkey: &quot;Software\RaggieSoft\StoreTrainer&quot;; Flags: deletekey noerror; Check: IsAdminInstallMode
 
-; Register &#39;.stf&#39; file extension -&gt; &#39;RaggieSoft.StoreFile&#39; ProgID
+; Modern &#39;.stfx&#39; JSON profile association (respects Custom Setup&#39;s Launch vs. Edit double-click verb!)
+Root: HKA; Subkey: &quot;Software\Classes\.stfx&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;RaggieSoft.StoreFileX&quot;; Flags: uninsdeletevalue; Tasks: associate_stfx
+Root: HKA; Subkey: &quot;Software\Classes\RaggieSoft.StoreFileX&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;RaggieSoft StoreTrainer 2.0 Profile&quot;; Flags: uninsdeletekey; Tasks: associate_stfx
+Root: HKA; Subkey: &quot;Software\Classes\RaggieSoft.StoreFileX\DefaultIcon&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;&quot;&quot;{app}\{#MyAppExeName}&quot;&quot;,0&quot;; Tasks: associate_stfx
+Root: HKA; Subkey: &quot;Software\Classes\RaggieSoft.StoreFileX\shell&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;{code:GetStoreFileDefaultVerb}&quot;; Tasks: associate_stfx
+Root: HKA; Subkey: &quot;Software\Classes\RaggieSoft.StoreFileX\shell\open&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;Launch Game &amp;&amp; Trainer&quot;; Tasks: associate_stfx
+Root: HKA; Subkey: &quot;Software\Classes\RaggieSoft.StoreFileX\shell\open\command&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;&quot;&quot;{app}\{#MyAppExeName}&quot;&quot; /l &quot;&quot;%1&quot;&quot;&quot;; Tasks: associate_stfx
+Root: HKA; Subkey: &quot;Software\Classes\RaggieSoft.StoreFileX\shell\edit&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;Edit in RaggieSoft StoreTrainer&quot;; Tasks: associate_stfx
+Root: HKA; Subkey: &quot;Software\Classes\RaggieSoft.StoreFileX\shell\edit\command&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;&quot;&quot;{app}\{#MyAppExeName}&quot;&quot; /e &quot;&quot;%1&quot;&quot;&quot;; Tasks: associate_stfx
+
+; Optional classic &#39;.stf&#39; association -&gt; opens StoreTrainer 2.0&#39;s non-destructive Upgrade Wizard
 Root: HKA; Subkey: &quot;Software\Classes\.stf&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;RaggieSoft.StoreFile&quot;; Flags: uninsdeletevalue; Tasks: associate_stf
-Root: HKA; Subkey: &quot;Software\Classes\RaggieSoft.StoreFile&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;RaggieSoft StoreTrainer Profile&quot;; Flags: uninsdeletekey; Tasks: associate_stf
+Root: HKA; Subkey: &quot;Software\Classes\RaggieSoft.StoreFile&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;Classic RaggieSoft StoreFile (v1.0 / v1.1)&quot;; Flags: uninsdeletekey; Tasks: associate_stf
 Root: HKA; Subkey: &quot;Software\Classes\RaggieSoft.StoreFile\DefaultIcon&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;&quot;&quot;{app}\{#MyAppExeName}&quot;&quot;,0&quot;; Tasks: associate_stf
-Root: HKA; Subkey: &quot;Software\Classes\RaggieSoft.StoreFile\shell\open&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;Launch Game &amp;&amp; Trainer&quot;; Tasks: associate_stf
-Root: HKA; Subkey: &quot;Software\Classes\RaggieSoft.StoreFile\shell\open\command&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;&quot;&quot;{app}\{#MyAppExeName}&quot;&quot; /l &quot;&quot;%1&quot;&quot;&quot;; Tasks: associate_stf
-Root: HKA; Subkey: &quot;Software\Classes\RaggieSoft.StoreFile\shell\edit&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;Edit in RaggieSoft StoreTrainer&quot;; Tasks: associate_stf
-Root: HKA; Subkey: &quot;Software\Classes\RaggieSoft.StoreFile\shell\edit\command&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;&quot;&quot;{app}\{#MyAppExeName}&quot;&quot; /e &quot;&quot;%1&quot;&quot;&quot;; Tasks: associate_stf
+Root: HKA; Subkey: &quot;Software\Classes\RaggieSoft.StoreFile\shell\open&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;Upgrade in RaggieSoft StoreTrainer 2.0&quot;; Tasks: associate_stf
+Root: HKA; Subkey: &quot;Software\Classes\RaggieSoft.StoreFile\shell\open\command&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;&quot;&quot;{app}\{#MyAppExeName}&quot;&quot; /e &quot;&quot;%1&quot;&quot;&quot;; Tasks: associate_stf
 
 ; Register &#39;raggiesoft-storetrainer://&#39; deep-link protocol
 Root: HKA; Subkey: &quot;Software\Classes\raggiesoft-storetrainer&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;URL:RaggieSoft StoreTrainer Protocol&quot;; Flags: uninsdeletekey
@@ -314,35 +513,36 @@ Root: HKA; Subkey: &quot;Software\Classes\raggiesoft-storetrainer&quot;; ValueTy
 Root: HKA; Subkey: &quot;Software\Classes\raggiesoft-storetrainer\DefaultIcon&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;&quot;&quot;{app}\{#MyAppExeName}&quot;&quot;,0&quot;
 Root: HKA; Subkey: &quot;Software\Classes\raggiesoft-storetrainer\shell\open\command&quot;; ValueType: string; ValueName: &quot;&quot;; ValueData: &quot;&quot;&quot;{app}\{#MyAppExeName}&quot;&quot; &quot;&quot;%1&quot;&quot;&quot;
 
-; --------------------------------------------------------------------------------
-; [Run] SECTION: Install .NET 10 Desktop Runtime (only if missing) &amp; optional Launch
-; --------------------------------------------------------------------------------
 [Run]
 Filename: &quot;{tmp}\{code:GetDotNetInstallerFileName}&quot;; Parameters: &quot;/install /quiet /norestart&quot;; StatusMsg: &quot;Installing Microsoft .NET 10.0 Desktop Runtime...&quot;; Flags: waituntilterminated; Check: ShouldInstallDownloadedDotNet10Runtime
 Filename: &quot;{app}\{#MyAppExeName}&quot;; Description: &quot;{cm:LaunchProgram,{#StringChange(MyAppName, &#39;&amp;&#39;, &#39;&amp;&amp;&#39;)}}&quot;; Flags: nowait postinstall skipifsilent
 
-; --------------------------------------------------------------------------------
-; [Code] SECTION: Pascal Script hooks (Surgical NSIS Upgrade, .NET 10 Check &amp; Uninstall UI)
-; --------------------------------------------------------------------------------
+; Pull in shared RaggieSoftUpdate.exe packaging, Express/Custom page &amp; Active Setup multi-user cleanup!
+#include &quot;..\SharedInno\RaggieSoftWizardCommon.iss&quot;
+
 [Code]
 var
   DownloadPage: TDownloadWizardPage;
+  DoubleClickVerbPage: TInputOptionWizardPage;
   DotNet10RuntimeDownloaded: Boolean;
   LegacyNsisInstallDir: String;
 
-  // Custom Uninstaller Wizard Page controls &amp; flags (default False / unchecked for safety!)
   UninstallOptionsPage: TNewNotebookPage;
   RemoveProfilesCheckBox: TNewCheckBox;
   RemovePrefsCheckBox: TNewCheckBox;
+  CleanOtherUsersCheckBox: TNewCheckBox;
   UninstallRemoveProfiles: Boolean;
   UninstallRemovePrefs: Boolean;
+  UninstallCleanOtherUsers: Boolean;
 
-// ============================================================================
-// SURGICAL LEGACY NSIS (v1.0 / v1.1) DISCOVERY &amp; CLEANUP
-//   - Captured BEFORE [Registry] deletes &#39;HKLM32\Software\RaggieSoft\StoreTrainer&#39;.
-//   - Surgically removes ONLY StoreTrainer&#39;s own legacy files from &#39;Program Files (x86)&#39;,
-//     leaving C:\Windows\SysWOW64\ VB6 runtime DLLs/OCXs and user &#39;.stf&#39; files 100% intact!
-// ============================================================================
+function GetStoreFileDefaultVerb(Param: String): String;
+begin
+  if (DoubleClickVerbPage &lt;&gt; nil) and (not IsRaggieSoftExpressMode()) and (DoubleClickVerbPage.SelectedValueIndex = 1) then
+    Result := &#39;edit&#39;
+  else
+    Result := &#39;open&#39;;
+end;
+
 function DetectLegacyNsisInstallFolder(): String;
 var
   DirVal, UninsVal: String;
@@ -368,17 +568,14 @@ begin
   if (LegacyNsisInstallDir = &#39;&#39;) or (not DirExists(LegacyNsisInstallDir)) then
     Exit;
 
-  // Safety check: only clean if this folder actually contains classic TStore.exe or NSIS uninstall.exe
   if (not FileExists(LegacyNsisInstallDir + &#39;\TStore.exe&#39;)) and (not FileExists(LegacyNsisInstallDir + &#39;\uninstall.exe&#39;)) then
     Exit;
 
   Log(&#39;Upgrading classic NSIS StoreTrainer installation at: &#39; + LegacyNsisInstallDir);
 
-  // Remove optional VB6 Source\ subfolder installed by TSSetup.nsi
   if DirExists(LegacyNsisInstallDir + &#39;\Source&#39;) then
     DelTree(LegacyNsisInstallDir + &#39;\Source&#39;, True, True, True);
 
-  // Surgically remove ONLY the exact files placed into $INSTDIR by TSSetup.nsi / TSSetup-Patch.nsi
   DeleteFile(LegacyNsisInstallDir + &#39;\TStore.exe&#39;);
   DeleteFile(LegacyNsisInstallDir + &#39;\TStore.exe.manifest&#39;);
   DeleteFile(LegacyNsisInstallDir + &#39;\LICENSE.rtf&#39;);
@@ -387,17 +584,12 @@ begin
   DeleteFile(LegacyNsisInstallDir + &#39;\TStore.ini&#39;);
   DeleteFile(LegacyNsisInstallDir + &#39;\uninstall.exe&#39;);
 
-  // RemoveDir (unlike DelTree) removes a folder ONLY IF IT IS COMPLETELY EMPTY —
-  // guaranteeing we never touch any user-added files if the user placed extras inside!
   ParentDir := ExtractFileDir(LegacyNsisInstallDir);
   RemoveDir(LegacyNsisInstallDir);
   if ParentDir &lt;&gt; &#39;&#39; then
     RemoveDir(ParentDir);
 end;
 
-// ============================================================================
-// .NET 10.0 DESKTOP RUNTIME DETECTION &amp; ON-DEMAND DOWNLOAD
-// ============================================================================
 function GetDotNetInstallerUrl(): String;
 begin
   if IsArm64 then
@@ -463,7 +655,6 @@ end;
 
 function InitializeSetup(): Boolean;
 begin
-  // Snapshot any legacy 32-bit NSIS path right at startup before [Registry] deletes the key!
   LegacyNsisInstallDir := DetectLegacyNsisInstallFolder();
   Result := True;
 end;
@@ -471,10 +662,58 @@ end;
 procedure InitializeWizard;
 begin
   DotNet10RuntimeDownloaded := False;
+
+  // 1. Shared Express vs. Custom Installation Mode page
+  InitRaggieSoftExpressCustomPage(
+    &#39;Installs {#MyAppName} into the default RaggieSoft folder, creates shortcuts, registers .stfx game profiles (double-click to launch), and preserves any classic My StoreFiles.&#39;,
+    &#39;Lets you pick a custom installation folder, choose Start Menu and Desktop shortcuts, toggle .stfx / .stf file associations, and pick your preferred double-click behavior.&#39;);
+
+  // 2. Custom Setup Double-Click Action page (modeled on classic StoreTrainer IS2010PR Setup.Rul!)
+  DoubleClickVerbPage := CreateInputOptionPage(
+    wpSelectTasks,
+    &#39;StoreFile (.stfx) Double-Click Behavior&#39;,
+    &#39;Choose what happens when you double-click a saved .stfx game profile in File Explorer.&#39;,
+    &#39;Both &quot;Launch Game &amp; Trainer&quot; and &quot;Edit in RaggieSoft StoreTrainer&quot; remain available anytime in the right-click menu:&#39;,
+    True,
+    False);
+  DoubleClickVerbPage.Add(&#39;Launch my game and companion trainer immediately (Recommended)&#39;);
+  DoubleClickVerbPage.Add(&#39;Open the profile inside the StoreTrainer editor window&#39;);
+  DoubleClickVerbPage.SelectedValueIndex := 0;
+
   DownloadPage := CreateDownloadPage(
     SetupMessage(msgWizardPreparing),
     &#39;Downloading required Microsoft .NET 10 Desktop Runtime...&#39;,
     nil);
+end;
+
+function ShouldSkipPage(PageID: Integer): Boolean;
+begin
+  Result := ShouldSkipStandardPagesInExpressMode(PageID);
+  if (not Result) and (PageID = DoubleClickVerbPage.ID) then
+  begin
+    if IsRaggieSoftExpressMode() or (not WizardIsTaskSelected(&#39;associate_stfx&#39;)) then
+      Result := True;
+  end;
+end;
+
+function UpdateReadyMemo(Space, NewLine, MemoUserInfoInfo, MemoDirInfo, MemoTypeInfo, MemoComponentsInfo, MemoGroupInfo, MemoTasksInfo: String): String;
+var
+  Extra: String;
+begin
+  Extra := &#39;StoreFile Double-Click Action:&#39; + NewLine + Space;
+  if GetStoreFileDefaultVerb(&#39;&#39;) = &#39;edit&#39; then
+    Extra := Extra + &#39;Open profile in StoreTrainer editor (/e)&#39;
+  else
+    Extra := Extra + &#39;Launch game &amp; trainer immediately (/l)&#39;;
+
+  if LegacyNsisInstallDir &lt;&gt; &#39;&#39; then
+    Extra := Extra + NewLine + NewLine + &#39;Classic Upgrade:&#39; + NewLine + Space +
+      &#39;Upgrading classic StoreTrainer installation at &#39; + LegacyNsisInstallDir + &#39; (preserving My StoreFiles).&#39;;
+
+  Result := FormatRaggieSoftReadyMemo(
+    Space, NewLine, MemoUserInfoInfo, MemoDirInfo, MemoTypeInfo,
+    MemoComponentsInfo, MemoGroupInfo, MemoTasksInfo, Extra,
+    IsDotNet10DesktopInstalled());
 end;
 
 function NextButtonClick(CurPageID: Integer): Boolean;
@@ -506,15 +745,11 @@ procedure CurStepChanged(CurStep: TSetupStep);
 begin
   if CurStep = ssInstall then
   begin
-    // Perform the surgical NSIS v1.0 / v1.1 cleanup right before extracting v2.0 files
     if IsAdminInstallMode then
       PerformSurgicalLegacyNsisCleanup();
   end;
 end;
 
-// ============================================================================
-// CUSTOM UNINSTALLER OPTIONS PAGE (BOTH UNCHECKED BY DEFAULT FOR USER SAFETY)
-// ============================================================================
 procedure InitializeUninstallProgressForm();
 var
   IntroLabel, ProfilesNoteLabel, PrefsNoteLabel: TNewStaticText;
@@ -524,6 +759,7 @@ var
 begin
   UninstallRemoveProfiles := False;
   UninstallRemovePrefs := False;
+  UninstallCleanOtherUsers := IsAdminInstallMode;
 
   if UninstallSilent then
     Exit;
@@ -532,9 +768,9 @@ begin
   OrigPageDesc := UninstallProgressForm.PageDescriptionLabel.Caption;
   OrigCancelEnabled := UninstallProgressForm.CancelButton.Enabled;
 
-  UninstallProgressForm.PageNameLabel.Caption := &#39;Uninstall Options — Game Profiles &amp; Settings&#39;;
+  UninstallProgressForm.PageNameLabel.Caption := &#39;Uninstall Options — Game Profiles &amp; Associations&#39;;
   UninstallProgressForm.PageDescriptionLabel.Caption :=
-    &#39;Choose whether to keep or remove your saved My StoreFiles game profiles and preferences.&#39;;
+    &#39;Choose whether to keep or remove your saved StoreFiles game profiles, settings, and multi-user associations.&#39;;
 
   UninstallOptionsPage := TNewNotebookPage.Create(UninstallProgressForm);
   UninstallOptionsPage.Notebook := UninstallProgressForm.InnerNotebook;
@@ -549,16 +785,16 @@ begin
   IntroLabel.WordWrap := True;
   IntroLabel.AutoSize := True;
   IntroLabel.Caption :=
-    &#39;Setup will now remove {#MyAppName} from your computer. By default, your saved game profiles &#39; +
-    &#39;in Documents\My StoreFiles and personal settings are kept safe.&#39;;
+    &#39;Setup will now remove {#MyAppName}. By default, your saved game profiles in Documents\StoreFiles &#39; +
+    &#39;(and any classic My StoreFiles) are kept safe.&#39;;
 
   RemoveProfilesCheckBox := TNewCheckBox.Create(UninstallProgressForm);
   RemoveProfilesCheckBox.Parent := UninstallOptionsPage;
   RemoveProfilesCheckBox.Left := ScaleX(0);
-  RemoveProfilesCheckBox.Top := IntroLabel.Top + IntroLabel.Height + ScaleY(18);
+  RemoveProfilesCheckBox.Top := IntroLabel.Top + IntroLabel.Height + ScaleY(14);
   RemoveProfilesCheckBox.Width := UninstallOptionsPage.Width;
   RemoveProfilesCheckBox.Height := ScaleY(22);
-  RemoveProfilesCheckBox.Caption := &#39;Remove my saved game profiles in Documents\My StoreFiles&#39;;
+  RemoveProfilesCheckBox.Caption := &#39;Remove my saved .stfx game profiles and save-game backups&#39;;
   RemoveProfilesCheckBox.Checked := False;
 
   ProfilesNoteLabel := TNewStaticText.Create(UninstallProgressForm);
@@ -569,12 +805,12 @@ begin
   ProfilesNoteLabel.WordWrap := True;
   ProfilesNoteLabel.AutoSize := True;
   ProfilesNoteLabel.Caption :=
-    &#39;Leave unchecked to keep all of your .stf game and trainer profiles (your actual games are never touched).&#39;;
+    &#39;Leave unchecked to keep Documents\StoreFiles (classic Documents\My StoreFiles and your installed games are never touched).&#39;;
 
   RemovePrefsCheckBox := TNewCheckBox.Create(UninstallProgressForm);
   RemovePrefsCheckBox.Parent := UninstallOptionsPage;
   RemovePrefsCheckBox.Left := ScaleX(0);
-  RemovePrefsCheckBox.Top := ProfilesNoteLabel.Top + ProfilesNoteLabel.Height + ScaleY(16);
+  RemovePrefsCheckBox.Top := ProfilesNoteLabel.Top + ProfilesNoteLabel.Height + ScaleY(12);
   RemovePrefsCheckBox.Width := UninstallOptionsPage.Width;
   RemovePrefsCheckBox.Height := ScaleY(22);
   RemovePrefsCheckBox.Caption := &#39;Remove saved {#MyAppName} preferences&#39;;
@@ -589,6 +825,18 @@ begin
   PrefsNoteLabel.AutoSize := True;
   PrefsNoteLabel.Caption :=
     &#39;Leave unchecked to preserve your library path and theme preference for future updates.&#39;;
+
+  if IsAdminInstallMode then
+  begin
+    CleanOtherUsersCheckBox := TNewCheckBox.Create(UninstallProgressForm);
+    CleanOtherUsersCheckBox.Parent := UninstallOptionsPage;
+    CleanOtherUsersCheckBox.Left := ScaleX(0);
+    CleanOtherUsersCheckBox.Top := PrefsNoteLabel.Top + PrefsNoteLabel.Height + ScaleY(12);
+    CleanOtherUsersCheckBox.Width := UninstallOptionsPage.Width;
+    CleanOtherUsersCheckBox.Height := ScaleY(22);
+    CleanOtherUsersCheckBox.Caption := &#39;Also clean up per-user .stfx file associations for other Windows accounts on next sign-in&#39;;
+    CleanOtherUsersCheckBox.Checked := True;
+  end;
 
   UninstallProgressForm.InnerNotebook.ActivePage := UninstallOptionsPage;
 
@@ -614,6 +862,8 @@ begin
 
   UninstallRemoveProfiles := RemoveProfilesCheckBox.Checked;
   UninstallRemovePrefs := RemovePrefsCheckBox.Checked;
+  if CleanOtherUsersCheckBox &lt;&gt; nil then
+    UninstallCleanOtherUsers := CleanOtherUsersCheckBox.Checked;
 
   UninstallNextButton.Visible := False;
   UninstallProgressForm.PageNameLabel.Caption := OrigPageName;
@@ -625,20 +875,39 @@ end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 var
-  StoreFilesDir, StoreTrainerAppDataDir: String;
+  StoreFilesDir, SaveBackupsDir, RoamingDir, PrefsFile: String;
 begin
   if CurUninstallStep = usUninstall then
   begin
-    StoreFilesDir := ExpandConstant(&#39;{userdocs}\My StoreFiles&#39;);
-    StoreTrainerAppDataDir := ExpandConstant(&#39;{userappdata}\RaggieSoft\StoreTrainer&#39;);
+    StoreFilesDir := ExpandConstant(&#39;{userdocs}\StoreFiles&#39;);
+    SaveBackupsDir := ExpandConstant(&#39;{localappdata}\RaggieSoft\Cache\StoreTrainer&#39;);
+    RoamingDir := ExpandConstant(&#39;{userappdata}\RaggieSoft&#39;);
+    PrefsFile := RoamingDir + &#39;\storetrainer-preferences.json&#39;;
 
-    if UninstallRemoveProfiles and DirExists(StoreFilesDir) then
-      DelTree(StoreFilesDir, True, True, True);
-
-    if UninstallRemovePrefs and DirExists(StoreTrainerAppDataDir) then
+    if UninstallRemoveProfiles then
     begin
-      DelTree(StoreTrainerAppDataDir, True, True, True);
-      RemoveDir(ExpandConstant(&#39;{userappdata}\RaggieSoft&#39;));
+      if DirExists(StoreFilesDir) then
+        DelTree(StoreFilesDir, True, True, True);
+      if DirExists(SaveBackupsDir) then
+        DelTree(SaveBackupsDir, True, True, True);
+    end;
+
+    if UninstallRemovePrefs and FileExists(PrefsFile) then
+    begin
+      DeleteFile(PrefsFile);
+      RemoveDir(RoamingDir);
+    end;
+
+    // Clean current user&#39;s per-user classes if present, and register Active Setup stub for OTHER accounts!
+    RegDeleteKeyIncludingSubkeys(HKCU, &#39;Software\Classes\.stfx&#39;);
+    RegDeleteKeyIncludingSubkeys(HKCU, &#39;Software\Classes\RaggieSoft.StoreFileX&#39;);
+    RegDeleteKeyIncludingSubkeys(HKCU, &#39;Software\Classes\raggiesoft-storetrainer&#39;);
+
+    if UninstallCleanOtherUsers and IsAdminInstallMode then
+    begin
+      RegisterMultiUserHkcuClassesCleanupStub(&#39;{8E92D4A1-63F0-4C8B-9B7A-10164500B004}_STFX&#39;, &#39;RaggieSoft.StoreFileX&#39;);
+      RegisterMultiUserHkcuClassesCleanupStub(&#39;{8E92D4A1-63F0-4C8B-9B7A-10164500B004}_EXT&#39;, &#39;.stfx&#39;);
+      RegisterMultiUserHkcuClassesCleanupStub(&#39;{8E92D4A1-63F0-4C8B-9B7A-10164500B004}_URI&#39;, &#39;raggiesoft-storetrainer&#39;);
     end;
   end;
 end;
@@ -693,7 +962,6 @@ Var SCRRUNVER
 Var SCRRUNDLL
 Var scr_exit_code
 Var TSTOREVER
-Var SRCCODE
 Var UNINSREG
 Var IS_INSTALLED
 Var TSTORESETUP
@@ -741,7 +1009,6 @@ VIAddVersionKey &quot;FileVersion&quot; &quot;${Expv_1}.${Expv_2}.${Expv_3}.${Ex
   !define MUI_LICENSEPAGE_RADIOBUTTONS_TEXT_ACCEPT &quot;I &amp;Accept&quot;
   !define MUI_LICENSEPAGE_RADIOBUTTONS_TEXT_DECLINE &quot;I &amp;Decline&quot;
 !insertmacro MUI_PAGE_LICENSE &quot;License\LICENSE.rtf&quot;
-!insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
   !define MUI_FINISHPAGE_RUN &quot;$INSTDIR\TStore.exe&quot;
@@ -844,37 +1111,9 @@ Section &quot;$CompanyName $ProductName&quot; TStoreBase
 SectionEnd
 
 ; ==============================================================================
-; SECTION 3: Optional Bundled VB6 Source Code
-; ==============================================================================
-Section &quot;Source Code (Visual Basic 6.0)&quot; Src
-  DetailPrint &quot;Installing Visual Basic 6.0 Source Code...&quot;
-  StrCpy $SRCCODE &quot;$INSTDIR\Source&quot;
-  CreateDirectory &quot;$SRCCODE&quot;
-  SetOutPath &quot;$SRCCODE&quot;
-
-  File &quot;..\DetectOSBits.bas&quot;
-  File &quot;..\frmMain.frm&quot;
-  File &quot;..\frmMain.frx&quot;
-  File &quot;..\INIFile.bas&quot;
-  File &quot;..\OSVersionInfo.bas&quot;
-  File &quot;..\README.txt&quot;
-  File &quot;..\README-dev.txt&quot;
-  File &quot;..\Registry.bas&quot;
-  File &quot;..\SFile.bas&quot;
-  File &quot;..\SpecialFolder.bas&quot;
-  File &quot;..\TStore.bas&quot;
-  File &quot;..\TStore.vbp&quot;
-  File &quot;..\VersionCompare.bas&quot;
-  File &quot;..\wHwnd.bas&quot;
-  CreateDirectory &quot;$SRCCODE\Installer&quot;
-  CreateDirectory &quot;$SRCCODE\Build&quot;
-  SetOutPath &quot;$SRCCODE\Installer&quot;
-  File &quot;TSSetup.nsi&quot;
-  File &quot;TSSetup-Patch.nsi&quot;
-SectionEnd
-
-; ==============================================================================
-; SECTION 4: Windows Uninstall &amp; RaggieSoft Launcher Discovery Keys
+; SECTION 3: Windows Uninstall &amp; RaggieSoft Launcher Discovery Keys
+;   (Note: Bundled VB6 source code was retired in v1.1 since the complete
+;    multi-generation source archive is published at github.com/raggiesoft/storetrainer.)
 ; ==============================================================================
 Section &quot;-Uninstall Registry Keys&quot; Unins
   DetailPrint &quot;Registering Uninstaller &amp; RaggieSoft Launcher Metadata...&quot;
@@ -903,13 +1142,6 @@ Section &quot;-Cleanup&quot; Cleanup
   Delete &quot;$TEMP\WScr9x.exe&quot;
   Delete &quot;$TEMP\WScrNT2k.exe&quot;
 SectionEnd
-
-LangString DESC_TStoreBase ${LANG_ENGLISH} &quot;$ProductName stores and launches your PC games and companion trainers.&quot;
-LangString DESC_Src ${LANG_ENGLISH} &quot;Visual Basic 6.0 source code and NSIS installer scripts for $ProductName.&quot;
-!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${TStoreBase} $(DESC_TStoreBase)
-  !insertmacro MUI_DESCRIPTION_TEXT ${Src} $(DESC_Src)
-!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ; ==============================================================================
 ; UNINSTALL SECTION (Leaves shared VB6 system DLLs &amp; user My StoreFiles safe!)
@@ -1057,7 +1289,6 @@ Var TStoreVersionInstalled
 Var TStoreVersionPatch
 Var TSVerCompare
 Var TSTOREVER
-Var SRCCODE
 Var UNINSREG
 Var hMutexCheck
 
@@ -1147,33 +1378,12 @@ Section &quot;$CompanyName $ProductName&quot; TStoreBase
   WriteRegStr HKCR &quot;RaggieSoft.StoreFile\shell\open\command&quot; &quot;&quot; &quot;$\&quot;$INSTDIR\TStore.exe$\&quot; /l $\&quot;%1$\&quot;&quot;
   WriteRegStr HKCR &quot;RaggieSoft.StoreFile\shell\edit&quot; &quot;&quot; &quot;Edit in RaggieSoft StoreTrainer&quot;
   WriteRegStr HKCR &quot;RaggieSoft.StoreFile\shell\edit\command&quot; &quot;&quot; &quot;$\&quot;$INSTDIR\TStore.exe$\&quot; /e $\&quot;%1$\&quot;&quot;
-SectionEnd
 
-Section &quot;Source Code&quot; Src
-  ; Only refresh Source\ if the user opted to install Source\ during their original installation (or update it cleanly)
-  IfFileExists &quot;$INSTDIR\Source\*.*&quot; 0 SkipSourcePatch
-    DetailPrint &quot;Updating installed Visual Basic 6.0 Source Code...&quot;
-    StrCpy $SRCCODE &quot;$INSTDIR\Source&quot;
-    SetOutPath &quot;$SRCCODE&quot;
-    File &quot;..\DetectOSBits.bas&quot;
-    File &quot;..\frmMain.frm&quot;
-    File &quot;..\frmMain.frx&quot;
-    File &quot;..\INIFile.bas&quot;
-    File &quot;..\OSVersionInfo.bas&quot;
-    File &quot;..\README.txt&quot;
-    File &quot;..\README-dev.txt&quot;
-    File &quot;..\Registry.bas&quot;
-    File &quot;..\SFile.bas&quot;
-    File &quot;..\SpecialFolder.bas&quot;
-    File &quot;..\TStore.bas&quot;
-    File &quot;..\TStore.vbp&quot;
-    File &quot;..\VersionCompare.bas&quot;
-    File &quot;..\wHwnd.bas&quot;
-    CreateDirectory &quot;$SRCCODE\Installer&quot;
-    SetOutPath &quot;$SRCCODE\Installer&quot;
-    File &quot;TSSetup.nsi&quot;
-    File &quot;TSSetup-Patch.nsi&quot;
-  SkipSourcePatch:
+  ; If upgrading from v1.0 where &#39;$INSTDIR\Source&#39; was installed locally, remove the retired
+  ; v1.0 Source folder so old 1.0 files don&#39;t sit beside a patched 1.1 binary (full source now
+  ; lives permanently on GitHub at https://github.com/raggiesoft/storetrainer).
+  IfFileExists &quot;$INSTDIR\Source\*.*&quot; 0 +2
+    RMDir /r &quot;$INSTDIR\Source&quot;
 SectionEnd
 
 Section &quot;-Uninstall Registry Keys&quot; Unins

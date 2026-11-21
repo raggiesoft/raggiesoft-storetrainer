@@ -135,7 +135,7 @@
     <div class="retro-banner">
       <h1>RaggieSoft StoreTrainer — PC Game &amp; Trainer Organizer (v1.0 • v1.1 • v2.0)</h1>
       <p style="margin: 0 0 0.85rem; font-size: 1.02rem;">
-        <strong>RaggieSoft StoreTrainer</strong> is a free desktop organizer created by <strong>Michael P. Ragsdale</strong> for keeping your classic and modern PC games paired with their companion <strong>game trainers (cheat utilities)</strong>, launch options, and personal hotkey notes. Originally hand-written between 2018 and 2020 inside a <strong>Windows 2000 Professional SP4</strong> setup before AI tools existed, StoreTrainer now spans <strong>three preserved generations</strong> that all share the same simple <code>My StoreFiles</code> (<code>.stf</code>) profile library!
+        <strong>RaggieSoft StoreTrainer</strong> is a free desktop organizer created by <strong>Michael P. Ragsdale</strong> for keeping your classic and modern PC games paired with their companion <strong>game trainers (cheat utilities)</strong>, downloaded <code>.zip</code> trainer archives, save-game backups, and floating shortcut cheat cards. Originally hand-written between 2018 and 2020 inside a <strong>Windows 2000 Professional SP4</strong> setup before AI tools existed, StoreTrainer now spans <strong>three preserved generations</strong> — evolving classic <code>My StoreFiles</code> (<code>.stf</code>) into modern <code>Documents\StoreFiles</code> (<code>.stfx</code>) with a built-in <strong>StoreFile Upgrade Wizard</strong> that keeps your original files untouched!
       </p>
       <div class="hero-cta-row">
         <a href="https://github.com/raggiesoft/storetrainer" target="_blank" rel="noopener noreferrer" class="win-btn win-btn-primary">
@@ -145,7 +145,7 @@
           💾 Download Classic Pre-AI Installer: tssetup100.exe (v1.0)
         </a>
         <a href="/source" class="win-btn">
-          🔍 Inspect Source Code (20 Files) →
+          🔍 Inspect Source Code (24 Files) →
         </a>
         <a href="/installer" class="win-btn">
           📦 Inspect Setup &amp; Upgrade Scripts →
@@ -155,36 +155,34 @@
 
     <div class="retro-grid-2">
       <section class="retro-dialog-card" aria-labelledby="editions-heading">
-        <h2 id="editions-heading" style="margin-top: 0;">Three Generations, One Shared Library</h2>
+        <h2 id="editions-heading" style="margin-top: 0;">Three Generations, Seamless Upgrade Path</h2>
         <p>
-          <strong>StoreTrainer 2.0 (Modern Desktop &amp; RaggieSoft Launcher Edition):</strong> Features a live searchable <code>My StoreFiles</code> sidebar, Favorites pinning, drag-and-drop game and trainer setup, automatic window-ready launch timing, personal hotkey notes, and trusted trainer file safety checks — while smoothly upgrading classic v1.0 and v1.1 installations in place.
+          <strong>StoreTrainer 2.0 (Modern Desktop &amp; RaggieSoft Launcher Edition):</strong> Introduces modern <code>.stfx</code> profiles in <code>Documents\StoreFiles</code>, a 3-step <strong>StoreFile Upgrade Wizard</strong>, built-in <strong>Trainer ZIP Archive Extraction</strong> (including directly into your game&rsquo;s folder!), multiple trainers per game, <em>Launch with Trainer</em> vs. <em>Launch Clean</em> buttons, pre-launch <strong>Save-Game Backups</strong>, a classic <code>.NFO</code> ASCII art viewer, a floating Always-On-Top <strong>Cheat Card</strong>, and automatic trainer cleanup when you exit your game.
         </p>
         <p style="margin-bottom: 0;">
-          <strong>StoreTrainer 1.1 (Classic Retro Edition) &amp; Frozen 1.0 Archive:</strong> Keeps full support alive for vintage <strong>Windows 95, Windows 98, and Windows 2000</strong> gaming PCs with File Explorer double-click <code>.stf</code> launching, launch delays, a Recent Files menu, and RaggieSoft Launcher discovery — right alongside the untouched 2018–2022 pre-AI historical archive.
+          <strong>StoreTrainer 1.1 (Classic Retro Edition) &amp; Frozen 1.0 Archive:</strong> Keeps full support alive for vintage <strong>Windows 95, Windows 98, NT 4.0, and Windows 2000</strong> gaming PCs (bundling classic system redistributables for bare-metal retro installs) with full forward/backward <code>.stf</code> compatibility between v1.0 and v1.1, plus built-in software update checks on modern PCs.
         </p>
       </section>
 
       <section class="retro-dialog-card" aria-labelledby="sfile-spec-heading">
-        <h2 id="sfile-spec-heading" style="margin-top: 0;">Saved Game Profile (<code>.stf</code>) Format</h2>
+        <h2 id="sfile-spec-heading" style="margin-top: 0;">Modern <code>.stfx</code> &amp; Classic <code>.stf</code> Profiles</h2>
         <p>
-          Every StoreTrainer edition saves each game profile in <code>Documents\My StoreFiles</code> as a clean, human-readable text file (<code>MyGame.stf</code>) that works interchangeably across retro and modern PCs:
+          Just like <code>.doc</code> evolved into <code>.docx</code>, StoreTrainer 2.0 upgrades classic <code>My StoreFiles\*.stf</code> profiles into rich <code>Documents\StoreFiles\*.stfx</code> files while keeping your classic <code>.stf</code> files 100% intact:
         </p>
-        <pre class="code-viewer" style="max-height: 200px; margin: 0;">[General]
-STF.Version=1.1
-DisplayName=Command &amp; Conquer: Red Alert 2
-Category=Strategy &amp; Simulation
-Favorite=true
-LaunchDelay=3
-
-[Game]
-LaunchGameFirst=true
-Path=C:\Games\RA2\ra2.exe
-Switch=-win
-
-[Trainer]
-TrainerLaunchesGame=false
-Path=C:\Games\Trainers\ra2_trainer.exe
-Switch=</pre>
+        <pre class="code-viewer" style="max-height: 200px; margin: 0;">{
+  "schemaVersion": "2.0",
+  "displayName": "Command &amp; Conquer: Red Alert 2",
+  "category": "Strategy &amp; Simulation",
+  "autoCloseTrainerOnGameExit": true,
+  "backupSavesBeforeLaunch": true,
+  "gamePath": "C:\\Games\\RA2\\ra2.exe",
+  "trainers": [
+    { "label": "+12 Campaign Trainer", "path": "C:\\Games\\RA2\\trn.exe" }
+  ],
+  "hotkeys": [
+    { "keys": "Numpad 1", "effect": "Unlimited Credits" }
+  ]
+}</pre>
       </section>
     </div>
 
